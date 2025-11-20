@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@yield('title', 'SATGAS P4GN UNILA')</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+    @stack('styles')
+</head>
+<body class="bg-gray-900">
+    <!-- Navbar -->
+    <nav class="bg-gradient-to-r from-green-500 to-green-600 shadow-lg" x-data="{ open: false }">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <!-- Logo Section -->
+            <div class="flex items-center gap-4">
+                <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-md">
+                    <img src="{{ asset('assets/logo_unila.png') }}" alt="Logo" class="w-10 h-10">
+                </div>
+                <div class="text-white leading-tight">
+                    <h1 class="text-lg font-bold">SATGAS P4GN UNILA</h1>
+                    <p class="text-xs opacity-90">SISTEM INFORMASI KONSELING DAN PELAPORAN<br>UNIVERSITAS LAMPUNG</p>
+                </div>
+            </div>
+
+            <!-- Hamburger Button -->
+            <button @click="open = !open" class="lg:hidden text-white focus:outline-none">
+                <!-- Icon Hamburger -->
+                <svg x-show="!open" xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+                <!-- Icon Close -->
+                <svg x-show="open" xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+            <!-- Navigation Menu (Desktop) -->
+                <ul class="hidden lg:flex items-center gap-6 text-sm font-medium">
+                    <li><a href="{{ route('home') }}" class="text-white hover:bg-white/15 px-4 py-2 rounded {{ Request::routeIs('home') ? 'bg-white/20' : '' }}">BERANDA</a></li>
+                    <li><a href="{{ route('tentang') }}" class="text-white hover:bg-white/15 px-4 py-2 rounded {{ Request::routeIs('tentang') ? 'bg-white/20' : '' }}">TENTANG</a></li>
+                    <li><a href="{{ route('artikel.index') }}" class="text-white hover:bg-white/15 px-4 py-2 rounded {{ Request::routeIs('artikel.*') ? 'bg-white/20' : '' }}">ARTIKEL</a></li>
+                    <li><a href="{{ route('konselor.index') }}" class="text-white hover:bg-white/15 px-4 py-2 rounded {{ Request::routeIs('konselor.*') ? 'bg-white/20' : '' }}">KONSELOR</a></li>
+                    <li><a href="{{ route('inbox') }}" class="text-white hover:bg-white/15 px-4 py-2 rounded {{ Request::routeIs('inbox') ? 'bg-white/20' : '' }}">INBOX</a></li>
+                    <li><a href="{{ route('register') }}" class="text-white hover:bg-white/15 px-4 py-2 rounded {{ Request::routeIs('register') ? 'bg-white/20' : '' }}">DAFTAR</a></li>
+                    <li><a href="{{ route('login') }}" class="text-white hover:bg-white/15 px-4 py-2 rounded {{ Request::routeIs('login') ? 'bg-white/20' : '' }}">LOGIN</a></li>
+                </ul>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div x-show="open" x-transition class="lg:hidden bg-green-600/90 backdrop-blur-md">
+            <ul class="flex flex-col items-center py-4 space-y-2">
+                <li><a href="{{ route('home') }}" class="text-white hover:bg-white/15 px-4 py-2 rounded block">BERANDA</a></li>
+                <li><a href="{{ route('tentang') }}" class="text-white hover:bg-white/15 px-4 py-2 rounded block">TENTANG</a></li>
+                <li><a href="{{ route('artikel.index') }}" class="text-white hover:bg-white/15 px-4 py-2 rounded block">ARTIKEL</a></li>
+                <li><a href="{{ route('konselor.index') }}" class="text-white hover:bg-white/15 px-4 py-2 rounded block">KONSELOR</a></li>
+                <li><a href="{{ route('inbox') }}" class="text-white hover:bg-white/15 px-4 py-2 rounded block">INBOX</a></li>
+                <li><a href="{{ route('register') }}" class="text-white hover:bg-white/15 px-4 py-2 rounded block">DAFTAR</a></li>
+                <li><a href="{{ route('login') }}" class="text-white hover:bg-white/15 px-4 py-2 rounded block">LOGIN</a></li>
+            </ul>
+        </div>
+    </nav>
+
+
+    <!-- Main Content -->
+    <main>
+        @yield('content')
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-green-800 text-green-300 mt-10 border-t border-gray-700">
+        <div class="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-3 gap-8">
+
+            <!-- Logo & Identity -->
+            <div>
+                <div class="flex items-center gap-3 mb-3">
+                    <img src="{{ asset('assets/logo_unila.png') }}" class="w-12 h-12 bg-white rounded-full p-1 shadow" alt="">
+                    <div>
+                        <h3 class="font-semibold text-white text-lg">SATGAS P4GN UNILA</h3>
+                        <p class="text-sm opacity-80 leading-tight">Pencegahan, Pemberantasan, Penyalahgunaan & Peredaran Gelap Narkoba</p>
+                    </div>
+                </div>
+                <p class="text-sm opacity-75">
+                    Sistem Informasi Konseling dan Pelaporan  
+                    <br>Universitas Lampung.
+                </p>
+            </div>
+
+            <!-- Navigation -->
+            <div>
+                <h3 class="text-white font-semibold mb-3">Navigasi</h3>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="{{ route('home') }}" class="hover:text-white">Beranda</a></li>
+                    <li><a href="{{ route('tentang') }}" class="hover:text-white">Tentang</a></li>
+                    <li><a href="{{ route('artikel.index') }}" class="hover:text-white">Artikel</a></li>
+                    <li><a href="{{ route('konselor.index') }}" class="hover:text-white">Konselor</a></li>
+                    <li><a href="{{ route('laporan.create') }}" class="hover:text-white">Lapor</a></li>
+                    <li><a href="{{ route('konseling.create') }}" class="hover:text-white">Konseling</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact -->
+            <div>
+                <h3 class="text-white font-semibold mb-3">Kontak</h3>
+                <p class="text-sm opacity-80">UPA Bimbingan Konseling Universitas Lampung</p>
+                <p class="text-sm mt-2 opacity-70">Email: bk@unila.ac.id</p>
+                <p class="text-sm opacity-70">Alamat: Gedung Rektorat Lt. 2, Universitas Lampung</p>
+
+                <div class="flex gap-4 mt-4">
+                    <!-- Social Icons -->
+                    <a href="#" class="text-gray-300 hover:text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M22 12c0-5.522-4.477-10-10-10S2 6.478 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987H7.898v-2.89h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562v1.875h2.773l-.443 2.89h-2.33V21.88C18.343 21.128 22 16.99 22 12z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="text-gray-300 hover:text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M21.35 11.1c0-.71-.06-1.39-.18-2.06H12v3.89h5.33c-.23 1.2-.92 2.22-1.96 2.9v2.4h3.17c1.86-1.71 2.91-4.23 2.91-7.13z"/>
+                            <path d="M12 22c2.7 0 4.97-.9 6.63-2.4l-3.17-2.4c-.9.6-2.04.96-3.46.96-2.67 0-4.93-1.8-5.74-4.22H2.96v2.48C4.59 19.98 7.96 22 12 22z"/>
+                            <path d="M6.26 13.94C6.08 13.4 6 12.8 6 12.19s.08-1.21.23-1.75V7.96H2.96A9.999 9.999 0 0 0 2 12.19c0 1.61.38 3.14 1.04 4.48l3.22-2.73z"/>
+                            <path d="M12 6.22c1.45 0 2.75.5 3.78 1.49l2.83-2.83C17.03 2.91 14.76 2 12 2 7.96 2 4.59 4.02 2.96 6.9l3.3 2.48C7.07 8.02 9.33 6.22 12 6.22z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center text-green-400 text-xs py-4 border-t border-gray-700">
+            © {{ date('Y') }} SATGAS P4GN UNILA — Sistem Informasi Konseling & Pelaporan.
+        </div>
+    </footer>
+
+
+    @stack('scripts')
+</body>
+</html>
