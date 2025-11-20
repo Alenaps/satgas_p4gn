@@ -11,7 +11,7 @@ use App\Http\Controllers\LaporanController;
 */
 Route::get('/', fn() => view('welcome'))->name('home');
 Route::view('/tentang', 'tentang')->name('tentang');
-Route::view('/artikel', 'artikel')->name('artikel.index');
+Route::view('/publikasi', 'publikasi')->name('publikasi.index');
 Route::view('/konselor', 'konselor')->name('konselor.index');
 Route::view('/inbox', 'inbox')->name('inbox');
 Route::view('/konseling', 'konseling')->name('konseling.create');
@@ -63,6 +63,10 @@ Route::middleware(['auth', 'role:konsuli'])
     ->prefix('konsuli')->name('konsuli.')
     ->group(function () {
         Route::view('/dashboard', 'konsuli.dashboard')->name('dashboard');
+        Route::view('/tentang', 'konsuli.tentang')->name('tentang');
+        Route::view('/publikasi', 'konsuli.publikasi.index')->name('publikasi.index');
+        Route::view('/konselor', 'konsuli.konselor.index')->name('konselor.index');
+        Route::view('/inbox', 'konsuli.inbox')->name('inbox');
     });
 
 /*

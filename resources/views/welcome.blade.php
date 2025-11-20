@@ -45,7 +45,7 @@
         </h2>
 
         <div class="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fadeInUp-delay">
-            <a href="{{ route('konseling.create') }}" 
+            <a href="{{ route('login') }}" 
                class="btn-custom bg-blue-500 text-white px-10 py-4 rounded-full font-semibold shadow-xl hover:shadow-cyan-500/50 hover:-translate-y-1 transition-all duration-300 text-center">
                 Mulai Konseling
             </a>

@@ -41,7 +41,7 @@
                 <ul class="hidden lg:flex items-center gap-6 text-sm font-medium">
                     <li><a href="{{ route('home') }}" class="text-white hover:bg-white/15 px-4 py-2 rounded {{ Request::routeIs('home') ? 'bg-white/20' : '' }}">BERANDA</a></li>
                     <li><a href="{{ route('tentang') }}" class="text-white hover:bg-white/15 px-4 py-2 rounded {{ Request::routeIs('tentang') ? 'bg-white/20' : '' }}">TENTANG</a></li>
-                    <li><a href="{{ route('artikel.index') }}" class="text-white hover:bg-white/15 px-4 py-2 rounded {{ Request::routeIs('artikel.*') ? 'bg-white/20' : '' }}">ARTIKEL</a></li>
+                    <li><a href="{{ route('publikasi.index') }}" class="text-white hover:bg-white/15 px-4 py-2 rounded {{ Request::routeIs('publikasi.*') ? 'bg-white/20' : '' }}">PUBLIKASI</a></li>
                     <li><a href="{{ route('konselor.index') }}" class="text-white hover:bg-white/15 px-4 py-2 rounded {{ Request::routeIs('konselor.*') ? 'bg-white/20' : '' }}">KONSELOR</a></li>
                     <li><a href="{{ route('inbox') }}" class="text-white hover:bg-white/15 px-4 py-2 rounded {{ Request::routeIs('inbox') ? 'bg-white/20' : '' }}">INBOX</a></li>
                     <li><a href="{{ route('register') }}" class="text-white hover:bg-white/15 px-4 py-2 rounded {{ Request::routeIs('register') ? 'bg-white/20' : '' }}">DAFTAR</a></li>
@@ -54,7 +54,7 @@
             <ul class="flex flex-col items-center py-4 space-y-2">
                 <li><a href="{{ route('home') }}" class="text-white hover:bg-white/15 px-4 py-2 rounded block">BERANDA</a></li>
                 <li><a href="{{ route('tentang') }}" class="text-white hover:bg-white/15 px-4 py-2 rounded block">TENTANG</a></li>
-                <li><a href="{{ route('artikel.index') }}" class="text-white hover:bg-white/15 px-4 py-2 rounded block">ARTIKEL</a></li>
+                <li><a href="{{ route('publikasi.index') }}" class="text-white hover:bg-white/15 px-4 py-2 rounded block">PUBLIKASI</a></li>
                 <li><a href="{{ route('konselor.index') }}" class="text-white hover:bg-white/15 px-4 py-2 rounded block">KONSELOR</a></li>
                 <li><a href="{{ route('inbox') }}" class="text-white hover:bg-white/15 px-4 py-2 rounded block">INBOX</a></li>
                 <li><a href="{{ route('register') }}" class="text-white hover:bg-white/15 px-4 py-2 rounded block">DAFTAR</a></li>
@@ -94,7 +94,7 @@
                 <ul class="space-y-2 text-sm">
                     <li><a href="{{ route('home') }}" class="hover:text-white">Beranda</a></li>
                     <li><a href="{{ route('tentang') }}" class="hover:text-white">Tentang</a></li>
-                    <li><a href="{{ route('artikel.index') }}" class="hover:text-white">Artikel</a></li>
+                    <li><a href="{{ route('publikasi.index') }}" class="hover:text-white">PUBLIKASI</a></li>
                     <li><a href="{{ route('konselor.index') }}" class="hover:text-white">Konselor</a></li>
                     <li><a href="{{ route('laporan.create') }}" class="hover:text-white">Lapor</a></li>
                     <li><a href="{{ route('konseling.create') }}" class="hover:text-white">Konseling</a></li>
