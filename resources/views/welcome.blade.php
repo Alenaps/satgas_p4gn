@@ -49,7 +49,7 @@
                class="btn-custom bg-blue-500 text-white px-10 py-4 rounded-full font-semibold shadow-xl hover:shadow-cyan-500/50 hover:-translate-y-1 transition-all duration-300 text-center">
                 Mulai Konseling
             </a>
-            <a href="{{ route('laporan.create') }}" 
+            <a href="{{ route('guest.laporan.create') }}" 
                class="btn-custom bg-blue-500 text-white px-10 py-4 rounded-full font-semibold shadow-xl hover:shadow-blue-500/50 hover:-translate-y-1 transition-all duration-300 text-center">
                 Lapor Sekarang!
             </a>

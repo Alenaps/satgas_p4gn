@@ -20,7 +20,7 @@
         <h2 class="text-center text-xl font-bold mb-6">FORMULIR LAPOR P4GN</h2>
 
         <!-- GRID FORM -->
-        <form action="{{ route('laporan.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('guest.laporan.store') }}" method="POST" enctype="multipart/form-data" novalidate>
             @csrf
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -31,9 +31,13 @@
 
                     <label>Nama Pelapor</label>
                     <input type="text" name="nama_pelapor" class="w-full p-2 rounded mb-3">
+                    @error('nama_pelapor')
+                        <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
+                    @enderror
 
                     <label>Peran Pelapor</label>
                     <select name="peran_pelapor" class="w-full p-2 rounded mb-3">
+                        <option value="">--Pilih--</option>
                         <option>Mahasiswa</option>
                         <option>Dosen</option>
                         <option>Tendik</option>
@@ -50,6 +54,7 @@
 
                     <label>Jenis Kelamin</label>
                     <select name="jk_pelapor" class="w-full p-2 rounded mb-3">
+                        <option value="">--Pilih--</option>
                         <option>Laki-laki</option>
                         <option>Perempuan</option>
                     </select>
@@ -61,9 +66,13 @@
 
                     <label>Nama Terlapor</label>
                     <input type="text" name="nama_terlapor" class="w-full p-2 rounded mb-3">
+                    @error('nama_terlapor')
+                        <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
+                    @enderror
 
                     <label>Peran Terlapor</label>
                     <select name="peran_terlapor" class="w-full p-2 rounded mb-3">
+                        <option value="">--Pilih--</option>
                         <option>Mahasiswa</option>
                         <option>Dosen</option>
                         <option>Tendik</option>
@@ -74,12 +83,22 @@
 
                     <label>Jenis Kelamin</label>
                     <select name="jk_terlapor" class="w-full p-2 rounded mb-3">
+                        <option value="">--Pilih--</option>
                         <option>Laki-laki</option>
                         <option>Perempuan</option>
                     </select>
 
                     <label>Alamat Terlapor</label>
                     <input type="text" name="alamat_terlapor" class="w-full p-2 rounded mb-3">
+
+                    <label>Jenis Kasus/Indikasi</label>
+                    <select name="jenis_kasus" class="w-full p-2 rounded mb-3">
+                        <option value="">--Pilih--</option>
+                        <option>Pengguna</option>
+                        <option>Pengedar</option>
+                        <option>Kurir</option>
+                        <option>Bandar</option>
+                    </select>
                 </div>
             </div>
 
@@ -89,18 +108,30 @@
 
                 <label>Lokasi Kejadian</label>
                 <input type="text" name="lokasi" class="w-full p-2 rounded mb-3">
+                @error('lokasi')
+                        <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
+                    @enderror
 
                 <label>Upload Foto Lokasi</label>
                 <input type="file" name="foto_lokasi" class="w-full p-2 rounded mb-3">
+                @error('foto_lokasi')
+                        <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
+                    @enderror
 
                 <label>Tanggal Kejadian</label>
                 <input type="date" name="tanggal" class="w-full p-2 rounded mb-3">
+                @error('tanggal')
+                        <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
+                    @enderror
 
                 <label>Jenis Narkoba</label>
                 <input type="text" name="jenis_narkoba" class="w-full p-2 rounded mb-3">
 
                 <label>Uraian Kronologi</label>
                 <textarea name="kronologi" class="w-full p-2 rounded mb-3"></textarea>
+                @error('kronologi')
+                        <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
+                    @enderror
             </div>
 
             <div class="flex justify-end mt-5">

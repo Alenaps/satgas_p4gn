@@ -8,7 +8,7 @@
                 DAFTAR
             </h2>
 
-            <form method="POST" action="{{ route('register') }}" class="relative z-50">
+            <form method="POST" action="{{ route('register') }}" class="relative z-50" novalidate>
                 @csrf
 
                 <!-- Nama -->

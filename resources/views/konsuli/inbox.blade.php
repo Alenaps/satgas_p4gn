@@ -1,7 +1,7 @@
 @extends('layouts.konsuli')
 
-@section('title', 'INBOX Konsuli')
+@section('title', 'KONSELING Konsuli')
 
 @section('content')
-<h2>ini inbox</h2>
+<h2>ini KONSELING</h2>
 @endsection

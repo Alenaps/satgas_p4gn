@@ -5,58 +5,100 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Dashboard Konselor')</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-white font-sans antialiased">
+<body class="bg-gray-50 font-sans antialiased">
 
 <div class="flex flex-col md:flex-row min-h-screen">
 
     <!-- SIDEBAR -->
-    <aside class="w-full md:w-64 bg-gradient-to-b from-green-600 to-green-700 text-white flex flex-col">
+    <aside class="w-full md:w-64 bg-gradient-to-b from-green-600 to-green-700 text-white flex flex-col shadow-xl">
 
         <!-- Logo Section -->
-        <div class="flex flex-col items-center px-4 py-6">
-            <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-md mb-3">
+        <div class="flex flex-col items-center px-4 py-6 border-b border-green-500">
+            <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-lg mb-3">
                 <img src="{{ asset('assets/logo_unila.png') }}" alt="Logo" class="w-12 h-12">
             </div>
             <div class="text-center">
                 <h1 class="text-lg font-bold">SATGAS P4GN UNILA</h1>
-                <p class="text-xs opacity-90">SISTEM INFORMASI <br>KONSELING DAN PELAPORAN<br>UNIVERSITAS LAMPUNG</p>
+                <p class="text-xs opacity-90 mt-1">SISTEM INFORMASI<br>KONSELING DAN PELAPORAN<br>UNIVERSITAS LAMPUNG</p>
             </div>
         </div>
 
-        <!-- Menu -->
-        <nav class="flex-1 px-4 py-6 space-y-2">
-            <a href="#" class="flex items-center gap-2 p-2 hover:bg-green-500 rounded">
-                🏠 Beranda
+        <!-- User Profile Section -->
+        <div class="px-4 py-4 border-b border-green-500">
+            <a href="{{ route('profile.index') }}" class="flex items-center gap-3 p-3 hover:bg-green-500 rounded-lg transition-colors group">
+                <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-md overflow-hidden">
+                    @if(auth()->user()->foto)
+                        <img src="{{ asset('storage/' . auth()->user()->foto) }}" alt="Profile" class="w-full h-full object-cover">
+                    @else
+                        <i class="fas fa-user text-green-600 text-xl"></i>
+                    @endif
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="font-semibold text-sm truncate group-hover:text-green-50">{{ auth()->user()->nama }}</p>
+                    <p class="text-xs opacity-75 truncate">{{ auth()->user()->npm_nip }}</p>
+                    <p class="text-xs opacity-90 bg-green-800 px-2 py-0.5 rounded-full inline-block mt-1">
+                        {{ ucfirst(auth()->user()->role) }}
+                    </p>
+                </div>
             </a>
-            <a href="#" class="flex items-center gap-2 p-2 hover:bg-green-500 rounded">
-                📄 Publikasi
+        </div>
+
+        <!-- Menu Navigation -->
+        <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+            <a href="{{ route('konselor.dashboard') }}" 
+               class="flex items-center gap-3 px-3 py-2.5 hover:bg-green-500 rounded-lg transition-colors {{ request()->routeIs('konselor.dashboard') ? 'bg-green-500' : '' }}">
+                <i class="fas fa-home w-5"></i>
+                <span>Beranda</span>
             </a>
-            <a href="#" class="flex items-center gap-2 p-2 hover:bg-green-500 rounded">
-                📬 Inbox
+            
+            <a href="{{ route('konselor.publikasi.index') }}" 
+               class="flex items-center gap-3 px-3 py-2.5 hover:bg-green-500 rounded-lg transition-colors {{ request()->routeIs('konselor.publikasi.*') ? 'bg-green-500' : '' }}">
+                <i class="fas fa-newspaper w-5"></i>
+                <span>Publikasi</span>
             </a>
-            <a href="#" class="flex items-center gap-2 p-2 hover:bg-green-500 rounded">
-                📊 Laporan
+            
+            <a href="{{ route('konselor.laporan.index') }}" 
+               class="flex items-center gap-3 px-3 py-2.5 hover:bg-green-500 rounded-lg transition-colors {{ request()->routeIs('konselor.laporan.*') ? 'bg-green-500' : '' }}">
+                <i class="fas fa-file-alt w-5"></i>
+                <span>Laporan</span>
             </a>
+
+            <!-- PERBAIKAN: Tambahkan route yang benar untuk konseling -->
+            <a href="{{ route('konselor.konseling.index') }}" 
+               class="flex items-center gap-3 px-3 py-2.5 hover:bg-green-500 rounded-lg transition-colors {{ request()->routeIs('konselor.konseling.*') ? 'bg-green-500' : '' }}">
+                <i class="fas fa-comments w-5"></i>
+                <span>Konseling</span>
+            </a>
+
         </nav>
 
-        <!-- Logout -->
-        <form method="POST" action="{{ route('logout') }}" class="px-4 py-4">
-            @csrf
-            <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded">🔓 Logout</button>
-        </form>
+        <!-- Logout Button -->
+        <div class="px-4 py-4 border-t border-green-500">
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </form>
+        </div>
 
-        <footer class="text-center text-xs p-4 border-t border-green-800">
+        <footer class="text-center text-xs px-4 py-3 border-t border-green-500 opacity-75">
             © {{ date('Y') }} SATGAS P4GN UNILA
         </footer>
     </aside>
 
     <!-- MAIN CONTENT -->
-    <main class="flex-1 p-6 md:p-10">
+    <main class="flex-1 p-6 md:p-10 overflow-y-auto">
         @yield('content')
     </main>
 
 </div>
+
+{{-- Scripts Section --}}
+@yield('scripts')
 
 </body>
 </html>

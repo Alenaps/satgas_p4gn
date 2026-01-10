@@ -34,12 +34,12 @@
         </h2>
 
         <div class="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fadeInUp-delay">
-            <a href="{{ route('konseling.create') }}" 
+            <a href="{{ route('konsuli.konseling.index') }}" 
                class="bg-blue-500 text-white px-8 py-3 rounded-full font-semibold shadow-xl hover:shadow-blue-500/50 hover:-translate-y-1 transition-all duration-300">
                 Mulai Konseling
             </a>
 
-            <a href="{{ route('laporan.create') }}" 
+            <a href="{{ route('konsuli.laporan.create') }}" 
                class="bg-green-600 text-white px-8 py-3 rounded-full font-semibold shadow-xl hover:shadow-green-500/50 hover:-translate-y-1 transition-all duration-300">
                 Lapor Sekarang
             </a>
@@ -80,7 +80,7 @@
                 </p>
 
                 <div class="text-center mt-6">
-                    <a href="{{ route('konseling.create') }}"
+                    <a href="{{ route('konsuli.konseling.index') }}"
                        class="px-5 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-semibold">
                         Buka Layanan
                     </a>
@@ -107,7 +107,7 @@
                 </p>
 
                 <div class="text-center mt-6">
-                    <a href="{{ route('laporan.create') }}"
+                    <a href="{{ route('konsuli.laporan.create') }}"
                        class="px-5 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-semibold">
                         Ajukan Laporan
                     </a>
@@ -134,7 +134,7 @@
                 </p>
 
                 <div class="text-center mt-6">
-                    <a href="{{ route('publikasi.index') }}"
+                    <a href="{{ route('konsuli.publikasi.index') }}"
                        class="px-5 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-semibold">
                         Baca publikasi
                     </a>

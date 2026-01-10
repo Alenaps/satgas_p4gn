@@ -1,52 +1,87 @@
 @extends('layouts.konsuli')
-
 @section('title', 'Publikasi Konsuli')
+
+@section('content')
+<div class="bg-white">
+
     {{-- Hero Background --}}
     <div class="relative w-full h-64 bg-cover bg-center"
-        style="background-image: url('/images/banner.jpg');">
+         style="background-image: url('/assets/banner.jpeg');">
+
         <div class="absolute inset-0 bg-black bg-opacity-40"></div>
 
         <div class="relative z-10 flex flex-col items-center justify-center h-full text-white">
             <h1 class="text-3xl font-bold mb-4">News & Articles</h1>
 
-            {{-- Search Bar --}}
-            <form method="GET" action="{{ route('publikasi.index') }}" class="w-full max-w-lg">
-                <div class="flex bg-white rounded-full overflow-hidden shadow">
-                    <input type="text" name="q" placeholder="Search By"
-                           class="w-full px-4 py-2 text-gray-700 focus:outline-none">
-                    <button type="submit" class="bg-blue-600 text-white px-4 flex items-center">
-                        <i class="fa fa-search"></i>
-                    </button>
-                </div>
+            {{-- Search --}}
+            <form method="GET" action="{{ route('guest.publikasi.index') }}" class="flex gap-3 justify-center">
+    
+                <input type="text" name="q"
+                    value="{{ request('q') }}"
+                    placeholder="Cari..."
+                    class="px-3 py-2 border rounded-lg">
+
+                <select name="kategori" class="px-3 py-2 border rounded-lg text-gray-600">
+                    <option value="">Semua Kategori</option>
+                    @foreach($kategori as $k)
+                        <option value="{{ $k->kategori }}" {{ request('kategori')==$k->kategori? 'selected':'' }}>
+                            {{ $k->kategori }}
+                        </option>
+                    @endforeach
+                </select>
+
+                <button class="bg-blue-600 px-4 text-white rounded-lg">
+                    Cari
+                </button>
+
             </form>
+
         </div>
     </div>
 
-    {{-- publikasi Cards --}}
-    <div class="py-10 max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 
-        {{-- Looping dari database --}}
-        @foreach ($publikasis as $publikasi)
-        <div class="bg-white shadow-md rounded-xl overflow-hidden hover:shadow-xl transition">
-            <img src="{{ asset('storage/publikasi/' . $publikasi->thumbnail) }}"
-                 class="h-48 w-full object-cover" alt="thumbnail">
+    {{-- CARD LIST --}}
+    <section class="max-w-7xl mx-auto mt-12 px-4">
 
-            <div class="p-4">
-                <span class="text-sm font-semibold text-blue-600">{{ $publikasi->kategori }}</span>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 
-                <h3 class="mt-2 font-bold text-lg line-clamp-2">{{ $publikasi->judul }}</h3>
+            @foreach($publikasi as $p)
+                <article class="bg-white rounded-xl overflow-hidden shadow hover:shadow-lg transition">
 
-                <p class="mt-1 text-sm text-gray-600 line-clamp-3">
-                    {{ $publikasi->excerpt }}
-                </p>
+                    {{-- Thumbnail --}}
+                    <img src="{{ $p->thumbnail ? asset('storage/'.$p->thumbnail) : asset('assets/publikasi-default.jpg') }}"
+                         class="w-full h-48 object-cover"
+                         alt="{{ $p->judul }}">
 
-                <a href="{{ route('publikasi.show', $publikasi->slug) }}"
-                   class="text-blue-600 text-sm font-semibold inline-block mt-3">
-                    Read More >>
-                </a>
-            </div>
+                    {{-- Content --}}
+                    <div class="p-5">
+                        <span class="text-xs font-semibold text-blue-600 uppercase tracking-wide">
+                            {{ $p->kategori }}
+                        </span>
+
+                        <h3 class="font-bold mt-2 text-lg leading-snug">
+                            {{ $p->judul }}
+                        </h3>
+
+                        <p class="text-sm text-gray-600 mt-2 line-clamp-2">
+                            {{ $p->ringkasan }}
+                        </p>
+
+                        <a href="{{ route('guest.publikasi.show',$p->slug) }}"
+                           class="text-blue-600 mt-4 inline-block font-medium">
+                            Read More →
+                        </a>
+                    </div>
+                </article>
+            @endforeach
+
         </div>
-        @endforeach
 
-    </div>
+        <div class="mt-12 flex justify-center">
+            {{ $publikasi->links() }}
+        </div>
+
+    </section>
+
+</div>
 @endsection

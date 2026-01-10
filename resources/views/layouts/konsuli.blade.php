@@ -8,11 +8,12 @@
     @vite('resources/css/app.css')
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     @stack('styles')
 </head>
 
-<body class="bg-gray-900">
+<body class="bg-white">
 
     <!-- NAVBAR -->
     <nav class="bg-gradient-to-r from-green-500 to-green-600 shadow-lg" x-data="{ open: false }">
@@ -58,7 +59,7 @@
                 <li><a href="{{ route('konsuli.tentang') }}" class="hover:bg-white/15 px-4 py-2 rounded {{ Request::routeIs('tentang') ? 'bg-white/20' : '' }}">TENTANG</a></li>
                 <li><a href="{{ route('konsuli.publikasi.index') }}" class="hover:bg-white/15 px-4 py-2 rounded {{ Request::routeIs('konsuli.publikasi.index') ? 'bg-white/20' : '' }}">PUBLIKASI</a></li>
                 <li><a href="{{ route('konsuli.konselor.index') }}" class="hover:bg-white/15 px-4 py-2 rounded {{ Request::routeIs('konsuli.konselor.index') ? 'bg-white/20' : '' }}">KONSELOR</a></li>
-                <li><a href="{{ route('konsuli.inbox') }}" class="hover:bg-white/15 px-4 py-2 rounded {{ Request::routeIs('inbox') ? 'bg-white/20' : '' }}">INBOX</a></li>
+                <li><a href="{{ route('konsuli.konseling.index') }}" class="hover:bg-white/15 px-4 py-2 rounded {{ Request::routeIs('konsuli.konseling.index') ? 'bg-white/20' : '' }}">KONSELING</a></li>
                 <li><a href="{{ route('profile.index') }}" class="hover:bg-white/15 px-4 py-2 rounded {{ Request::routeIs('profile.index') ? 'bg-white/20' : '' }}">PROFILE</a></li>
 
                 <li>
@@ -79,9 +80,9 @@
 
                 <li><a href="{{ route('konsuli.dashboard') }}" class="px-4 py-2 hover:bg-white/15 rounded block">BERANDA</a></li>
                 <li><a href="{{ route('tentang') }}" class="px-4 py-2 hover:bg-white/15 rounded block">TENTANG</a></li>
-                <li><a href="{{ route('publikasi.index') }}" class="px-4 py-2 hover:bg-white/15 rounded block">PUBLIKASI</a></li>
-                <li><a href="{{ route('konselor.index') }}" class="px-4 py-2 hover:bg-white/15 rounded block">KONSELOR</a></li>
-                <li><a href="{{ route('inbox') }}" class="px-4 py-2 hover:bg-white/15 rounded block">INBOX</a></li>
+                <li><a href="{{ route('konsuli.publikasi.index') }}" class="px-4 py-2 hover:bg-white/15 rounded block">PUBLIKASI</a></li>
+                <li><a href="{{ route('konsuli.konselor.index') }}" class="px-4 py-2 hover:bg-white/15 rounded block">KONSELOR</a></li>
+                <li><a href="{{ route('konsuli.konseling.index') }}" class="px-4 py-2 hover:bg-white/15 rounded block">KONSELING</a></li>
                 <li><a href="{{ route('profile.index') }}" class="px-4 py-2 hover:bg-white/15 rounded block">PROFILE</a></li>
 
                 <li>
@@ -104,7 +105,7 @@
     <!--           FOOTER            -->
     <!-- =========================== -->
 
-    <footer class="bg-green-800 text-green-300 mt-10 border-t border-gray-700">
+    <footer class="bg-green-800 text-green-300 border-t border-gray-700">
         <div class="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-3 gap-8">
 
             <!-- Logo -->
@@ -130,10 +131,10 @@
                 <ul class="space-y-2 text-sm">
                     <li><a href="{{ route('konsuli.dashboard') }}" class="hover:text-white">Beranda</a></li>
                     <li><a href="{{ route('tentang') }}" class="hover:text-white">Tentang</a></li>
-                    <li><a href="{{ route('publikasi.index') }}" class="hover:text-white">Publikasi</a></li>
-                    <li><a href="{{ route('konselor.index') }}" class="hover:text-white">Konselor</a></li>
-                    <li><a href="{{ route('konseling.create') }}" class="hover:text-white">Konseling</a></li>
-                    <li><a href="{{ route('laporan.create') }}" class="hover:text-white">Lapor</a></li>
+                    <li><a href="{{ route('konsuli.publikasi.index') }}" class="hover:text-white">Publikasi</a></li>
+                    <li><a href="{{ route('konsuli.konselor.index') }}" class="hover:text-white">Konselor</a></li>
+                    <li><a href="{{ route('konsuli.konseling.index') }}" class="hover:text-white">Konseling</a></li>
+                    <li><a href="{{ route('konsuli.laporan.create') }}" class="hover:text-white">Lapor</a></li>
                 </ul>
             </div>
 
