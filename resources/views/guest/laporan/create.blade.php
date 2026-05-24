@@ -38,13 +38,13 @@
                     <label>Peran Pelapor</label>
                     <select name="peran_pelapor" class="w-full p-2 rounded mb-3">
                         <option value="">--Pilih--</option>
-                        <option>Mahasiswa</option>
-                        <option>Dosen</option>
-                        <option>Tendik</option>
+                        <option value="Mahasiswa">Mahasiswa</option>
+                        <option value="Dosen">Dosen</option>
+                        <option value="Tendik">Tendik</option>
                     </select>
 
                     <label>NIP/NPM</label>
-                    <input type="text" name="nip" class="w-full p-2 rounded mb-3">
+                    <input type="text" name="npm_nip" class="w-full p-2 rounded mb-3">
 
                     <label>No Telp</label>
                     <input type="text" name="no_telp" class="w-full p-2 rounded mb-3">
@@ -55,8 +55,8 @@
                     <label>Jenis Kelamin</label>
                     <select name="jk_pelapor" class="w-full p-2 rounded mb-3">
                         <option value="">--Pilih--</option>
-                        <option>Laki-laki</option>
-                        <option>Perempuan</option>
+                        <option value="Laki-laki">Laki-laki</option>
+                        <option value="Perempuan">Perempuan</option>
                     </select>
                 </div>
 
@@ -84,8 +84,8 @@
                     <label>Jenis Kelamin</label>
                     <select name="jk_terlapor" class="w-full p-2 rounded mb-3">
                         <option value="">--Pilih--</option>
-                        <option>Laki-laki</option>
-                        <option>Perempuan</option>
+                        <option value="Laki-laki">Laki-laki</option>
+                        <option value="Perempuan">Perempuan</option>
                     </select>
 
                     <label>Alamat Terlapor</label>

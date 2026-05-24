@@ -64,15 +64,15 @@ class LaporanController extends Controller
     {
         return $request->validate([
             'nama_pelapor'      => 'required|string|max:100',
-            'peran_pelapor'     => 'required|string|max:50',
+            'peran_pelapor'     => 'required|in:Mahasiswa, Dosen, Tendik',
             'jk_pelapor'        => 'required|in:Laki-laki,Perempuan',
 
-            'nip'               => 'nullable|string|max:30',
+            'npm_nip'           => 'nullable|string|max:30',
             'no_telp'           => 'nullable|numeric|digits_between:10,15',
             'email'             => 'nullable|email|max:100',
 
             'nama_terlapor'     => 'required|string|max:100',
-            'peran_terlapor'    => 'required|string|max:50',
+            'peran_terlapor'    => 'required|in:Mahasiswa, Dosen, Tendik',
             'no_telp_terlapor'  => 'nullable|numeric|digits_between:10,15',
             'jk_terlapor'       => 'required|in:Laki-laki,Perempuan',
             'alamat_terlapor'   => 'nullable|string|max:255',
@@ -105,7 +105,7 @@ class LaporanController extends Controller
         return [
             'nama_pelapor'     => $request->nama_pelapor,
             'peran_pelapor'    => $request->peran_pelapor,
-            'nip'              => $request->nip,
+            'npm_nip'          => $request->npm_nip,
             'telp_pelapor'     => $request->no_telp,
             'email'            => $request->email,
             'jk_pelapor'       => $request->jk_pelapor,

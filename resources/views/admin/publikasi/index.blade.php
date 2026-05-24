@@ -48,7 +48,7 @@
                     Terapkan
                 </button>
 
-                <a href="{{ route('konselor.publikasi.index') }}"
+                <a href="{{ route('admin.publikasi.index') }}"
                   class="bg-gray-400 text-white px-4 py-2 rounded-lg text-center w-full">
                     Reset
                 </a>

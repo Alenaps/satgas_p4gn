@@ -29,7 +29,7 @@
 
             <div>
                 <label class="{{ $labelClass }}">NIP/NPM</label>
-                <div class="{{ $valueClass }}">{{ $laporan->nip ?? '-' }}</div>
+                <div class="{{ $valueClass }}">{{ $laporan->npm_nip ?? '-' }}</div>
             </div>
 
             <div>
@@ -82,6 +82,11 @@
             <div>
                 <label class="{{ $labelClass }}">Jenis Kelamin</label>
                 <div class="{{ $valueClass }}">{{ $laporan->jk_terlapor }}</div>
+            </div>
+
+            <div>
+                <label class="{{ $labelClass }}">Jenis Kasus/Indikasi</label>
+                <div class="{{ $valueClass }}">{{ $laporan->jenis_kasus ?? '-' }}</div>
             </div>
         </div>
     </div>

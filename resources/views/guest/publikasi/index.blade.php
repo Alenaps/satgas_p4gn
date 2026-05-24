@@ -19,7 +19,7 @@
                 <input type="text" name="q"
                     value="{{ request('q') }}"
                     placeholder="Cari..."
-                    class="px-3 py-2 border rounded-lg">
+                    class="px-3 py-2 border rounded-lg text-black">
 
                 <select name="kategori" class="px-3 py-2 border rounded-lg text-gray-600">
                     <option value="">Semua Kategori</option>

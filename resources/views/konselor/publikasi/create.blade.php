@@ -1,9 +1,9 @@
-@extends('layouts.admin')
+@extends('layouts.konselor')
 @section('title','Tambah Publikasi')
 @section('content')
 
 <div class="mt-6 px-4">
-  <form id="formPublikasi" action="{{ route('admin.publikasi.store') }}" method="POST" enctype="multipart/form-data" novalidate>
+  <form id="formPublikasi" action="{{ route('konselor.publikasi.store') }}" method="POST" enctype="multipart/form-data" novalidate>
     @csrf
     <div class="flex flex-col lg:flex-row gap-6">
 

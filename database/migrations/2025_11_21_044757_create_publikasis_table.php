@@ -10,16 +10,16 @@ return new class extends Migration
     {
         Schema::create('publikasis', function (Blueprint $table) {
             $table->id();
-            $table->string('judul');
+            $table->string('judul', 191);
             $table->string('slug')->unique();
             $table->longText('isi');
-            $table->text('ringkasan');
+            $table->text('ringkasan', 300);
             $table->text('kutipan');
             $table->text('keyword');
             
             $table->enum('kategori', ['Artikel', 'Jurnal', 'Berita']); 
             $table->enum('status', ['Draft', 'Publish']);
-            $table->string('label')->nullable();
+            $table->string('label', 50)->nullable();
             $table->string('thumbnail')->nullable(); 
             $table->timestamps();
             $table->foreignId('user_id');

@@ -8,14 +8,39 @@
         <h1 class="text-3xl font-bold">{{ $publikasi->judul }}</h1>
 
         <p class="text-gray-600 mt-2">
-            {{ $publikasi->created_at->format('d M Y') }} • {{ $publikasi->kategori }}
+            {{ $publikasi->created_at->format('d M Y') }} • {{ $publikasi->kategori }} • {{ $publikasi->label }} 
         </p>
 
         <img src="{{ asset('storage/'.$publikasi->thumbnail) }}"
             class="w-full rounded-xl mt-6">
 
         <article class="prose mt-8">{!! $publikasi->isi !!}</article>
+ @if($publikasi->keyword)
+            <div class="mt-8">
+                <h4 class="font-semibold mb-2">Kata Kunci:</h4>
+                <div class="flex flex-wrap gap-2">
+                    @foreach(explode(',', $publikasi->keyword) as $key)
+                        <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">
+                            #{{ trim($key) }}
+                        </span>
+                    @endforeach
+                </div>
+            </div>
+        @endif
 
+        @if($publikasi->kutipan)
+            <div class="mt-10">
+                <h3 class="font-bold text-lg mb-3">Daftar Referensi</h3>
+                <ul class="list-decimal pl-5 text-sm text-gray-700 space-y-2">
+                    @foreach(explode("\n", $publikasi->kutipan) as $ref)
+                        @if(trim($ref) != '')
+                            <li>{{ $ref }}</li>
+                        @endif
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        
         <div class="flex justify-between mt-10 text-blue-600">
             @if($prev)
                 <a href="{{ route('guest.publikasi.show',$prev->slug) }}">← {{ $prev->judul }}</a>

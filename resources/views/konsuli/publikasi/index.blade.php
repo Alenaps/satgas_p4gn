@@ -14,12 +14,12 @@
             <h1 class="text-3xl font-bold mb-4">News & Articles</h1>
 
             {{-- Search --}}
-            <form method="GET" action="{{ route('guest.publikasi.index') }}" class="flex gap-3 justify-center">
+            <form method="GET" action="{{ route('konsuli.publikasi.index') }}" class="flex gap-3 justify-center">
     
                 <input type="text" name="q"
                     value="{{ request('q') }}"
                     placeholder="Cari..."
-                    class="px-3 py-2 border rounded-lg">
+                    class="px-3 py-2 border rounded-lg text-black">
 
                 <select name="kategori" class="px-3 py-2 border rounded-lg text-gray-600">
                     <option value="">Semua Kategori</option>
@@ -67,7 +67,7 @@
                             {{ $p->ringkasan }}
                         </p>
 
-                        <a href="{{ route('guest.publikasi.show',$p->slug) }}"
+                        <a href="{{ route('konsuli.publikasi.show',$p->slug) }}"
                            class="text-blue-600 mt-4 inline-block font-medium">
                             Read More →
                         </a>

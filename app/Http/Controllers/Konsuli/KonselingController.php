@@ -8,6 +8,7 @@ use App\Models\KonselingSession;
 use App\Models\KonselingMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Events\MessageSent;
 
 class KonselingController extends Controller
 {
@@ -99,54 +100,60 @@ class KonselingController extends Controller
     /**
      * Kirim pesan
      */
-    public function sendMessage(Request $request, $sessionId)
-    {
-        $request->validate([
-            'message' => 'required|string|max:5000'
-        ]);
+public function sendMessage(Request $request, $sessionId)
+{
+    $request->validate([
+        'message' => 'required|string|max:5000'
+    ]);
 
-        $session = KonselingSession::where('id', $sessionId)
-            ->where('konseli_id', Auth::id())
-            ->where('status', 'active')
-            ->firstOrFail();
+    $session = KonselingSession::where('id', $sessionId)
+        ->where('konseli_id', Auth::id())
+        ->where('status', 'active')
+        ->firstOrFail();
 
-        $message = KonselingMessage::create([
-            'session_id' => $sessionId,
-            'sender_id' => Auth::id(),
-            'message' => $request->message
-        ]);
+    $message = KonselingMessage::create([
+        'session_id' => $sessionId,
+        'sender_id'  => Auth::id(),
+        'message'    => $request->message
+    ]);
 
-        // Load sender relationship
-        $message->load('sender');
+    $message->load('sender');
 
-        return response()->json([
-            'success' => true,
-            'message' => $message
-        ]);
-    }
+    // Broadcast ke konselor (toOthers = jangan kirim balik ke pengirim)
+    broadcast(new MessageSent($message))->toOthers();
+
+    return response()->json([
+        'success' => true,
+        'message' => $message
+    ]);
+}
 
     /**
      * Get new messages (AJAX)
      */
-    public function getMessages($sessionId)
-    {
-        $session = KonselingSession::where('id', $sessionId)
-            ->where('konseli_id', Auth::id())
-            ->firstOrFail();
+    public function getMessages(Request $request, $sessionId)
+{
+    $session = KonselingSession::where('id', $sessionId)
+        ->where('konseli_id', Auth::id())
+        ->firstOrFail();
 
-        $messages = $session->messages()
-            ->with('sender')
-            ->orderBy('created_at', 'asc')
-            ->get();
+    $query = $session->messages()->orderBy('created_at', 'asc');
 
-        // Mark as read
-        $session->messages()
-            ->where('sender_id', '!=', Auth::id())
-            ->where('is_read', false)
-            ->update(['is_read' => true]);
-
-        return response()->json($messages);
+    // Hanya ambil pesan setelah ID tertentu (untuk polling efisien)
+    if ($request->filled('after_id')) {
+        $query->where('id', '>', (int) $request->after_id);
     }
+
+    $messages = $query->get(['id', 'sender_id', 'message', 'is_read', 'created_at']);
+
+    // Mark as read
+    $session->messages()
+        ->where('sender_id', '!=', Auth::id())
+        ->where('is_read', false)
+        ->update(['is_read' => true]);
+
+    return response()->json(['messages' => $messages]);
+}
 
     /**
      * End session dari sisi konseli
@@ -166,4 +173,16 @@ class KonselingController extends Controller
         return redirect()->route('konsuli.konseling.index')
             ->with('success', 'Sesi konseling telah diakhiri.');
     }
+
+   public function showRiwayat($id)
+{
+    $session = \App\Models\KonselingSession::with(['konselor', 'messages'])->findOrFail($id);
+
+    if ($session->konseli_id !== auth()->id()) {
+        abort(403, 'Unauthorized action.');
+    }
+
+    // Harus pakai 'konseling.detail' karena filenya ada di dalam folder konseling
+    return view('konsuli.konseling.detail', compact('session'));
+}
 }
