@@ -1,18 +1,17 @@
 <?php
 
+use App\Models\KonselingSession;
 use Illuminate\Support\Facades\Broadcast;
 
 /*
-|--------------------------------------------------------------------------
-| Broadcast Channels
-|--------------------------------------------------------------------------
-|
-| Here you may register all of the event broadcasting channels that your
-| application supports. The given channel authorization callbacks are
-| used to check if an authenticated user can listen to the channel.
-|
-*/
+ * Hanya konseli atau konselor yang terlibat
+ * dalam sesi tersebut yang boleh masuk ke channel
+ */
+Broadcast::channel('session.{sessionId}', function ($user, $sessionId) {
+    $session = KonselingSession::find($sessionId);
 
-Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
-    return (int) $user->id === (int) $id;
+    if (!$session) return false;
+
+    return $user->id === $session->konseli_id
+        || $user->id === $session->konselor_id;
 });

@@ -29,7 +29,7 @@ return [
     */
 
     'connections' => [
-
+        //seng ini settingan pusher ya
         'pusher' => [
             'driver' => 'pusher',
             'key' => env('PUSHER_APP_KEY'),
@@ -43,6 +43,7 @@ return [
                 'useTLS' => env('PUSHER_SCHEME', 'https') === 'https',
             ],
             'client_options' => [
+                'verify' => false, // bypass ssl jangan lupa hapus di production!!!!!!!
                 // Guzzle client options: https://docs.guzzlephp.org/en/stable/request-options.html
             ],
         ],
