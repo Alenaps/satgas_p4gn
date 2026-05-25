@@ -1,4 +1,4 @@
-@extends('layouts.guest')
+@extends('layouts.konsuli')
 
 @section('title', 'Laporan - SATGAS P4GN UNILA')
 
@@ -29,6 +29,7 @@
             <p class="text-gray-700 leading-relaxed mb-4">
                 Setiap laporan yang diterima akan diverifikasi oleh tim konselor dan petugas terkait. 
                 Identitas pelapor tidak akan disebarluaskan dan tetap terjaga sesuai standar kerahasiaan informasi.
+                Pantau perkembangan laporan Anda di menu <span class="font-semibold">"Laporan Saya"</span>.
             </p>
 
             <p class="text-gray-700 leading-relaxed">

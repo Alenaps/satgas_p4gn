@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Konselor;
 use App\Http\Controllers\Controller;
 use App\Models\PublikasiModel;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
@@ -13,20 +12,20 @@ class PublikasiController extends Controller
     public function index(Request $request)
     {
         $publikasi = PublikasiModel::query();
-        
-        //search
-        if ($request->search){
-            $publikasi->where('judul', 'like', '%'.request()->search.'%');
+
+        // SEARCH
+        if ($request->filled('search')) {
+            $publikasi->where('judul', 'like', '%' . $request->search . '%');
         }
 
-        //filter
-        if ($request->kategori){
-            $publikasi->where('kategori', request()->kategori);
-        }
-        if ($request->status){
-            $publikasi->where('status', request()->status);
+        // FILTER
+        if ($request->filled('kategori')) {
+            $publikasi->where('kategori', $request->kategori);
         }
 
+        if ($request->filled('status')) {
+            $publikasi->where('status', $request->status);
+        }
 
         $publikasi = $publikasi->latest()->paginate(10)->appends($request->all());
         return view('konselor.publikasi.index', compact('publikasi'));
@@ -41,46 +40,10 @@ class PublikasiController extends Controller
 
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'judul'     => 'required|string|min:5|max:191',
-            'slug'      => 'nullable|unique:publikasis,slug',
-            'isi'       => 'required|min:50',
-            'ringkasan' => 'required|max:300',
-            'kategori'  => ['required', Rule::in(['Artikel','Jurnal','Berita'])],
-            'status'    => ['required', Rule::in(['Draft','Publish'])],
-            'thumbnail' => 'nullable|image|mimes:jpg,jpeg,png|max:4096',
-        ],[
-            'judul.required' => 'Judul wajib diisi.',
-            'judul.min'      => 'Judul minimal 5 karakter.',
-            'judul.max'      => 'Judul maksimal 191 karakter.',
+        // VALIDASI
+        $this->validatePublikasi($request);
 
-            'slug.unique' => 'Slug sudah digunakan.',
-
-            'isi.required' => 'Isi publikasi wajib diisi.',
-            'isi.min'      => 'Isi minimal 50 karakter.',
-
-            'ringkasan.required' => 'Ringkasan wajib diisi.',
-            'ringkasan.max' => 'Ringkasan maksimal 300 karakter.',
-
-            'kategori.required' => 'Kategori wajib dipilih.',
-            'kategori.in'       => 'Kategori tidak valid.',
-
-            'status.required' => 'Status wajib dipilih.',
-            'status.in'       => 'Status tidak valid.',
-
-            'thumbnail.image' => 'Thumbnail harus berupa gambar.',
-            'thumbnail.mimes' => 'Format gambar harus JPG, JPEG, atau PNG.',
-            'thumbnail.max'   => 'Ukuran gambar maksimal 4MB.',
-        ]);
-
-        // slug otomatis jika tidak diisi
-        $slug = $request->slug ?: Str::slug($request->judul);
-        $base = $slug; $i = 1;
-        while(PublikasiModel::where('slug',$slug)->exists()){
-            $slug = $base . '-' . $i++;
-        }
-
-        // UPLOAD 
+        // UPLOAD
         $thumbnail = null;
         if ($request->hasFile('thumbnail')) {
             $thumbnail = $request->file('thumbnail')->store('publikasi', 'public');
@@ -88,7 +51,7 @@ class PublikasiController extends Controller
 
         PublikasiModel::create([
             'judul'     => $request->judul,
-            'slug'      => $slug,
+            'slug'      => $request->slug,
             'isi'       => $request->isi,
             'ringkasan' => $request->ringkasan,
             'kutipan'   => $request->kutipan,
@@ -103,7 +66,7 @@ class PublikasiController extends Controller
         return redirect()->route('konselor.publikasi.index')->with('success','Publikasi berhasil ditambahkan.');
     }
 
-    public function edit($id)
+    public function edit(int $id)
     {
         $publikasi = PublikasiModel::findOrFail($id);
         $kategori = ['Artikel','Jurnal','Berita'];
@@ -111,33 +74,91 @@ class PublikasiController extends Controller
         return view('konselor.publikasi.edit', compact('publikasi','kategori','status'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request,int $id)
     {
         $item = PublikasiModel::findOrFail($id);
 
-        $this->validate($request, [
+        // VALIDASI
+        $this->validatePublikasi($request, $item->id);
+
+        // THUMBNAIL
+        $thumbnail = $item->thumbnail;
+
+        if ($request->hasFile('thumbnail')) {
+            if ($thumbnail && Storage::disk('public')->exists($thumbnail)) {
+                Storage::disk('public')->delete($thumbnail);
+            }
+
+            $thumbnail = $request->file('thumbnail')->store('publikasi', 'public');
+        }
+
+        $item->update([
+            'judul'     => $request->judul,
+            'slug'      => $request->slug,
+            'isi'       => $request->isi,
+            'ringkasan' => $request->ringkasan,
+            'kutipan'   => $request->kutipan,
+            'kategori'  => $request->kategori,
+            'status'    => $request->status,
+            'label'     => $request->label,
+            'keyword'   => $request->keyword,
+            'thumbnail' => $thumbnail,
+            'user_id'   => auth()->id(),
+        ]);
+
+        return redirect()->route('konselor.publikasi.index')
+            ->with('success','Publikasi diperbarui.');
+    }
+
+    public function destroy(PublikasiModel $publikasi)
+    {
+        if ($publikasi->thumbnail && Storage::disk('public')->exists($publikasi->thumbnail)) {
+            Storage::disk('public')->delete($publikasi->thumbnail);
+        }
+
+        $publikasi->delete();
+
+        return back()->with('success','Publikasi dihapus!');
+    }
+
+    // VALIDASI
+    private function validatePublikasi(Request $request, $id = null)
+    {
+        return $request->validate([
             'judul'     => 'required|string|min:5|max:191',
-            'slug'      => ['nullable', Rule::unique('publikasis','slug')->ignore($item->id)],
-            'isi'       => 'required|min:50',
-            'ringkasan' => 'required|max:300',
-            'kutipan'   => 'nullable|max:300',
-            'kategori'  => ['required', Rule::in(['Artikel','Jurnal','Berita'])],
-            'keyword'   => 'nullable',
-            'label'     => 'nullable',
-            'status'    => ['required', Rule::in(['Draft','Publish'])],
-            'thumbnail' => 'nullable|image|mimes:jpg,jpeg,png|max:4096',
-        ],[
+
+            'slug'      => [
+                'nullable',
+                'string',
+                Rule::unique('publikasis','slug')->ignore($id)
+            ],
+
+            'isi'       => 'required|string|min:50',
+            'ringkasan' => 'required|string|max:300',
+            'kutipan'   => 'nullable|string|max:300',
+            'keyword'   => 'nullable|string|max:255',
+            'label'     => 'nullable|string|max:100',
+
+            'kategori'  => 'required|in:Artikel,Jurnal,Berita',
+            'status'    => 'required|in:Draft,Publish',
+
+            'thumbnail' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+
+        ], [
+
             'judul.required' => 'Judul wajib diisi.',
             'judul.min'      => 'Judul minimal 5 karakter.',
             'judul.max'      => 'Judul maksimal 191 karakter.',
 
-            'slug.unique' => 'Slug sudah digunakan.',
+            'slug.unique'    => 'Slug sudah digunakan.',
 
-            'isi.required' => 'Isi publikasi wajib diisi.',
-            'isi.min'      => 'Isi minimal 50 karakter.',
+            'isi.required'   => 'Isi publikasi wajib diisi.',
+            'isi.min'        => 'Isi minimal 50 karakter.',
 
             'ringkasan.required' => 'Ringkasan wajib diisi.',
-            'ringkasan.max' => 'Ringkasan maksimal 300 karakter.',
+            'ringkasan.max'      => 'Ringkasan maksimal 300 karakter.',
+
+            'kutipan.max' => 'Kutipan maksimal 300 karakter.',
 
             'kategori.required' => 'Kategori wajib dipilih.',
             'kategori.in'       => 'Kategori tidak valid.',
@@ -146,53 +167,8 @@ class PublikasiController extends Controller
             'status.in'       => 'Status tidak valid.',
 
             'thumbnail.image' => 'Thumbnail harus berupa gambar.',
-            'thumbnail.mimes' => 'Format gambar harus JPG, JPEG, atau PNG.',
-            'thumbnail.max'   => 'Ukuran gambar maksimal 4MB.',
+            'thumbnail.mimes' => 'Format harus JPG, JPEG, PNG.',
+            'thumbnail.max'   => 'Ukuran maksimal 2MB.',
         ]);
-
-        // slug otomatis kalau slug dikosongkan
-        $slug = $request->slug ?: Str::slug($request->judul);
-        $base = $slug; $i = 1;
-        while(PublikasiModel::where('slug',$slug)->where('id','!=',$item->id)->exists()){
-            $slug = $base . '-' . $i++;
-        }
-
-        // UPLOAD 
-        if ($request->hasFile('thumbnail')) {
-            // hapus file lama
-            if ($item->thumbnail && Storage::disk('public')->exists($item->thumbnail)) {
-                Storage::disk('public')->delete($item->thumbnail);
-            }
-            // upload baru
-            $item->thumbnail = $request->file('thumbnail')->store('publikasi', 'public');
-        }
-
-        $item->update([
-            'judul'     => $request->judul,
-            'slug'      => $slug,
-            'isi'       => $request->isi,
-            'ringkasan' => $request->ringkasan,
-            'kutipan'   => $request->kutipan,
-            'catatan'   => $request->catatan,
-            'kategori'  => $request->kategori,
-            'status'    => $request->status,
-            'label'     => $request->label,
-            'keyword'   => $request->keyword,
-            'thumbnail' => $item->thumbnail,
-            'user_id'   => auth()->id(),
-        ]);
-
-        return redirect()->route('konselor.publikasi.index')->with('success','Publikasi diperbarui.');
-    }
-
-    public function destroy(PublikasiModel $publikasi)
-    {
-        if($publikasi->thumbnail && Storage::disk('public')->exists($publikasi->thumbnail)){
-            Storage::disk('public')->delete($publikasi->thumbnail);
-        }
-
-        $publikasi->delete();
-
-        return back()->with('success','Publikasi dihapus!');
     }
 }

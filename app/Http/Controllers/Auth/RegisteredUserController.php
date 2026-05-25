@@ -31,17 +31,19 @@ class RegisteredUserController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nama' => 'required|string|max:100',
-            'jenis_kelamin' => 'required|string',
-            'npm_nip' => 'required|string|max:50|unique:users',
-            'no_telp' => 'nullable|string|max:20',
-            'email' => 'required|string|email|max:100|unique:users',
-            'password' => 'required|string|confirmed|min:8',
+            'nama' => 'required|string|max:60',
+            'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
+            'npm_nip' => ['required','string','regex:/^(\d{10,12}|\d{18})$/','unique:users,npm_nip'],
+            'no_telp' => 'nullable|string|max:15',
+            'email' => 'required|string|email|max:40|unique:users,email',
+            'password' => 'required|string|confirmed|min:8|max:16',
         ], [
             'nama.required' => 'Nama lengkap belum diisi.',
             'jenis_kelamin.required' => 'Jenis kelamin belum dipilih.',
             'npm_nip.required' => 'NPM/NIP tidak boleh kosong.',
             'npm_nip.numeric' => 'NPM/NIP harus berupa angka.',
+            'npm_nip.unique' => 'NPM/NIP ini sudah terdaftar.',
+            'npm_nip.regex' => 'Format NPM harus 10-12 digit atau NIP 18 digit.',
             'no_telp.required' => 'Nomor telepon tidak boleh kosong.',
             'no_telp.numeric' => 'Nomor telepon harus berupa angka.',
             'email.required' => 'Email tidak boleh kosong.',
@@ -49,6 +51,7 @@ class RegisteredUserController extends Controller
             'email.unique' => 'Email ini sudah terdaftar.',
             'password.required' => 'Password belum diisi.',
             'password.min' => 'Password minimal 8 karakter.',
+            'password.max' => 'Password maksimal 16 karakter.',
             'password.confirmed' => 'Konfirmasi password tidak sesuai.',
         ]);
 

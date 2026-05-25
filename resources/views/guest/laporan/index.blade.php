@@ -30,7 +30,16 @@
                 Setiap laporan yang diterima akan diverifikasi oleh tim konselor dan petugas terkait. 
                 Identitas pelapor tidak akan disebarluaskan dan tetap terjaga sesuai standar kerahasiaan informasi.
             </p>
-
+            
+            <div>
+                <p class="font-semibold text-gray-700 leading-relaxed">Untuk melihat perkembangan laporan:</p>
+                <ul class="list-disc pl-5 space-y-1">
+                    <li>Klik menu Daftar dan Login ke akun Anda</li>
+                    <li>Masuk ke menu <span class="font-semibold">"Laporan Saya"</span></li>
+                    <li>Klaim laporan menggunakan kode & token yang Anda terima di email pelapor</li>
+                </ul>
+            </div>
+            <br>
             <p class="text-gray-700 leading-relaxed">
                 Terima kasih telah berkontribusi dalam upaya pencegahan dan penanganan penyalahgunaan narkoba
                 di lingkungan Universitas Lampung.  

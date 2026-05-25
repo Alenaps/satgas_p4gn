@@ -64,6 +64,7 @@
         <table class="w-full text-left">
             <thead class="bg-blue-600 border-b border-blue-200 text-white">
                 <tr>
+                    <th class="p-4 font-semibold">No</th>
                     <th class="p-4 font-semibold">Thumbnail</th>
                     <th class="p-4 font-semibold">Judul</th>
                     <th class="p-4 font-semibold">Kategori</th>
@@ -75,6 +76,9 @@
             <tbody class="text-gray-800">
                 @forelse ($publikasi as $item)
                 <tr class="border-b hover:bg-blue-50 transition">
+
+                    <!-- NO -->
+                    <td class="p-4">{{ $loop->iteration }}</td>
 
                     <!-- THUMBNAIL -->
                     <td class="p-4">

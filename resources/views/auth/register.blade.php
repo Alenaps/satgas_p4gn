@@ -1,7 +1,7 @@
 @extends('layouts.auth')
 
 @section('content')
-    <div class="min-h-screen flex items-center justify-center bg-green-500 py-8">
+    <div class="min-h-screen flex items-center justify-center bg-green-500 py-8 px-4">
         <div class="w-full max-w-md bg-white shadow-md rounded-2xl p-8 border border-green-100">
             
             <h2 class="text-2xl font-bold text-blue-700 text-center mb-6">

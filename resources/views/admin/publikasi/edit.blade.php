@@ -48,6 +48,7 @@
           <span class="text-sm">Kutipan</span>
           <input name="kutipan" value="{{ old('kutipan', $publikasi->kutipan) }}"
                  class="w-full border px-3 py-2 rounded" />
+          <small id="kutipanErr" class="text-red-600 hidden">Maksimal 300 karakter</small>
         </label>
 
         <label class="block mb-3">
@@ -101,7 +102,7 @@
           {{-- thumbnail input --}}
           <input id="thumbnail" name="thumbnail" type="file" accept="image/*" class="mt-3" />
 
-          <small class="text-gray-600">Ukuran file maksimal 2MB</small>
+          <small class="text-gray-600">Ukuran file maksimal 2MB format .jpg, .jpeg, .png</small>
         </div>
 
         <div class="bg-yellow-300 p-4 rounded">
@@ -241,6 +242,13 @@ document.addEventListener('DOMContentLoaded', function(){
         let status = document.getElementById("status").value;
         if (status === "") {
             alert("Status wajib dipilih!");
+            valid = false;
+        }
+
+        // ===== KUTIPAN =====
+        let kutipan = document.getElementById("kutipan").value.trim();
+        if (kutipan.length > 300) {
+            alert("Kutipan maksimal 300 karakter.");
             valid = false;
         }
 

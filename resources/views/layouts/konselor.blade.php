@@ -99,6 +99,9 @@
 
 {{-- Scripts Section --}}
 @yield('scripts')
-
+@stack('scripts')
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@endpush
 </body>
 </html>

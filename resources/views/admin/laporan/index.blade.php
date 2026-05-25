@@ -68,7 +68,7 @@
                     <th class="p-4 text-left font-semibold">TANGGAL</th>
                     <th class="p-4 text-left font-semibold">NAMA TERLAPOR</th>
                     <th class="p-4 text-left font-semibold">LOKASI KEJADIAN</th>
-                    <th class="p-4 text-left font-semibold">BUKTI</th>
+                    <th class="p-4 text-left font-semibold">FOTO LOKASI</th>
                     <th class="p-4 text-left font-semibold">AKSI</th>
                 </tr>
             </thead>

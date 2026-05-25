@@ -59,7 +59,7 @@
             <a href="{{ route('admin.publikasi.index') }}" 
                class="flex items-center gap-3 px-3 py-2.5 hover:bg-green-500 rounded-lg transition-colors {{ request()->routeIs('publikasi.*') ? 'bg-green-500' : '' }}">
                 <i class="fas fa-newspaper w-5"></i>
-                <span>Publikasi</span>
+                <span>Data Publikasi</span>
             </a>
             
             <a href="{{ route('admin.laporan.index') }}" 
@@ -102,6 +102,8 @@
 {{-- Scripts Section --}}
 @yield('scripts')
 @stack('scripts')
-
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@endpush
 </body>
 </html>
