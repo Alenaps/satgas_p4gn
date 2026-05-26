@@ -1,223 +1,300 @@
 @extends('layouts.konselor')
 
-@section('title', 'Konseling')
+@section('title', 'Ruang Praktik')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 py-6">
+    
+    {{-- Decorative Background Blobs --}}
+    <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-300/20 rounded-full blur-[120px] -z-10 -mr-64 -mt-32"></div>
+    <div class="absolute bottom-1/4 left-0 w-[400px] h-[400px] bg-teal-300/10 rounded-full blur-[100px] -z-10 -ml-48"></div>
 
-    @if(session('success'))
-    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-        {{ session('success') }}
-    </div>
-    @endif
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 relative">
 
-    @if(session('error'))
-    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-        {{ session('error') }}
-    </div>
-    @endif
-
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <!-- Permintaan Konseling Masuk -->
-        <div>
-            <h2 class="text-xl font-bold text-gray-800 mb-3">Permintaan Konseling Masuk</h2>
-            
-            @if($pendingSessions->count() > 0)
-            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-3 mb-3">
-                <p class="text-sm text-yellow-700">
-                    <i class="fas fa-bell mr-2"></i>
-                    Anda memiliki {{ $pendingSessions->count() }} permintaan konseling yang menunggu persetujuan.
-                </p>
-            </div>
-
-            <div class="space-y-3">
-                @foreach($pendingSessions as $session)
-                <div class="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-lg shadow-md p-4 border-l-4 border-yellow-500">
-                <div class="flex items-center gap-3 mb-3">
-                    <div class="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
-                        @if($session->konseli->foto)
-                            <img src="{{ asset('storage/' . $session->konseli->foto) }}" class="w-full h-full object-cover">
-                        @else
-                            <i class="fas fa-user text-gray-400 text-xl"></i>
-                        @endif
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <h3 class="font-semibold text-gray-800 truncate">{{ $session->konseli->nama }}</h3>
-                        <p class="text-xs text-gray-600">{{ $session->konseli->npm_nip }}</p>
-                        <span class="inline-block px-2 py-0.5 text-xs rounded-full mt-1 bg-yellow-100 text-yellow-800">
-                            Menunggu Persetujuan
-                        </span>
-                    </div>
-                </div>
-
-                <div class="text-xs text-gray-600 mb-3 space-y-1">
-                    <p><i class="fas fa-calendar mr-2"></i>{{ $session->created_at->format('d M Y, H:i') }}</p>
-                    <p><i class="fas fa-clock mr-2"></i>{{ $session->created_at->diffForHumans() }}</p>
-                </div>
-
-                <div class="flex gap-2">
-                    <form action="{{ route('konselor.konseling.approve', $session->id) }}" method="POST" class="flex-1">
-                        @csrf
-                        <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg transition-colors text-sm">
-                            <i class="fas fa-check mr-1"></i>Terima
-                        </button>
-                    </form>
-                    <form action="{{ route('konselor.konseling.reject', $session->id) }}" method="POST" class="flex-1">
-                        @csrf
-                        <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg transition-colors text-sm" 
-                                onclick="return confirm('Yakin ingin menolak permintaan ini?')">
-                            <i class="fas fa-times mr-1"></i>Tolak
-                        </button>
-                    </form>
-                </div>
-            </div>
-            @endforeach
-            </div>
-            @else
-            <div class="bg-gray-100 p-6 rounded-lg text-center border-2 border-dashed border-gray-300">
-                <i class="fas fa-inbox text-gray-400 text-3xl mb-2"></i>
-                <p class="text-gray-600 text-sm">Tidak ada permintaan konseling</p>
-            </div>
-            @endif
+        {{-- Header --}}
+        <div class="mb-12 animate-fade-in-down">
+            <h1 class="text-3xl md:text-4xl font-black text-gray-800 tracking-tight mb-2">
+                Halo, <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-700 to-teal-600">{{ auth()->user()->name ?? 'Konselor' }}</span> 
+            </h1>
+            <p class="text-gray-600 font-medium text-lg">Selamat datang kembali. Mari bantu mereka menemukan ketenangan hari ini.</p>
         </div>
 
-        <!-- Sesi Konseling Aktif -->
-        <div>
-            <h2 class="text-xl font-bold text-gray-800 mb-3">Sesi Konseling Aktif</h2>
-            
-            @if($activeSessions->count() > 0)
-            <div class="bg-green-50 border-l-4 border-green-400 p-3 mb-3">
-                <p class="text-sm text-green-700">
-                    <i class="fas fa-comments mr-2"></i>
-                    Anda memiliki {{ $activeSessions->count() }} sesi konseling aktif.
-                </p>
+        {{-- Alerts --}}
+        @if(session('success'))
+        <div class="bg-[#f4f7f6] border-l-4 border-emerald-500 text-gray-800 px-6 py-4 rounded-2xl mb-8 flex items-center shadow-lg shadow-emerald-900/5 animate-fade-in-down">
+            <div class="bg-emerald-200/50 p-2 rounded-full mr-4 text-emerald-700 text-sm">
+                <i class="fas fa-check"></i>
             </div>
-
-            <div class="space-y-3">
-                @foreach($activeSessions as $session)
-                <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg shadow-md p-4 border-l-4 border-green-500">
-                <div class="flex items-center gap-3 mb-3">
-                    <div class="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
-                        @if($session->konseli->foto)
-                            <img src="{{ asset('storage/' . $session->konseli->foto) }}" class="w-full h-full object-cover">
-                        @else
-                            <i class="fas fa-user text-gray-400 text-xl"></i>
-                        @endif
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <h3 class="font-semibold text-gray-800 truncate">{{ $session->konseli->nama }}</h3>
-                        <p class="text-xs text-gray-600">{{ $session->konseli->npm_nip }}</p>
-                        <span class="inline-block px-2 py-0.5 text-xs rounded-full mt-1 bg-green-100 text-green-800">
-                            Aktif
-                        </span>
-                    </div>
-                </div>
-
-                <div class="text-xs text-gray-600 mb-3 space-y-1">
-                    <p><i class="fas fa-calendar mr-2"></i>{{ $session->started_at->format('d M Y, H:i') }}</p>
-                    <p><i class="fas fa-clock mr-2"></i>{{ $session->started_at->diffForHumans() }}</p>
-                </div>
-
-                <div class="flex gap-2">
-                    <a href="{{ route('konselor.konseling.chat', $session->id) }}" class="flex-1 bg-green-600 hover:bg-green-700 text-white text-center py-2 rounded-lg transition-colors text-sm">
-                        <i class="fas fa-comments mr-1"></i>Buka Chat
-                    </a>
-                    <a href="{{ route('konselor.konseling.end-form', $session->id) }}" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-center py-2 rounded-lg transition-colors text-sm">
-                        <i class="fas fa-check-circle mr-1"></i>Akhiri
-                    </a>
-                </div>
-            </div>
-            @endforeach
-            </div>
-            @else
-            <div class="bg-gray-100 p-6 rounded-lg text-center border-2 border-dashed border-gray-300">
-                <i class="fas fa-inbox text-gray-400 text-3xl mb-2"></i>
-                <p class="text-gray-600 text-sm">Tidak ada sesi konseling aktif</p>
-            </div>
-            @endif
+            <span class="font-bold">{{ session('success') }}</span>
         </div>
-    </div>
+        @endif
 
-    <!-- Pesan jika tidak ada sesi pending dan aktif -->
-    @if($pendingSessions->count() == 0 && $activeSessions->count() == 0)
-    <div class="bg-gradient-to-br from-gray-100 to-gray-200 p-8 rounded-lg text-center mb-6 border-2 border-dashed border-gray-300">
-        <i class="fas fa-inbox text-gray-400 text-4xl mb-3"></i>
-        <p class="text-gray-600 font-medium">Tidak ada permintaan atau sesi konseling aktif</p>
-        <p class="text-gray-500 text-sm mt-2">Permintaan konseling baru akan muncul di sini</p>
-    </div>
-    @endif
-
-    <!-- Riwayat Konseling -->
-    @if($completedSessions->total() > 0)
-    <div class="mt-6">
-        <h2 class="text-xl font-bold text-gray-800 mb-3">Riwayat Konseling</h2>
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gradient-to-r from-green-600 to-green-700">
-                        <tr>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-white uppercase tracking-wider">Konseli</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-white uppercase tracking-wider">Tanggal Mulai</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-white uppercase tracking-wider">Tanggal Selesai</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-white uppercase tracking-wider">Durasi</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-white uppercase tracking-wider">Status</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-white uppercase tracking-wider">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        @foreach($completedSessions as $index => $session)
-                        <tr class="{{ $index % 2 == 0 ? 'bg-white' : 'bg-gray-50' }} hover:bg-green-50 transition-colors">
-                            <td class="px-4 py-3 whitespace-nowrap">
-                                <div class="flex items-center">
-                                    <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden mr-3 flex-shrink-0">
-                                        @if($session->konseli->foto)
-                                            <img src="{{ asset('storage/' . $session->konseli->foto) }}" class="w-full h-full object-cover">
-                                        @else
-                                            <i class="fas fa-user text-gray-400 text-sm"></i>
-                                        @endif
+        {{-- Grid: Pending & Active (Dibungkus Container Mint Grey) --}}
+        <div class="bg-[#dce8e4]/60 p-6 md:p-8 rounded-[2.5rem] mb-12 shadow-sm border border-[#cddad5]">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+                
+                {{-- KOLOM 1: Permintaan Masuk --}}
+                <div class="flex flex-col h-full">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center gap-3">
+                            <div class="bg-amber-200/60 p-2.5 rounded-xl text-amber-700 shadow-sm">
+                                <i class="fas fa-bell"></i>
+                            </div>
+                            <h2 class="text-xl font-black text-gray-800 tracking-tight">Permintaan Masuk</h2>
+                        </div>
+                    </div>
+                    
+                    @if($pendingSessions->count() > 0)
+                    <div class="flex flex-col gap-5 flex-1">
+                        @foreach($pendingSessions as $session)
+                        <div class="bg-[#f4f7f6] rounded-[2rem] p-6 shadow-lg shadow-gray-200/50 border border-gray-100 relative overflow-hidden group transition-all hover:shadow-xl h-full flex flex-col">
+                            <div class="absolute top-0 right-0 w-24 h-24 bg-amber-100/50 rounded-full -mr-10 -mt-10 transition-transform group-hover:scale-110"></div>
+                            
+                            <div class="relative flex-1 flex flex-col">
+                                <div class="flex items-center gap-4 mb-5">
+                                    <div class="w-14 h-14 bg-amber-200/50 rounded-2xl p-0.5 flex-shrink-0">
+                                        <div class="w-full h-full bg-[#f4f7f6] rounded-[0.9rem] overflow-hidden">
+                                            @if($session->konseli->foto)
+                                                <img src="{{ asset('storage/' . $session->konseli->foto) }}" class="w-full h-full object-cover">
+                                            @else
+                                                <div class="w-full h-full flex items-center justify-center text-amber-500 bg-gray-50/50">
+                                                    <i class="fas fa-user text-xl"></i>
+                                                </div>
+                                            @endif
+                                        </div>
                                     </div>
-                                    <div>
-                                        <div class="text-sm font-medium text-gray-900">{{ $session->konseli->nama }}</div>
-                                        <div class="text-xs text-gray-500">{{ $session->konseli->npm_nip }}</div>
+                                    <div class="flex-1">
+                                        <h3 class="font-black text-gray-800 text-lg truncate">{{ $session->konseli->nama }}</h3>
+                                        <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">{{ $session->konseli->npm_nip }}</p>
                                     </div>
                                 </div>
-                            </td>
-                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
-                                {{ $session->started_at?->format('d M Y, H:i') ?? '-' }}
-                            </td>
-                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
-                                {{ $session->ended_at?->format('d M Y, H:i') ?? '-' }}
-                            </td>
-                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
-                                @if($session->started_at && $session->ended_at)
-                                    {{ $session->started_at->diffForHumans($session->ended_at, true) }}
-                                @else
-                                    -
-                                @endif
-                            </td>
-                            <td class="px-4 py-3 whitespace-nowrap">
-                                <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                    <i class="fas fa-check-circle mr-1"></i>Selesai
-                                </span>
-                            </td>
-                            <td class="px-4 py-3 whitespace-nowrap text-sm">
-                                <a href="{{ route('konselor.konseling.detail', $session->id) }}" class="text-blue-600 hover:text-blue-800 font-medium">
-                                    <i class="fas fa-eye mr-1"></i>Detail
-                                </a>
-                            </td>
-                        </tr>
+                                
+                                {{-- Spacer untuk mendorong tombol ke bawah --}}
+                                <div class="flex-1"></div>
+
+                                <div class="flex gap-3 mt-auto pt-2">
+                                    <form action="{{ route('konselor.konseling.approve', $session->id) }}" method="POST" class="flex-1">
+                                        @csrf
+                                        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl transition-all font-black text-sm shadow-md">
+                                            Terima
+                                        </button>
+                                    </form>
+                                    <form action="{{ route('konselor.konseling.reject', $session->id) }}" method="POST" class="flex-1">
+                                        @csrf
+                                        <button type="submit" class="w-full bg-transparent border-2 border-rose-200 text-rose-500 hover:bg-rose-100 hover:border-rose-300 py-3 rounded-xl transition-all font-black text-sm" onclick="return confirm('Tolak permintaan ini?')">
+                                            Tolak
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                         @endforeach
-                    </tbody>
-                </table>
-            </div>
-            
-            <!-- Pagination -->
-            <div class="px-4 py-3 bg-gray-50 border-t border-gray-200">
-                {{ $completedSessions->links() }}
+                    </div>
+                    @else
+                    <div class="bg-[#f4f7f6]/60 border-2 border-dashed border-gray-300 rounded-[2.5rem] flex flex-col items-center justify-center p-10 text-center flex-1 h-full min-h-[200px]">
+                        <i class="fas fa-mug-hot text-3xl text-gray-400 mb-4"></i>
+                        <h3 class="font-black text-gray-700">Kosong & Tenang</h3>
+                        <p class="text-sm text-gray-500 font-medium">Belum ada permintaan masuk.</p>
+                    </div>
+                    @endif
+                </div>
+
+                {{-- KOLOM 2: Sesi Aktif --}}
+                <div class="flex flex-col h-full">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center gap-3">
+                            <div class="bg-emerald-200/60 p-2.5 rounded-xl text-emerald-700 shadow-sm">
+                                <i class="fas fa-comments"></i>
+                            </div>
+                            <h2 class="text-xl font-black text-gray-800 tracking-tight">Sesi Aktif</h2>
+                        </div>
+                    </div>
+                    
+                    @if($activeSessions->count() > 0)
+                    <div class="flex flex-col gap-5 flex-1">
+                        @foreach($activeSessions as $session)
+                        <div class="bg-[#f4f7f6] rounded-[2rem] p-6 shadow-lg shadow-gray-200/50 border border-gray-100 relative overflow-hidden group transition-all hover:shadow-xl h-full flex flex-col">
+                            <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-200/20 rounded-full -mr-16 -mt-16"></div>
+                            
+                            <div class="relative flex-1 flex flex-col">
+                                <div class="flex items-center gap-4 mb-5">
+                                    <div class="w-14 h-14 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-2xl p-0.5 shadow-md">
+                                        <div class="w-full h-full bg-[#f4f7f6] rounded-[0.9rem] overflow-hidden">
+                                            @if($session->konseli->foto)
+                                                <img src="{{ asset('storage/' . $session->konseli->foto) }}" class="w-full h-full object-cover">
+                                            @else
+                                                <div class="w-full h-full flex items-center justify-center text-teal-600">
+                                                    <i class="fas fa-smile text-xl"></i>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h3 class="font-black text-gray-800 text-lg truncate">{{ $session->konseli->nama }}</h3>
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                            <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-widest">Sedang Berlangsung</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-gray-200/50 rounded-xl p-3 mb-5 flex justify-between items-center text-sm font-bold text-gray-700 border border-gray-200/50">
+                                    <span class="text-gray-500 uppercase text-[10px] tracking-wider">Mulai:</span>
+                                    <span>{{ $session->started_at->format('H:i') }} WIB</span>
+                                </div>
+
+                                {{-- Spacer untuk mendorong tombol ke bawah --}}
+                                <div class="flex-1"></div>
+
+                                <div class="flex gap-3 mt-auto pt-2">
+                                    <a href="{{ route('konselor.konseling.chat', $session->id) }}" class="flex-[2] bg-gray-800 hover:bg-emerald-700 text-white py-3 rounded-xl transition-all font-black text-sm flex items-center justify-center shadow-md">
+                                        <i class="fas fa-paper-plane mr-2"></i> Buka Obrolan
+                                    </a>
+                                    <a href="{{ route('konselor.konseling.end-form', $session->id) }}" class="flex-1 bg-transparent border-2 border-gray-300 hover:border-gray-400 text-gray-600 hover:bg-gray-100 py-3 rounded-xl transition-all font-black text-sm flex items-center justify-center">
+                                        <i class="fas fa-flag-checkered mr-1"></i> Akhiri
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                    @else
+                    <div class="bg-[#f4f7f6]/60 border-2 border-dashed border-gray-300 rounded-[2.5rem] flex flex-col items-center justify-center p-10 text-center flex-1 h-full min-h-[200px]">
+                        <i class="fas fa-wind text-3xl text-gray-400 mb-4"></i>
+                        <h3 class="font-black text-gray-700">Hening...</h3>
+                        <p class="text-sm text-gray-500 font-medium">Tidak ada sesi aktif saat ini.</p>
+                    </div>
+                    @endif
+                </div>
+                
             </div>
         </div>
-    </div>
-    @endif
+        
+        {{-- Tabel Riwayat beserta Pencarian & Filter --}}
+        @if($completedSessions->total() > 0 || request('search') || request('tanggal'))
+        <div class="mt-16">
+            
+            {{-- Header Title & Filter Area --}}
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+                <div class="flex items-center gap-3">
+                    <div class="bg-gray-300/70 p-2.5 rounded-xl text-gray-700 shadow-sm">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <h2 class="text-2xl font-black text-gray-800 tracking-tight">Jejak Pelayananmu</h2>
+                </div>
 
+                {{-- Fitur Search dan Filter --}}
+                <form method="GET" action="{{ request()->url() }}" class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                    {{-- Input Pencarian --}}
+                    <div class="relative w-full sm:w-64">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-search text-gray-400 text-sm"></i>
+                        </div>
+                        <input type="text" name="search" value="{{ request('search') }}" class="w-full pl-10 pr-4 py-2.5 bg-[#f4f7f6] border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-600 focus:border-transparent outline-none transition-all text-gray-700 placeholder-gray-400" placeholder="Cari nama atau NPM/NIP...">
+                    </div>
+                    
+                    {{-- Input Filter Tanggal --}}
+                    <div class="relative w-full sm:w-48">
+                        <input type="date" name="tanggal" value="{{ request('tanggal') }}" class="w-full px-4 py-2.5 bg-[#f4f7f6] border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-600 focus:border-transparent outline-none transition-all text-gray-600">
+                    </div>
+
+                    {{-- Action Buttons --}}
+                    <div class="flex gap-2">
+                        <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-sm transition-all flex items-center gap-2">
+                            <i class="fas fa-filter"></i> Filter
+                        </button>
+                        
+                        {{-- Tombol Reset (Muncul jika ada parameter di URL) --}}
+                        @if(request('search') || request('tanggal'))
+                        <a href="{{ request()->url() }}" class="bg-rose-100 hover:bg-rose-200 text-rose-600 px-4 py-2.5 rounded-xl font-bold text-sm shadow-sm transition-all flex items-center justify-center" title="Reset Filter">
+                            <i class="fas fa-undo"></i>
+                        </a>
+                        @endif
+                    </div>
+                </form>
+            </div>
+
+            {{-- Table Card --}}
+            <div class="bg-[#f4f7f6] rounded-[2.5rem] shadow-lg shadow-gray-200/50 border border-gray-100 overflow-hidden">
+                @if($completedSessions->total() > 0)
+                <div class="overflow-x-auto p-2">
+                    <table class="min-w-full divide-y divide-gray-200/60">
+                        <thead>
+                            <tr>
+                                <th class="px-6 py-5 text-left text-[10px] font-black text-gray-500 uppercase tracking-[0.2em]">Nama Konseli</th>
+                                <th class="px-6 py-5 text-left text-[10px] font-black text-gray-500 uppercase tracking-[0.2em]">Waktu Sesi</th>
+                                <th class="px-6 py-5 text-left text-[10px] font-black text-gray-500 uppercase tracking-[0.2em]">Durasi</th>
+                                <th class="px-6 py-5 text-center text-[10px] font-black text-gray-500 uppercase tracking-[0.2em]">Status</th>
+                                <th class="px-6 py-5 text-right text-[10px] font-black text-gray-500 uppercase tracking-[0.2em]">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200/40 text-gray-700">
+                            @foreach($completedSessions as $session)
+                            <tr class="hover:bg-emerald-100/30 transition-colors">
+                                <td class="px-6 py-5">
+                                    <div class="text-sm font-black text-gray-800">{{ $session->konseli->nama }}</div>
+                                    <div class="text-[10px] font-bold text-gray-500 uppercase">{{ $session->konseli->npm_nip }}</div>
+                                </td>
+                                <td class="px-6 py-5">
+                                    <div class="text-sm font-bold text-gray-700">{{ $session->started_at?->format('d M Y') }}</div>
+                                    <div class="text-[11px] text-gray-500 font-medium">{{ $session->started_at?->format('H:i') }} - {{ $session->ended_at?->format('H:i') }}</div>
+                                </td>
+                                <td class="px-6 py-5">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black bg-gray-200/50 text-gray-700 border border-gray-300/50">
+                                        <i class="far fa-hourglass mr-1.5"></i>
+                                        {{ $session->started_at && $session->ended_at ? $session->started_at->diffForHumans($session->ended_at, true) : '-' }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-5 text-center">
+                                    <span class="px-3 py-1 inline-flex text-[10px] font-black uppercase rounded-full bg-emerald-200/50 text-emerald-800 border border-emerald-200">Selesai</span>
+                                </td>
+                                <td class="px-6 py-5 text-right">
+                                    <a href="{{ route('konselor.konseling.detail', $session->id) }}" class="text-emerald-700 hover:text-emerald-900 font-black text-xs transition-colors flex justify-end items-center">
+                                        Detail <i class="fas fa-chevron-right ml-1 text-[10px]"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                <div class="px-6 py-4 bg-gray-200/30 border-t border-gray-200/50">
+                    {{ $completedSessions->appends(request()->query())->links() }}
+                </div>
+                @else
+                <div class="p-10 text-center">
+                    <i class="fas fa-search text-3xl text-gray-400 mb-4"></i>
+                    <h3 class="font-black text-gray-700">Data Tidak Ditemukan</h3>
+                    <p class="text-sm text-gray-500 mt-2">Tidak ada riwayat yang cocok dengan pencarian atau filter yang Anda masukkan.</p>
+                </div>
+                @endif
+            </div>
+        </div>
+        @endif
+
+    </div>
 </div>
+
+<style>
+    @keyframes fade-in-down {
+        0% { opacity: 0; transform: translateY(-20px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in-down { animation: fade-in-down 0.6s ease-out forwards; }
+    
+    /* Mengubah custom scrollbar ringan agar selaras dengan desain */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+    }
+</style>
 @endsection

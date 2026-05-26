@@ -16,6 +16,7 @@
 
         <article class="prose mt-8">{!! $publikasi->isi !!}</article>
         @if($publikasi->keyword)
+
             <div class="mt-8">
                 <h4 class="font-semibold mb-2">Kata Kunci:</h4>
                 <div class="flex flex-wrap gap-2">

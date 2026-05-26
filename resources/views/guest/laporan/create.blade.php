@@ -19,7 +19,7 @@
 
         <h2 class="text-center text-xl font-bold mb-6">FORMULIR LAPOR P4GN</h2>
         {{-- Catatan P4GN --}}
-        <div class="rounded-xl border border-gray-200 overflow-hidden mb-8">
+        <div class="rounded-xl border border-gray-200 overflow-hidden mb-8 ">
 
             <div class="flex items-center gap-3 px-6 py-4" style="background-color: #1E90FF;">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -69,6 +69,7 @@
                         <option value="Mahasiswa" {{ old('peran_pelapor') == 'Mahasiswa' ? 'selected' : '' }}>Mahasiswa</option>
                         <option value="Dosen" {{ old('peran_pelapor') == 'Dosen' ? 'selected' : '' }}>Dosen</option>
                         <option value="Tendik" {{ old('peran_pelapor') == 'Tendik' ? 'selected' : '' }}>Tendik</option>
+ 
                     </select>
                     @error('peran_pelapor')
                         <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
@@ -92,6 +93,7 @@
                         <option value="">--Pilih--</option>
                         <option value="Laki-laki" {{ old('jk_pelapor') == 'Laki-laki' ? 'selected' : '' }}>Laki-Laki</option>
                         <option value="Perempuan" {{ old('jk_pelapor') == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
+
                     </select>
                     @error('jk_pelapor')
                         <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
@@ -127,6 +129,7 @@
                         <option value="">--Pilih--</option>
                         <option value="Laki-laki" {{ old('jk_terlapor') == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
                         <option value="Perempuan" {{ old('jk_terlapor') == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
+
                     </select>
                     @error('jk_terlapor')
                         <p class="text-red-600 text-xs mt-1">{{ $message }}</p>

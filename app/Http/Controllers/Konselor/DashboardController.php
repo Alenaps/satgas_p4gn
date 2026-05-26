@@ -29,12 +29,15 @@ class DashboardController extends Controller
             ->pluck('total', 'jenis_kasus');
 
         // PIE CHART (Role User)
-        $userRole = DB::table('users')
-            ->select('status_sivitas', DB::raw('COUNT(*) as total'))
-            ->where('role', 'konsuli') // hanya konsuli yang dihitung
-            ->groupBy('status_sivitas')
-            ->pluck('total', 'status_sivitas');
-
+       $userRole = DB::table('users')
+    ->leftJoin('status_sivitas', 'users.status_sivitas_id', '=', 'status_sivitas.id')
+    ->select(
+        DB::raw('COALESCE(status_sivitas.nama, "Belum Diisi") as nama'),
+        DB::raw('COUNT(*) as total')
+    )
+    ->where('users.role', 'konsuli')
+    ->groupBy('status_sivitas.nama')
+    ->pluck('total', 'nama');
         // LINE CHART (Konseling per Bulan)
         $konselingPerBulan = DB::table('konseling_sessions')
             ->select(

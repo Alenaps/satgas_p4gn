@@ -32,10 +32,8 @@ return new class extends Migration
             // Kejadian
             $table->string('lokasi', 150);
             $table->string('foto_lokasi', 255)->nullable();
-            $table->date('tanggal');
-            
-            $table->foreignId('jenis_narkoba_id')->nullable()->constrained('jenis_narkobas')->nullOnDelete();
-
+            $table->date('tanggal');      
+            $table->foreignId('jenis_narkoba_id')->nullable()->constrained('jenis_narkobas')->nullOnDelete();       
             $table->text('kronologi')->nullable();
 
             $table->timestamps();

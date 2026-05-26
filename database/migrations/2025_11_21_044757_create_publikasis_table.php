@@ -15,8 +15,7 @@ return new class extends Migration
             $table->longText('isi');
             $table->text('ringkasan');
             $table->text('kutipan')->nullable();
-            $table->text('keyword')->nullable();
-            
+            $table->text('keyword')->nullable();            
             $table->enum('kategori', ['Artikel', 'Jurnal', 'Berita']); 
             $table->enum('status', ['Draft', 'Publish']);
             $table->string('label', 50)->nullable();

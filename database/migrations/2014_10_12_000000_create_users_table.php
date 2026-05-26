@@ -20,7 +20,7 @@ return new class extends Migration
             $table->enum('status_sivitas', ['Mahasiswa', 'Dosen', 'Tendik'])->nullable();
             $table->string('email', 40)->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');    
+            $table->string('password', 255);    
             $table->enum('role', ['admin', 'konselor', 'konsuli'])->default('konsuli');
             $table->string('foto', 255)->nullable();
             $table->rememberToken();

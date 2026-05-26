@@ -20,7 +20,13 @@ use App\Http\Controllers\Admin\LaporanController as AdminLaporanController;
 use App\Http\Controllers\Admin\PublikasiController as AdminPublikasiController;
 use App\Http\Controllers\Admin\KelolaPenggunaController as AdminKelolaPenggunaController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+
 use App\Models\JenisNarkoba;
+
+use App\Http\Controllers\Admin\UnitController;
+use App\Http\Controllers\Admin\InstansiController;
+use App\Http\Controllers\Admin\JabatanController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -76,6 +82,22 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'role:admin'])
     ->prefix('admin')->name('admin.')
     ->group(function () {
+    
+        //Cek Duplikasi Master Dataaaaa-------------------
+           // ── Unit ──────────────────────────────────────────────────────
+        Route::get('unit/template',        [\App\Http\Controllers\Admin\UnitController::class, 'downloadTemplate'])->name('unit.template');
+        Route::post('unit/import',         [\App\Http\Controllers\Admin\UnitController::class, 'import'])->name('unit.import');
+        Route::post('unit/import-confirm', [UnitController::class, 'importConfirm'])->name('unit.importConfirm');
+        Route::get('unit/check-duplicate', [\App\Http\Controllers\Admin\UnitController::class, 'checkDuplicate'])->name('unit.check-duplicate');
+        Route::resource('unit', \App\Http\Controllers\Admin\UnitController::class);
+        
+        // ── Instansi ──────────────────────────────────────────────────
+        Route::get('instansi/check-duplicate', [\App\Http\Controllers\Admin\InstansiController::class, 'checkDuplicate'])->name('instansi.check-duplicate');
+        Route::resource('instansi', \App\Http\Controllers\Admin\InstansiController::class);
+        
+        // ── Jabatan ───────────────────────────────────────────────────
+        Route::get('jabatan/check-duplicate', [\App\Http\Controllers\Admin\JabatanController::class, 'checkDuplicate'])->name('jabatan.check-duplicate');
+        Route::resource('jabatan', \App\Http\Controllers\Admin\JabatanController::class);
 
         // Dashboard
         Route::get('/dashboard',[AdminDashboardController::class, 'index'])->name('dashboard');
@@ -85,6 +107,20 @@ Route::middleware(['auth', 'role:admin'])
         Route::get('/laporan/{laporan}', [AdminLaporanController::class, 'show'])->name('laporan.show');
         Route::post('/laporan/{id}/tindak', [AdminLaporanController::class, 'tindakLanjut'])->name('laporan.tindak');
         Route::get('/laporan/cetak/pdf/{id}', [AdminLaporanController::class, 'cetakPdf'])->name('laporan.cetak.pdf');
+
+        //import excel-------------------------------
+        Route::get('unit/template', [\App\Http\Controllers\Admin\UnitController::class, 'downloadTemplate'])
+        ->name('unit.template');
+        
+        // Import dari Excel
+        Route::post('unit/import', [\App\Http\Controllers\Admin\UnitController::class, 'import'])
+            ->name('unit.import');
+        
+            
+        // Resource CRUD (letakkan setelah route spesifik di atas)
+        Route::resource('unit',     \App\Http\Controllers\Admin\UnitController::class);
+        Route::resource('instansi', \App\Http\Controllers\Admin\InstansiController::class);
+        Route::resource('jabatan',  \App\Http\Controllers\Admin\JabatanController::class);
 
         // Publikasi
         Route::resource('publikasi', AdminPublikasiController::class);
@@ -99,8 +135,10 @@ Route::middleware(['auth', 'role:admin'])
             Route::get('/{user}/edit', [AdminKelolaPenggunaController::class, 'edit'])->name('edit');
             Route::put('/{user}', [AdminKelolaPenggunaController::class, 'update'])->name('update');
             Route::delete('/{user}', [AdminKelolaPenggunaController::class, 'destroy'])->name('destroy');
+          });  
+
         });
-    });
+    
 
 /*
 |--------------------------------------------------------------------------
@@ -111,6 +149,8 @@ Route::middleware(['auth', 'role:konselor'])
     ->prefix('konselor')->name('konselor.')
     ->group(function () {
 
+        Route::get('konseling/{session}/messages', [KonselingSessionController::class, 'getMessages'])
+        ->name('konselor.konseling.messages');
         //Route::view('/dashboard', 'konselor.dashboard')->name('dashboard');
         Route::get('/dashboard', [KonselorDashboardController::class, 'index'])->name('dashboard');
         
@@ -144,7 +184,7 @@ Route::middleware(['auth', 'role:konselor'])
 | KONSULI (Konsuli)
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'role:konsuli'])
+Route::middleware(['auth', 'verified', 'role:konsuli']) // ← tambah 'verified'
     ->prefix('konsuli')->name('konsuli.')
     ->group(function () {
 
@@ -174,6 +214,7 @@ Route::middleware(['auth', 'role:konsuli'])
             Route::post('/{session}/send', [KonselingController::class, 'sendMessage'])->name('send');
             Route::get('/{session}/messages', [KonselingController::class, 'getMessages'])->name('messages');
             Route::post('/{session}/end', [KonselingController::class, 'endSession'])->name('end');
+            Route::get('/konseling/riwayat/{id}', [App\Http\Controllers\Konsuli\KonselingController::class, 'showRiwayat'])->name('konsuli.riwayat.show');
         });
     });
 

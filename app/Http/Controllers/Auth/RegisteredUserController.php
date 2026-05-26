@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\StatusSivitas;
+use App\Models\Unit;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -15,21 +17,17 @@ use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
-    /**
-     * Display the registration view.
-     */
     public function create(): View
     {
-        return view('auth.register');
+        $statusSivitasList = StatusSivitas::all();
+        $units = Unit::all();
+
+        return view('auth.register', compact('statusSivitasList', 'units'));
     }
 
-    /**
-     * Handle an incoming registration request.
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
+
         $validated = $request->validate([
             'nama' => 'required|string|max:60',
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
@@ -53,23 +51,24 @@ class RegisteredUserController extends Controller
             'password.min' => 'Password minimal 8 karakter.',
             'password.max' => 'Password maksimal 16 karakter.',
             'password.confirmed' => 'Konfirmasi password tidak sesuai.',
+
         ]);
 
-        // Simpan user baru
         $user = User::create([
-            'nama' => $validated['nama'],
-            'jenis_kelamin' => $validated['jenis_kelamin'],
-            'npm_nip' => $validated['npm_nip'],
-            'no_telp' => $validated['no_telp'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
-            'role' => 'konsuli', 
+            'nama'              => $request->nama,
+            'jenis_kelamin'     => $request->jenis_kelamin,
+            'npm_nip'           => $request->npm_nip,
+            'no_telp'           => $request->no_telp,
+            'status_sivitas_id' => $request->status_sivitas_id,
+            'unit_id'           => $request->unit_id,
+            'email'             => $request->email,
+            'password'          => Hash::make($request->password),
         ]);
 
-        //Auth::login($user);
+        event(new Registered($user));
 
-        return redirect()->route('login')->with('success', 'Pendaftaran berhasil! Silakan login.');
-        //return redirect(RouteServiceProvider::HOME);
+        Auth::login($user);
+
+        return redirect()->route('verification.notice');
     }
-
 }

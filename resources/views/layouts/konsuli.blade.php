@@ -47,12 +47,12 @@
             </button>
 
             <!-- MENU DESKTOP -->
-            <ul class="hidden lg:flex items-center gap-3 text-sm font-medium text-white">
+            <ul class="hidden lg:flex items-center gap-1 px-4 text-sm font-medium text-white">
 
     {{-- BERANDA --}}
     <li>
         <a href="{{ route('konsuli.dashboard') }}"
-           class="flex items-center h-10 px-4 rounded-lg transition duration-200
+           class="flex items-center h-10 px-3 rounded-lg transition duration-200
            hover:bg-white/10
            {{ Request::routeIs('konsuli.dashboard') ? 'bg-white/20 font-semibold' : '' }}">
             BERANDA
@@ -62,7 +62,7 @@
     {{-- TENTANG --}}
     <li>
         <a href="{{ route('konsuli.tentang') }}"
-           class="flex items-center h-10 px-4 rounded-lg transition duration-200
+           class="flex items-center h-10 px-3 rounded-lg transition duration-200
            hover:bg-white/10
            {{ Request::routeIs('tentang') ? 'bg-white/20 font-semibold' : '' }}">
             TENTANG
@@ -72,7 +72,7 @@
     {{-- PUBLIKASI --}}
     <li>
         <a href="{{ route('konsuli.publikasi.index') }}"
-           class="flex items-center h-10 px-4 rounded-lg transition duration-200
+           class="flex items-center h-10 px-3 rounded-lg transition duration-200
            hover:bg-white/10
            {{ Request::routeIs('konsuli.publikasi.index') ? 'bg-white/20 font-semibold' : '' }}">
             PUBLIKASI
@@ -82,7 +82,7 @@
     {{-- LAPORAN --}}
     <li>
         <a href="{{ route('konsuli.laporan.saya') }}"
-           class="flex items-center h-10 px-4 rounded-lg transition duration-200
+           class="flex items-center h-10 px-3 rounded-lg transition duration-200
            hover:bg-white/10
            {{ Request::routeIs('konsuli.laporan.saya') ? 'bg-white/20 font-semibold' : '' }}">
             LAPORAN SAYA
@@ -92,7 +92,7 @@
     {{-- KONSELOR --}}
     <li>
         <a href="{{ route('konsuli.konselor.index') }}"
-           class="flex items-center h-10 px-4 rounded-lg transition duration-200
+           class="flex items-center h-10 px-3 rounded-lg transition duration-200
            hover:bg-white/10
            {{ Request::routeIs('konsuli.konselor.index') ? 'bg-white/20 font-semibold' : '' }}">
             KONSELOR
@@ -102,7 +102,7 @@
     {{-- KONSELING --}}
     <li>
         <a href="{{ route('konsuli.konseling.index') }}"
-           class="flex items-center h-10 px-4 rounded-lg transition duration-200
+           class="flex items-center h-10 px-3 rounded-lg transition duration-200
            hover:bg-white/10
            {{ Request::routeIs('konsuli.konseling.index') ? 'bg-white/20 font-semibold' : '' }}">
             KONSELING
@@ -112,7 +112,7 @@
     {{-- PROFILE --}}
     <li>
         <a href="{{ route('profile.index') }}"
-           class="flex items-center h-10 px-4 rounded-lg transition duration-200
+           class="flex items-center h-10 px-3 rounded-lg transition duration-200
            hover:bg-white/10
            {{ Request::routeIs('profile.index') ? 'bg-white/20 font-semibold' : '' }}">
             PROFILE
@@ -124,7 +124,7 @@
         <form method="POST" action="{{ route('logout') }}">
             @csrf
             <button
-                class="flex items-center h-10 px-4 rounded-lg bg-white/10 hover:bg-red-500 transition duration-200">
+                class="flex items-center h-10 px-3 rounded-lg bg-white/10 hover:bg-red-500 transition duration-200">
                 LOGOUT
             </button>
         </form>

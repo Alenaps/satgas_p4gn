@@ -127,6 +127,7 @@
                         <option value="">--Pilih--</option>
                         <option value="Laki-laki" {{ old('jk_terlapor') == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
                         <option value="Perempuan" {{ old('jk_terlapor') == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
+
                     </select>
                     @error('jk_terlapor')
                         <p class="text-red-600 text-xs mt-1">{{ $message }}</p>

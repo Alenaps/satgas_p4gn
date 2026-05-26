@@ -8,7 +8,7 @@
 
     <!-- HEADER -->
     <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-bold text-blue-800 tracking-wide">Daftar Publikasi</h1>
+        <h1 class="text-2xl font-bold text-blue-800 tracking-wide">DAFTAR PUBLIKASI</h1>
         
         <a href="{{ route('konselor.publikasi.create') }}"
             class="bg-green-600 hover:bg-green-700 transition text-white px-5 py-2 rounded-lg shadow">

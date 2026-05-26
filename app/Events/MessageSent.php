@@ -1,32 +1,61 @@
 <?php
-
 namespace App\Events;
 
-use App\Models\Message;
+use App\Models\KonselingMessage;
 use Illuminate\Broadcasting\Channel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Broadcasting\PresenceChannel;
+use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow; 
+use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class MessageSent implements ShouldBroadcast
+// 2. UBAH IMPLEMENTS INI:
+class MessageSent implements ShouldBroadcastNow 
 {
-    use SerializesModels;
+    use Dispatchable, InteractsWithSockets, SerializesModels;
+    
+    // ... sisa kodemu di bawahnya biarkan sama ...
 
-    public Message $message;
-    public int $sessionId;
+    public KonselingMessage $message;
 
-    public function __construct(Message $message, int $sessionId)
+    public function __construct(KonselingMessage $message)
     {
+        // Load relasi sender agar tersedia di frontend
         $this->message = $message->load('sender');
-        $this->sessionId = $sessionId;
     }
 
-    public function broadcastOn(): Channel
+    public function broadcastOn(): array
     {
-        return new Channel('konseling.' . $this->sessionId);
+        return [
+            new PrivateChannel('session.' . $this->message->session_id),
+        ];
     }
 
+    /**
+     * Nama event yang didengar frontend
+     */
     public function broadcastAs(): string
     {
         return 'message.sent';
+    }
+
+    /**
+     * Data yang dikirim ke frontend
+     */
+    public function broadcastWith(): array
+    {
+        return [
+            'id'         => $this->message->id,
+            'session_id' => $this->message->session_id,
+            'sender_id'  => $this->message->sender_id,
+            'message'    => $this->message->message,
+            'is_read'    => $this->message->is_read,
+            'created_at' => $this->message->created_at->toDateTimeString(),
+            'sender'     => [
+                'id'   => $this->message->sender->id,
+                'nama' => $this->message->sender->nama,
+            ],
+        ];
     }
 }

@@ -6,10 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\KonselingSession;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Events\MessageSent;
 
 class KonselingSessionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $konselorId = Auth::id();
 
@@ -27,16 +28,32 @@ class KonselingSessionController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        // Ambil sesi completed dengan pagination
-        $completedSessions = KonselingSession::where('konselor_id', $konselorId)
+        // Base Query untuk sesi completed
+        $completedQuery = KonselingSession::where('konselor_id', $konselorId)
             ->where('status', 'completed')
-            ->with('konseli')
-            ->orderBy('ended_at', 'desc')
+            ->with('konseli');
+
+        // Fitur Pencarian: Berdasarkan Nama atau NPM/NIP Konseli
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $completedQuery->whereHas('konseli', function ($query) use ($search) {
+                $query->where('nama', 'like', "%{$search}%")
+                      ->orWhere('npm_nip', 'like', "%{$search}%");
+            });
+        }
+
+        // Fitur Filter Tanggal: Berdasarkan tanggal mulai sesi (started_at)
+        if ($request->filled('tanggal')) {
+            $completedQuery->whereDate('started_at', $request->tanggal);
+        }
+
+        // Ambil sesi completed dengan pagination beserta hasil filter/pencarian
+        $completedSessions = $completedQuery->orderBy('ended_at', 'desc')
             ->paginate(10);
 
         return view('konselor.konseling.index', compact('pendingSessions', 'activeSessions', 'completedSessions'));
     }
-
+    
     public function approve(KonselingSession $session)
     {
         // Pastikan session milik konselor yang login
@@ -131,26 +148,30 @@ class KonselingSessionController extends Controller
             ->with('success', 'Sesi konseling berhasil diselesaikan.');
     }
 
-    public function getMessages(KonselingSession $session)
-    {
-        // Pastikan session milik konselor yang login
-        if ($session->konselor_id !== Auth::id()) {
-            return response()->json(['error' => 'Unauthorized'], 403);
-        }
-
-        $messages = $session->messages()
-            ->with('sender')
-            ->orderBy('created_at', 'asc')
-            ->get();
-
-        // Mark messages as read
-        $session->messages()
-            ->where('sender_id', '!=', Auth::id())
-            ->where('is_read', false)
-            ->update(['is_read' => true]);
-
-        return response()->json($messages);
+   public function getMessages(Request $request, KonselingSession $session)
+{
+    // Pastikan session milik konselor yang login
+    if ($session->konselor_id !== Auth::id()) {
+        return response()->json(['error' => 'Unauthorized'], 403);
     }
+
+    $query = $session->messages()->orderBy('created_at', 'asc');
+
+    // Jika ada after_id, hanya ambil pesan setelah ID tersebut (untuk polling)
+    if ($request->filled('after_id')) {
+        $query->where('id', '>', (int) $request->after_id);
+    }
+
+    $messages = $query->get(['id', 'sender_id', 'message', 'is_read', 'created_at']);
+
+    // Mark messages as read (yang dikirim konseli)
+    $session->messages()
+        ->where('sender_id', '!=', Auth::id())
+        ->where('is_read', false)
+        ->update(['is_read' => true]);
+
+    return response()->json(['messages' => $messages]);
+}
 
     public function chat(KonselingSession $session)
     {
@@ -223,34 +244,53 @@ class KonselingSessionController extends Controller
     return view('konselor.konseling.detail', compact('session'));
 }
 
-    public function sendMessage(Request $request, KonselingSession $session)
-    {
-        $request->validate([
-            'message' => 'required|string|max:5000'
-        ]);
+  
 
-        // Pastikan session milik konselor yang login
-        if ($session->konselor_id !== Auth::id()) {
-            return response()->json(['error' => 'Unauthorized'], 403);
-        }
+public function sendMessage(Request $request, KonselingSession $session)
 
-        // Pastikan status active
-        if ($session->status !== 'active') {
-            return response()->json(['error' => 'Sesi tidak aktif'], 400);
-        }
+{
 
-        // Simpan pesan
-        $message = $session->messages()->create([
-            'sender_id' => Auth::id(),
-            'message' => $request->message,
-            'is_read' => false
-        ]);
+    $request->validate([
 
-        $message->load('sender');
+        'message' => 'required|string|max:5000'
 
-        return response()->json([
-            'success' => true,
-            'message' => $message
-        ]);
+    ]);
+
+    if ($session->konselor_id !== Auth::id()) {
+
+        return response()->json(['error' => 'Unauthorized'], 403);
+
     }
+
+    if ($session->status !== 'active') {
+
+        return response()->json(['error' => 'Sesi tidak aktif'], 400);
+
+    }
+
+    $message = $session->messages()->create([
+
+        'sender_id' => Auth::id(),
+
+        'message'   => $request->message,
+
+        'is_read'   => false
+
+    ]);
+
+    $message->load('sender');
+
+    // Broadcast ke konseli
+
+    broadcast(new MessageSent($message))->toOthers();
+
+    return response()->json([
+
+        'success' => true,
+
+        'message' => $message
+
+    ]);
+
+}
 }

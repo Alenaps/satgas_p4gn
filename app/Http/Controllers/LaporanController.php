@@ -97,6 +97,7 @@ class LaporanController extends Controller
     private function validateLaporan(Request $request)
     {
         return $request->validate([
+
             'nama_pelapor'      => 'required|string|max:60',
             'peran_pelapor'     => 'required|in:Mahasiswa,Dosen,Tendik',
             'jk_pelapor'        => 'required|in:Laki-laki,Perempuan',
@@ -108,6 +109,7 @@ class LaporanController extends Controller
             'nama_terlapor'     => 'required|string|max:60',
             'peran_terlapor'    => 'required|in:Mahasiswa,Dosen,Tendik',
             'no_telp_terlapor'  => 'nullable|string|digits_between:10,15',
+
             'jk_terlapor'       => 'required|in:Laki-laki,Perempuan',
             'alamat_terlapor'   => 'nullable|string|max:255',
             'jenis_kasus'       => 'required|in:Pengguna,Pengedar,Kurir,Bandar',

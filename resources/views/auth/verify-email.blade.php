@@ -1,18 +1,18 @@
 @extends('layouts.auth')
 
-@section('title', 'Login - SATGAS P4GN UNILA')
+@section('title', 'Verifikasi Email - SATGAS P4GN UNILA')
 
 @section('content')
-<div class="min-h-screen flex items-center justify-center bg-green-500 px-4">
+<div class="min-h-screen flex items-center justify-center bg-green-500 py-8">
     <div class="w-full max-w-md bg-white shadow-md rounded-2xl p-8 border border-green-100">
 
         <div class="mb-4 text-sm text-gray-600">
-            {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
+            Terima kasih telah mendaftar! Sebelum memulai, mohon verifikasi alamat email Anda dengan mengklik tautan yang telah kami kirimkan. Jika Anda belum menerima emailnya, kami siap mengirimkan yang baru.
         </div>
 
         @if (session('status') == 'verification-link-sent')
             <div class="mb-4 font-medium text-sm text-green-600">
-                {{ __('A new verification link has been sent to the email address you provided during registration.') }}
+                Tautan verifikasi baru telah dikirimkan ke alamat email yang Anda daftarkan.
             </div>
         @endif
 
@@ -22,7 +22,7 @@
 
                 <div>
                     <x-primary-button>
-                        {{ __('Resend Verification Email') }}
+                        Kirim Ulang Email Verifikasi
                     </x-primary-button>
                 </div>
             </form>
@@ -31,7 +31,7 @@
                 @csrf
 
                 <button type="submit" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    {{ __('Log Out') }}
+                    Keluar
                 </button>
             </form>
         </div>
