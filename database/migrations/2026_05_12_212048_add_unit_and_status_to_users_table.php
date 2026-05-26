@@ -20,7 +20,7 @@ return new class extends Migration
             // Relasi ke tabel units
             $table->foreignId('unit_id')
                   ->nullable()
-                  ->after('sttus_sivitas_id')
+                  ->after('status_sivitas_id')
                   ->constrained('units')
                   ->nullOnDelete();
         });

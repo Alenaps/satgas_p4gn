@@ -4,7 +4,7 @@
 
 @section('content')
 
-<div class="max-w-7xl mx-auto p-6">
+<div class="max-w-7xl mx-auto mt-10">
 
     <h1 class="text-2xl font-bold mb-8 text-blue-800 tracking-wide">
         DATA LAPORAN KASUS
@@ -68,7 +68,7 @@
                     <th class="p-4 text-left font-semibold">TANGGAL</th>
                     <th class="p-4 text-left font-semibold">NAMA TERLAPOR</th>
                     <th class="p-4 text-left font-semibold">LOKASI KEJADIAN</th>
-                    <th class="p-4 text-left font-semibold">BUKTI</th>
+                    <th class="p-4 text-left font-semibold">FOTO LOKASI</th>
                     <th class="p-4 text-left font-semibold">AKSI</th>
                 </tr>
             </thead>

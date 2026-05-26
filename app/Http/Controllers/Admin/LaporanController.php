@@ -49,7 +49,7 @@ class LaporanController extends Controller
         return view('admin.laporan.show', compact('laporan'));
     }
 
-    public function cetakPdf($id)
+    public function cetakPdf(int $id)
     {
         $laporan = LaporanModel::findOrFail($id);
 
@@ -57,5 +57,34 @@ class LaporanController extends Controller
                 ->setPaper('a4', 'portrait');
 
         return $pdf->download('laporan_'.$laporan->id.'.pdf');
+    }
+
+    public function tindakLanjut(Request $request, int $id)
+    {
+        $request->validate([
+            'status' => 'required|in:diverifikasi,diproses,selesai,ditolak',
+            'catatan' => 'required|min:10'
+        ],[
+            'status.required' => 'Status wajib diisi.',
+            'status.in' => 'Status tidak valid.',
+            'catatan.required' => 'Catatan wajib diisi.',
+            'catatan.min' => 'Catatan minimal 10 karakter.'
+        ]);
+
+        $laporan = LaporanModel::findOrFail($id);
+
+        // SIMPAN KE TIMELINE
+        $laporan->tindakLanjuts()->create([
+            'status' => $request->status,
+            'catatan' => $request->catatan,
+            'admin_id' => auth()->id()
+        ]);
+
+        // UPDATE STATUS UTAMA
+        $laporan->update([
+            'status' => $request->status
+        ]);
+
+        return back()->with('success', 'Tindak lanjut berhasil ditambahkan');
     }
 }

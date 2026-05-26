@@ -3,7 +3,7 @@
 
 @section('content')
 <div class="bg-white">
-    <div class="bg white max-w-4xl mx-auto py-10">
+    <div class="bg white max-w-4xl mx-auto py-10 px-4">
 
         <h1 class="text-3xl font-bold">{{ $publikasi->judul }}</h1>
 

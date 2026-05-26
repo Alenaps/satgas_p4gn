@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PublikasiController;
-
+use App\Http\Controllers\JenisNarkobaController;
 // Konsuli Controllers
 use App\Http\Controllers\Konsuli\KonselingController;
 use App\Http\Controllers\Konsuli\PublikasiController as KonsuliPublikasiController;
@@ -20,9 +20,13 @@ use App\Http\Controllers\Admin\LaporanController as AdminLaporanController;
 use App\Http\Controllers\Admin\PublikasiController as AdminPublikasiController;
 use App\Http\Controllers\Admin\KelolaPenggunaController as AdminKelolaPenggunaController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+
+use App\Models\JenisNarkoba;
+
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\InstansiController;
 use App\Http\Controllers\Admin\JabatanController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -43,7 +47,7 @@ Route::view('/konseling', 'konseling')->name('guest.konseling');
 Route::get('/laporan', [LaporanController::class, 'guestIndex'])->name('guest.laporan.index');
 Route::get('/laporan/create', [LaporanController::class, 'guestCreate'])->name('guest.laporan.create');
 Route::post('/laporan', [LaporanController::class, 'guestStore'])->name('guest.laporan.store');
-
+Route::get('/jenis-narkoba/search', [JenisNarkobaController::class, 'search']);
 /*
 |--------------------------------------------------------------------------
 | REDIRECT SETELAH LOGIN
@@ -101,6 +105,7 @@ Route::middleware(['auth', 'role:admin'])
         // Laporan
         Route::get('/laporan', [AdminLaporanController::class, 'index'])->name('laporan.index');
         Route::get('/laporan/{laporan}', [AdminLaporanController::class, 'show'])->name('laporan.show');
+        Route::post('/laporan/{id}/tindak', [AdminLaporanController::class, 'tindakLanjut'])->name('laporan.tindak');
         Route::get('/laporan/cetak/pdf/{id}', [AdminLaporanController::class, 'cetakPdf'])->name('laporan.cetak.pdf');
 
         //import excel-------------------------------
@@ -157,6 +162,7 @@ Route::middleware(['auth', 'role:konselor'])
         // Laporan
         Route::get('/laporan', [KonselorLaporanController::class, 'index'])->name('laporan.index');
         Route::get('/laporan/{laporan}', [KonselorLaporanController::class, 'show'])->name('laporan.show');
+        Route::post('/laporan/{id}/tindak', [KonselorLaporanController::class, 'tindakLanjut'])->name('laporan.tindak');
         Route::get('/laporan/cetak/pdf/{id}', [KonselorLaporanController::class, 'cetakPdf'])->name('laporan.cetak.pdf');
 
         // Konseling - Konselor Side
@@ -189,15 +195,18 @@ Route::middleware(['auth', 'verified', 'role:konsuli']) // ← tambah 'verified'
         Route::get('/laporan', [LaporanController::class, 'konsuliIndex'])->name('laporan.index');
         Route::get('/laporan/create', [LaporanController::class, 'konsuliCreate'])->name('laporan.create');
         Route::post('/laporan', [LaporanController::class, 'konsuliStore'])->name('laporan.store');
+        Route::get('/laporan-saya', [LaporanController::class, 'konsuliLaporanSaya'])->name('laporan.saya');
+        Route::post('/klaim', [LaporanController::class, 'konsuliKlaim'])->name('laporan.klaim');
+        Route::get('/laporan/{id}', [LaporanController::class, 'konsuliShow'])->name('laporan.show');
 
         // Publikasi
         Route::get('/publikasi', [KonsuliPublikasiController::class, 'index'])->name('publikasi.index');
         Route::get('/publikasi/{publikasi:slug}', [KonsuliPublikasiController::class, 'show'])->name('publikasi.show');
 
-        // 🔥 MENU KONSELOR - Daftar Konselor untuk Dipilih
+        // MENU KONSELOR - Daftar Konselor untuk Dipilih
         Route::get('/konselor', [KonselingController::class, 'daftarKonselor'])->name('konselor.index');
 
-        // 🔥 MENU KONSELING - Sesi Konseling Konsuli
+        // MENU KONSELING - Sesi Konseling Konsuli
         Route::prefix('konseling')->name('konseling.')->group(function () {
             Route::get('/', [KonselingController::class, 'index'])->name('index');
             Route::post('/request', [KonselingController::class, 'request'])->name('request');

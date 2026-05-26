@@ -15,15 +15,15 @@ return new class extends Migration
             $table->id();
 
             // Pelapor
-            $table->string('nama_pelapor', 100);
+            $table->string('nama_pelapor', 60);
             $table->enum('peran_pelapor',['Mahasiswa', 'Dosen', 'Tendik']);
             $table->string('npm_nip', 18)->nullable();
             $table->string('telp_pelapor', 15)->nullable();
-            $table->string('email', 100)->nullable();
+            $table->string('email', 40)->nullable();
             $table->enum('jk_pelapor',['Laki-laki', 'Perempuan']);
 
             // Terlapor
-            $table->string('nama_terlapor', 100);
+            $table->string('nama_terlapor', 60);
             $table->enum('peran_terlapor', ['Mahasiswa', 'Dosen', 'Tendik']);
             $table->string('telp_terlapor', 15)->nullable();
             $table->enum('jk_terlapor',['Laki-laki', 'Perempuan']);
@@ -32,8 +32,8 @@ return new class extends Migration
             // Kejadian
             $table->string('lokasi', 150);
             $table->string('foto_lokasi', 255)->nullable();
-            $table->date('tanggal');
-            $table->string('jenis_narkoba', 100)->nullable();
+            $table->date('tanggal');      
+            $table->foreignId('jenis_narkoba_id')->nullable()->constrained('jenis_narkobas')->nullOnDelete();       
             $table->text('kronologi')->nullable();
 
             $table->timestamps();

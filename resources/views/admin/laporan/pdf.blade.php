@@ -5,10 +5,10 @@
 
 <style>
     body {
-        font-family: DejaVu Sans, sans-serif;
+        font-family: 'Times New Roman', Times, serif, sans-serif;
         margin: 10px 35px; 
         line-height: 1.45;
-        font-size: 13px;
+        font-size: 15px;
     }
 
     .kop-table {
@@ -28,7 +28,7 @@
     }
 
     .kop-text-title {
-        font-size: 17px;
+        font-size: 20px;
         font-weight: bold;
         margin: 0;
         padding: 0;
@@ -36,7 +36,7 @@
     }
 
     .kop-text-sub {
-        font-size: 14px;
+        font-size: 15px;
         font-weight: bold;
         margin: 0;
         padding: 0;
@@ -106,7 +106,7 @@
 <div class="title-main">SURAT LAPORAN RESMI</div>
 
 @php
-    $nomorSurat = 'P4GN-UNILA/' . $laporan->id . '/' . date('Y');
+    $nomorSurat = 'P4GN-UNILA/' . $laporan->kode_laporan. '/' . date('Y');
 @endphp
 
 <table>
@@ -154,7 +154,7 @@
     <tr><td class="label">Nama Terlapor</td><td>: {{ $laporan->nama_terlapor }}</td></tr>
     <tr><td class="label">Tanggal Kejadian</td><td>: {{ $laporan->tanggal }}</td></tr>
     <tr><td class="label">Lokasi</td><td>: {{ $laporan->lokasi }}</td></tr>
-    <tr><td class="label">Jenis Kasus</td><td>: {{ $laporan->jenis_narkoba }}</td></tr>
+    <tr><td class="label">Jenis Kasus</td><td>: {{ $laporan->jenis_kasus }}</td></tr>
 </table>
 
 <div class="section-title">Kronologi</div>

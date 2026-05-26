@@ -12,7 +12,7 @@
         <h2 class="text-lg font-bold mb-4">Tambah Publikasi</h2>
 
         <label class="block mb-3">
-          <span class="text-sm">Judul</span>
+          <span class="text-sm">Judul<span class="text-red-500">*</span></span>
           <input id="judul" name="judul" value="{{ old('judul') }}"
                  class="w-full border px-3 py-2 rounded"/>
         @error('judul')
@@ -29,7 +29,7 @@
         </label>
 
         <label class="block mb-3">
-          <span class="text-sm">Ringkasan</span>
+          <span class="text-sm">Ringkasan<span class="text-red-500">*</span></span>
           <textarea id="ringkasan" name="ringkasan" maxlength="300" class="w-full border px-3 py-2 rounded">{{ old('ringkasan') }}</textarea>
           @error('ringkasan')
             <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
@@ -37,7 +37,7 @@
         </label>
 
         <label class="block mb-3">
-          <span class="text-sm">Isi Konten</span>
+          <span class="text-sm">Isi Konten<span class="text-red-500">*</span></span>
           <textarea id="isi" name="isi" class="w-full border px-3 py-2 rounded">{{ old('isi') }}</textarea>
           @error('isi')
             <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
@@ -47,11 +47,17 @@
         <label class="block mb-3">
           <span class="text-sm">Kutipan</span>
           <input name="kutipan" value="{{ old('kutipan') }}" class="w-full border px-3 py-2 rounded" />
+          @error('kutipan')
+            <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
+          @enderror
         </label>
 
         <label class="block mb-3">
           <span class="text-sm">Keyword</span>
           <input id="keyword" name="keyword" value="{{ old('keyword') }}" class="w-full border px-3 py-2 rounded" />
+          @error('keyword')
+            <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
+          @enderror
         </label>
 
         <div class="flex gap-3 mt-4">
@@ -64,7 +70,7 @@
       <div class="lg:w-1/4 space-y-4">
 
         <div class="bg-yellow-300 p-4 rounded">
-          <label>Kategori</label>
+          <label>Kategori<span class="text-red-500">*</span></label>
           <select id="kategori" name="kategori" class="w-full mt-2 p-2 rounded">
             <option value="">-- pilih --</option>
             @foreach($kategori as $k) <option value="{{ $k }}">{{ $k }}</option> @endforeach
@@ -75,7 +81,7 @@
         </div>
 
         <div class="bg-yellow-300 p-4 rounded">
-          <label>Status</label>
+          <label>Status<span class="text-red-500">*</span></label>
           <select id="status" name="status" class="w-full mt-2 p-2 rounded">
             <option value="">-- pilih --</option>
             @foreach($status as $s) <option value="{{ $s }}">{{ $s }}</option> @endforeach
@@ -94,7 +100,7 @@
           </div>
 
           <input type="file" name="thumbnail" id="thumbnail" accept="image/*" class="mt-3" />
-          <small class="text-gray-600">Ukuran file maksimal 2MB</small>
+          <small class="text-gray-600">Ukuran file maksimal 2MB format .jpg, .jpeg, .png</small>
           @error('thumbnail')
             <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
           @enderror

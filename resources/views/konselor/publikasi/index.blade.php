@@ -8,7 +8,7 @@
 
     <!-- HEADER -->
     <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-bold text-blue-800 tracking-wide">Daftar Publikasi</h1>
+        <h1 class="text-2xl font-bold text-blue-800 tracking-wide">DAFTAR PUBLIKASI</h1>
         
         <a href="{{ route('konselor.publikasi.create') }}"
             class="bg-green-600 hover:bg-green-700 transition text-white px-5 py-2 rounded-lg shadow">
@@ -64,6 +64,7 @@
         <table class="w-full text-left">
             <thead class="bg-blue-600 border-b border-blue-200 text-white">
                 <tr>
+                    <th class="p-4 font-semibold">No</th>
                     <th class="p-4 font-semibold">Thumbnail</th>
                     <th class="p-4 font-semibold">Judul</th>
                     <th class="p-4 font-semibold">Kategori</th>
@@ -75,6 +76,9 @@
             <tbody class="text-gray-800">
                 @forelse ($publikasi as $item)
                 <tr class="border-b hover:bg-blue-50 transition">
+
+                    <!-- NO -->
+                    <td class="p-4">{{ $loop->iteration }}</td>
 
                     <!-- THUMBNAIL -->
                     <td class="p-4">

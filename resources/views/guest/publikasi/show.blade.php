@@ -3,7 +3,7 @@
 
 @section('content')
 <div class="bg-white">
-    <div class="bg white max-w-4xl mx-auto py-10">
+    <div class="bg white max-w-4xl mx-auto py-10 px-4">
 
         <h1 class="text-3xl font-bold">{{ $publikasi->judul }}</h1>
 
@@ -15,7 +15,8 @@
             class="w-full rounded-xl mt-6">
 
         <article class="prose mt-8">{!! $publikasi->isi !!}</article>
- @if($publikasi->keyword)
+        @if($publikasi->keyword)
+
             <div class="mt-8">
                 <h4 class="font-semibold mb-2">Kata Kunci:</h4>
                 <div class="flex flex-wrap gap-2">

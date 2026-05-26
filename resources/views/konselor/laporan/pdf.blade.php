@@ -154,7 +154,7 @@
     <tr><td class="label">Nama Terlapor</td><td>: {{ $laporan->nama_terlapor }}</td></tr>
     <tr><td class="label">Tanggal Kejadian</td><td>: {{ $laporan->tanggal }}</td></tr>
     <tr><td class="label">Lokasi</td><td>: {{ $laporan->lokasi }}</td></tr>
-    <tr><td class="label">Jenis Kasus</td><td>: {{ $laporan->jenis_narkoba }}</td></tr>
+    <tr><td class="label">Jenis Kasus</td><td>: {{ $laporan->jenis_kasus }}</td></tr>
 </table>
 
 <div class="section-title">Kronologi</div>

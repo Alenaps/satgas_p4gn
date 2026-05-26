@@ -3,7 +3,7 @@
 @section('title', 'Login - SATGAS P4GN UNILA')
 
 @section('content')
-<div class="min-h-screen flex items-center justify-center bg-green-500 px-4">
+<div class="min-h-screen flex items-center justify-center bg-green-500 px-4 py-12">
     <div class="bg-white rounded-2xl shadow-lg flex flex-col md:flex-row overflow-hidden w-full max-w-4xl">
         <!-- Bagian Kiri -->
         <div class="md:w-1/2 flex flex-col items-center justify-center bg-emerald-100 p-8 text-center border-b md:border-b-0 md:border-r border-emerald-200">
@@ -66,7 +66,7 @@
 
             <p class="text-center text-sm text-gray-600 mt-6">
                 Belum punya akun?
-                <a href="{{ route('register') }}" class="text-blue-600 hover:underline font-semibold">Daftar Disini</a>
+                <a href="{{ route('register') }}" class="text-blue-600 hover:underline font-semibold">Daftar di sini</a>
             </p>
         </div>
     </div>
