@@ -9,8 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail; // verifikasi ini seng 
 use Laravel\Sanctum\HasApiTokens;
 
-
-class User extends Authenticatable  implements MustVerifyEmail 
+class User extends Authenticatable implements MustVerifyEmail 
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -19,8 +18,8 @@ class User extends Authenticatable  implements MustVerifyEmail
         'jenis_kelamin',
         'npm_nip',
         'no_telp',
-        'status_sivitas_id', // tambahan
-        'unit_id',           // tambahan
+        'status_sivitas_id', 
+        'unit_id',           
         'email',
         'password',
         'role',
@@ -51,5 +50,11 @@ class User extends Authenticatable  implements MustVerifyEmail
     public function konselorProfile()
     {
         return $this->hasOne(KonselorProfile::class);
+    }
+
+    //mutator untuk meng-hash password saat disimpan
+    public function setPasswordAttribute($password)
+    {
+        $this->attributes['password'] = bcrypt($password);
     }
 }

@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard Konselor')</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -18,8 +20,6 @@
     </div>
 
     {{-- SIDEBAR --}}
-    {{-- Desktop: relative (bagian flex row, selalu tampil) --}}
-    {{-- Mobile: fixed overlay dari kiri, tersembunyi by default --}}
     <aside id="sidebar"
            class="fixed inset-y-0 left-0 z-50 w-64
                   -translate-x-full
@@ -85,6 +85,32 @@
                 <span>Laporan</span>
             </a>
 
+            {{-- Statistik Layanan --}}
+            @php $isStatistikActive = request()->routeIs('konselor.statistik.*'); @endphp
+            <div x-data="{ open: {{ $isStatistikActive ? 'true' : 'false' }} }">
+                <button @click="open = !open"
+                        class="w-full flex items-center justify-between gap-3 px-3 py-2.5 hover:bg-green-500 rounded-lg transition-colors {{ $isStatistikActive ? 'bg-green-500' : '' }}">
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-chart-pie w-5"></i>
+                        <span>Statistik Layanan</span>
+                    </div>
+                    <i class="fas fa-chevron-down text-xs transition-transform duration-200"
+                    :class="open ? 'rotate-180' : ''"></i>
+                </button>
+                <div x-show="open" x-transition class="mt-1 ml-4 space-y-1 border-l-2 border-green-400 pl-3">
+                    <a href="{{ route('konselor.statistik.konseling') }}"
+                    class="flex items-center gap-2 px-3 py-2 text-sm hover:bg-green-500 rounded-lg transition-colors {{ request()->routeIs('konselor.statistik.konseling') ? 'bg-green-500' : '' }}">
+                        <i class="fas fa-heart-pulse w-4 text-xs"></i>
+                        <span>E-Konseling</span>
+                    </a>
+                    <a href="{{ route('konselor.statistik.laporan') }}"
+                    class="flex items-center gap-2 px-3 py-2 text-sm hover:bg-green-500 rounded-lg transition-colors {{ request()->routeIs('konselor.statistik.laporan') ? 'bg-green-500' : '' }}">
+                        <i class="fas fa-file-chart-column w-4 text-xs"></i>
+                        <span>Laporan</span>
+                    </a>
+                </div>
+            </div>
+
             <a href="{{ route('konselor.konseling.index') }}"
                class="flex items-center gap-3 px-3 py-2.5 hover:bg-green-500 rounded-lg transition-colors {{ request()->routeIs('konselor.konseling.*') ? 'bg-green-500' : '' }}">
                 <i class="fas fa-comments w-5"></i>
@@ -111,7 +137,7 @@
     {{-- MAIN CONTENT --}}
     <div class="flex-1 flex flex-col min-w-0">
 
-        {{-- Topbar Mobile — hanya muncul di bawah md --}}
+        {{-- Topbar Mobile --}}
         <header class="md:hidden bg-green-600 text-white px-4 py-3 flex items-center justify-between shadow-md">
             <div class="flex items-center gap-3">
                 <img src="{{ asset('assets/logo_unila.png') }}" alt="Logo" class="w-8 h-8 bg-white rounded-full p-0.5">
@@ -129,21 +155,18 @@
 
 </div>
 
-{{-- Scripts Section --}}
+{{-- Scripts --}}
 <script>
-    // Fungsi untuk membuka/menutup sidebar di tampilan mobile
     function toggleSidebar() {
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('sidebar-overlay');
-
         sidebar.classList.toggle('-translate-x-full');
         overlay.classList.toggle('hidden');
     }
 </script>
-@yield('scripts')
-@stack('scripts')
-@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-@endpush
+@stack('scripts')
+
 </body>
 </html>

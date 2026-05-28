@@ -7,9 +7,17 @@ import Pusher from 'pusher-js';
 
 window.Pusher = Pusher;
 
+const csrfToken = (document.head.querySelector('meta[name="csrf-token"]')
+    ?.getAttribute('content') ?? '').split('\n')[0].trim();
+
 window.Echo = new Echo({
     broadcaster: 'pusher',
     key: import.meta.env.VITE_PUSHER_APP_KEY,
     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
     forceTLS: true,
+    auth: {
+        headers: {
+            'X-CSRF-TOKEN': csrfToken, // ← pakai variable yang sudah di-trim
+        },
+    },
 });

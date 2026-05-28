@@ -11,7 +11,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+// use Illuminate\Support\Facades\Hash; <-- Boleh dihapus karena sudah tidak dipakai
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
@@ -27,7 +27,6 @@ class RegisteredUserController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-
         $validated = $request->validate([
             'nama' => 'required|string|max:60',
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
@@ -51,7 +50,6 @@ class RegisteredUserController extends Controller
             'password.min' => 'Password minimal 8 karakter.',
             'password.max' => 'Password maksimal 16 karakter.',
             'password.confirmed' => 'Konfirmasi password tidak sesuai.',
-
         ]);
 
         $user = User::create([
@@ -62,7 +60,8 @@ class RegisteredUserController extends Controller
             'status_sivitas_id' => $request->status_sivitas_id,
             'unit_id'           => $request->unit_id,
             'email'             => $request->email,
-            'password'          => Hash::make($request->password),
+            'password'          => $request->password, // <-- HASH DIHAPUS, KIRIM TEKS BIASA
+            'role'              => 'konsuli',          // <-- TAMBAHAN WAJIB AGAR TIDAK ERROR 403
         ]);
 
         event(new Registered($user));

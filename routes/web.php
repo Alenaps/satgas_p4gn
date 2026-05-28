@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PublikasiController;
 use App\Http\Controllers\JenisNarkobaController;
+
 // Konsuli Controllers
 use App\Http\Controllers\Konsuli\KonselingController;
 use App\Http\Controllers\Konsuli\PublikasiController as KonsuliPublikasiController;
@@ -14,12 +15,15 @@ use App\Http\Controllers\Konselor\KonselingSessionController;
 use App\Http\Controllers\Konselor\LaporanController as KonselorLaporanController;
 use App\Http\Controllers\Konselor\PublikasiController as KonselorPublikasiController;
 use App\Http\Controllers\Konselor\DashboardController as KonselorDashboardController;
+use App\Http\Controllers\Konselor\StatistikController;
+use Illuminate\Support\Facades\Broadcast;
 
 // Admin Controllers
 use App\Http\Controllers\Admin\LaporanController as AdminLaporanController;
 use App\Http\Controllers\Admin\PublikasiController as AdminPublikasiController;
 use App\Http\Controllers\Admin\KelolaPenggunaController as AdminKelolaPenggunaController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\StatistikController as AdminStatistikController;
 
 use App\Models\JenisNarkoba;
 
@@ -82,8 +86,8 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'role:admin'])
     ->prefix('admin')->name('admin.')
     ->group(function () {
-    
-        //Cek Duplikasi Master Dataaaaa-------------------
+
+         //Cek Duplikasi Master Dataaaaa-------------------
            // ── Unit ──────────────────────────────────────────────────────
         Route::get('unit/template',        [\App\Http\Controllers\Admin\UnitController::class, 'downloadTemplate'])->name('unit.template');
         Route::post('unit/import',         [\App\Http\Controllers\Admin\UnitController::class, 'import'])->name('unit.import');
@@ -101,6 +105,11 @@ Route::middleware(['auth', 'role:admin'])
 
         // Dashboard
         Route::get('/dashboard',[AdminDashboardController::class, 'index'])->name('dashboard');
+
+        //statistik layanan
+        Route::get('/statistik/konseling/data', [StatistikController::class, 'konselingData'])->name('statistik.konseling.data');
+        Route::get('/statistik/konseling', [AdminStatistikController::class, 'konseling'])->name('statistik.konseling');
+        Route::get('/statistik/laporan',   [AdminStatistikController::class, 'laporan'])->name('statistik.laporan');
 
         // Laporan
         Route::get('/laporan', [AdminLaporanController::class, 'index'])->name('laporan.index');
@@ -149,11 +158,26 @@ Route::middleware(['auth', 'role:konselor'])
     ->prefix('konselor')->name('konselor.')
     ->group(function () {
 
+        Broadcast::channel('konselor.{konselorId}', function ($user, $konselorId) {
+            return (int) $user->id === (int) $konselorId;
+        });
+        Broadcast::channel('konseling.{sessionId}', function ($user, $sessionId) {
+            $session = \App\Models\KonselingSession::find($sessionId);
+            if (!$session) return false;
+
+            return $user->id === $session->konselor_id
+                || $user->id === $session->konseli_id;
+        });
+
         Route::get('konseling/{session}/messages', [KonselingSessionController::class, 'getMessages'])
         ->name('konselor.konseling.messages');
         //Route::view('/dashboard', 'konselor.dashboard')->name('dashboard');
         Route::get('/dashboard', [KonselorDashboardController::class, 'index'])->name('dashboard');
         
+        //statistik layanan
+        Route::get('/statistik/konseling', [StatistikController::class, 'konseling'])->name('statistik.konseling');
+        Route::get('/statistik/laporan', [StatistikController::class, 'laporan'])->name('statistik.laporan');
+
         // Publikasi
         Route::resource('publikasi', KonselorPublikasiController::class);
         Route::post('publikasi/upload-thumbnail', [KonselorPublikasiController::class, 'uploadThumbnailAjax'])

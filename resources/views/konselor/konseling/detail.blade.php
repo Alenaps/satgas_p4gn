@@ -24,16 +24,75 @@
                 </span>
             </div>
 
-            <!-- Info Konseli -->
-            <div class="flex items-center gap-4 p-5 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border-2 border-blue-200">
-                <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
-                    <span class="text-white font-bold text-xl">{{ strtoupper(substr($session->konseli->nama, 0, 1)) }}</span>
-                </div>
-                <div class="flex-1">
-                    <h3 class="font-bold text-gray-800 text-lg">{{ $session->konseli->nama }}</h3>
-                    <p class="text-sm text-gray-600">{{ $session->konseli->npm_nip }}</p>
-                </div>
+            <div class="p-5 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border-2 border-blue-200">
+    <div class="flex items-center gap-4 mb-4">
+        <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center overflow-hidden shrink-0">
+            @if($session->konseli->foto)
+                <img src="{{ asset('storage/' . $session->konseli->foto) }}" alt="Foto" class="w-full h-full object-cover">
+            @else
+                <span class="text-white font-bold text-xl">{{ strtoupper(substr($session->konseli->nama, 0, 1)) }}</span>
+            @endif
+        </div>
+        <div>
+            <h3 class="font-bold text-gray-800 text-lg">{{ $session->konseli->nama }}</h3>
+            <p class="text-sm text-gray-600">{{ $session->konseli->npm_nip }}</p>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4 border-t border-blue-200">
+        <div class="flex items-center gap-2">
+            <span class="w-7 h-7 bg-blue-100 rounded-lg flex items-center justify-center shrink-0">
+                <i class="fas fa-venus-mars text-blue-500 text-xs"></i>
+            </span>
+            <div>
+                <p class="text-xs text-gray-500">Jenis Kelamin</p>
+                <p class="text-sm font-semibold text-gray-700">
+                    {{ $session->konseli->jenis_kelamin === 'L' ? 'Laki-laki' : 'Perempuan' }}
+                </p>
             </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <span class="w-7 h-7 bg-blue-100 rounded-lg flex items-center justify-center shrink-0">
+                <i class="fas fa-phone text-blue-500 text-xs"></i>
+            </span>
+            <div>
+                <p class="text-xs text-gray-500">No. Telp</p>
+                <p class="text-sm font-semibold text-gray-700">{{ $session->konseli->no_telp ?? '-' }}</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <span class="w-7 h-7 bg-blue-100 rounded-lg flex items-center justify-center shrink-0">
+                <i class="fas fa-envelope text-blue-500 text-xs"></i>
+            </span>
+            <div>
+                <p class="text-xs text-gray-500">Email</p>
+                <p class="text-sm font-semibold text-gray-700 break-all">{{ $session->konseli->email }}</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <span class="w-7 h-7 bg-blue-100 rounded-lg flex items-center justify-center shrink-0">
+                <i class="fas fa-id-badge text-blue-500 text-xs"></i>
+            </span>
+            <div>
+                <p class="text-xs text-gray-500">Status Sivitas</p>
+                <p class="text-sm font-semibold text-gray-700">{{ $session->konseli->statusSivitas->nama ?? '-' }}</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2 sm:col-span-2">
+            <span class="w-7 h-7 bg-blue-100 rounded-lg flex items-center justify-center shrink-0">
+                <i class="fas fa-building text-blue-500 text-xs"></i>
+            </span>
+            <div>
+                <p class="text-xs text-gray-500">Unit</p>
+                <p class="text-sm font-semibold text-gray-700">{{ $session->konseli->unit->nama ?? '-' }}</p>
+            </div>
+        </div>
+    </div>
+</div>
         </div>
 
         <!-- Statistik Sesi -->
