@@ -4,8 +4,8 @@ use App\Models\KonselingSession;
 use Illuminate\Support\Facades\Broadcast;
 
 /*
- * Hanya konseli atau konselor yang terlibat
- * dalam sesi tersebut yang boleh masuk ke channel
+ * Channel untuk sesi spesifik — dipakai di halaman chat
+ * Hanya konseli atau konselor yang terlibat yang boleh masuk
  */
 Broadcast::channel('session.{sessionId}', function ($user, $sessionId) {
     $session = KonselingSession::find($sessionId);
@@ -14,4 +14,22 @@ Broadcast::channel('session.{sessionId}', function ($user, $sessionId) {
 
     return $user->id === $session->konseli_id
         || $user->id === $session->konselor_id;
+});
+
+/*
+ * Channel private per-konseli
+ * Dipakai untuk notif realtime status sesi (approved, rejected, completed)
+ * di halaman Ruang Cerita dan Daftar Konselor milik konsuli
+ */
+Broadcast::channel('konseli.{id}', function ($user, $id) {
+    return (int) $user->id === (int) $id;
+});
+
+/*
+ * Channel private per-konselor
+ * Dipakai untuk notif realtime permintaan sesi baru masuk
+ * di halaman ruang praktik konselor
+ */
+Broadcast::channel('konselor.{id}', function ($user, $id) {
+    return (int) $user->id === (int) $id;
 });

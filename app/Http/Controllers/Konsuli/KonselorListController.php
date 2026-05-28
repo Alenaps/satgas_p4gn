@@ -9,22 +9,28 @@ use Illuminate\Support\Facades\Auth;
 
 class KonselorListController extends Controller
 {
-    /**
-     * Menampilkan daftar konselor yang tersedia
-     */
     public function index()
     {
-        // Ambil semua user dengan role konselor
-        $konselors = User::where('role', 'konselor')
-            ->orderBy('nama', 'asc')
-            ->get();
+            $konselors = User::where('role', 'konselor')
+        ->with([
+            'konselorProfile',
+            'konselorProfile.instansi',
+            'konselorProfile.jabatan',
+        ])
+        ->orderBy('nama', 'asc')
+        ->get();
 
-        // Ambil sesi konseling user yang sedang login
-        // untuk mengecek status dengan masing-masing konselor
+        // Sesi milik user yang sedang login
         $sessions = KonselingSession::where('konseli_id', Auth::id())
             ->whereIn('status', ['pending', 'active'])
             ->get();
 
-        return view('konsuli.konselor.index', compact('konselors', 'sessions'));
+        // Semua konselor yang sedang sibuk (dari siapapun)
+        $busyKonselorIds = KonselingSession::whereIn('status', ['pending', 'active'])
+            ->pluck('konselor_id')
+            ->unique()
+            ->toArray();
+
+        return view('konsuli.konselor.index', compact('konselors', 'sessions', 'busyKonselorIds'));
     }
 }

@@ -15,58 +15,117 @@
         <div class="grid lg:grid-cols-3 gap-6 sm:gap-8">
             
             <div class="lg:col-span-1">
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-6">
-                    
-                    <div class="text-center mb-6 pb-6 border-b border-gray-100">
-                        <div class="w-16 h-16 bg-teal-50 rounded-full flex items-center justify-center mx-auto mb-3 text-teal-600 shadow-sm border border-teal-100">
-                            <i class="fas fa-user text-2xl"></i>
-                        </div>
-                        <h3 class="font-bold text-gray-800 text-lg">{{ $session->konseli->nama }}</h3>
-                        <p class="text-sm text-gray-500">{{ $session->konseli->npm_nip }}</p>
-                        
-                        <div class="mt-3 inline-flex items-center gap-1.5 px-3 py-1 bg-green-50 text-green-700 text-xs font-medium rounded-full border border-green-100">
-                            <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
-                            Sesi Aktif
-                        </div>
-                    </div>
-                    
-                    <div class="space-y-4 mb-6 pb-6 border-b border-gray-100">
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm text-gray-500 flex items-center gap-2">
-                                <i class="far fa-clock text-gray-400"></i> Durasi
-                            </span>
-                            <span class="text-sm font-semibold text-gray-700">{{ $session->started_at->diffInMinutes(now()) }} Menit</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm text-gray-500 flex items-center gap-2">
-                                <i class="far fa-comments text-gray-400"></i> Total Pesan
-                            </span>
-                            <span class="text-sm font-semibold text-gray-700">{{ $session->messages->count() }} Pesan</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm text-gray-500 flex items-center gap-2">
-                                <i class="far fa-calendar-alt text-gray-400"></i> Dimulai
-                            </span>
-                            <span class="text-sm font-semibold text-gray-700">{{ $session->started_at->format('H:i') }} WIB</span>
-                        </div>
-                    </div>
-
-                    <div>
-                        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Informasi</p>
-                        <ul class="space-y-2 text-sm text-gray-600">
-                            <li class="flex items-start gap-2">
-                                <i class="fas fa-check text-teal-500 mt-1 text-[10px]"></i>
-                                <span>Riwayat tersimpan otomatis</span>
-                            </li>
-                            <li class="flex items-start gap-2">
-                                <i class="fas fa-check text-teal-500 mt-1 text-[10px]"></i>
-                                <span>Dapat diakses di menu Riwayat</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                </div>
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-6">
+        
+        {{-- Foto & Nama --}}
+        <div class="text-center mb-6 pb-6 border-b border-gray-100">
+            <div class="w-16 h-16 bg-teal-50 rounded-full flex items-center justify-center mx-auto mb-3 text-teal-600 shadow-sm border border-teal-100 overflow-hidden">
+                @if($session->konseli->foto)
+                    <img src="{{ asset('storage/' . $session->konseli->foto) }}" alt="Foto" class="w-full h-full object-cover">
+                @else
+                    <i class="fas fa-user text-2xl"></i>
+                @endif
             </div>
+            <h3 class="font-bold text-gray-800 text-lg">{{ $session->konseli->nama }}</h3>
+            <p class="text-sm text-gray-500">{{ $session->konseli->npm_nip }}</p>
+            
+            <div class="mt-3 inline-flex items-center gap-1.5 px-3 py-1 bg-green-50 text-green-700 text-xs font-medium rounded-full border border-green-100">
+                <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
+                Sesi Aktif
+            </div>
+        </div>
+
+        {{-- Data Diri Konseli --}}
+        <div class="space-y-3 mb-6 pb-6 border-b border-gray-100">
+            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Data Diri Konseli</p>
+
+            <div class="flex justify-between items-start gap-2">
+                <span class="text-sm text-gray-500 flex items-center gap-2 shrink-0">
+                    <i class="fas fa-venus-mars text-gray-400 w-3.5 text-center"></i> Jenis Kelamin
+                </span>
+                <span class="text-sm font-semibold text-gray-700 text-right">
+                    {{ $session->konseli->jenis_kelamin === 'L' ? 'Laki-laki' : 'Perempuan' }}
+                </span>
+            </div>
+
+            <div class="flex justify-between items-start gap-2">
+                <span class="text-sm text-gray-500 flex items-center gap-2 shrink-0">
+                    <i class="fas fa-phone text-gray-400 w-3.5 text-center"></i> No. Telp
+                </span>
+                <span class="text-sm font-semibold text-gray-700 text-right">
+                    {{ $session->konseli->no_telp ?? '-' }}
+                </span>
+            </div>
+
+            <div class="flex justify-between items-start gap-2">
+                <span class="text-sm text-gray-500 flex items-center gap-2 shrink-0">
+                    <i class="fas fa-envelope text-gray-400 w-3.5 text-center"></i> Email
+                </span>
+                <span class="text-sm font-semibold text-gray-700 text-right break-all">
+                    {{ $session->konseli->email }}
+                </span>
+            </div>
+
+            <div class="flex justify-between items-start gap-2">
+                <span class="text-sm text-gray-500 flex items-center gap-2 shrink-0">
+                    <i class="fas fa-id-badge text-gray-400 w-3.5 text-center"></i> Status
+                </span>
+                <span class="text-sm font-semibold text-gray-700 text-right">
+                    {{ $session->konseli->statusSivitas->nama ?? '-' }}
+                </span>
+            </div>
+
+            <div class="flex justify-between items-start gap-2">
+                <span class="text-sm text-gray-500 flex items-center gap-2 shrink-0">
+                    <i class="fas fa-building text-gray-400 w-3.5 text-center"></i> Unit
+                </span>
+                <span class="text-sm font-semibold text-gray-700 text-right">
+                    {{ $session->konseli->unit->nama ?? '-' }}
+                </span>
+            </div>
+        </div>
+
+        {{-- Statistik Sesi --}}
+        <div class="space-y-3 mb-6 pb-6 border-b border-gray-100">
+            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Statistik Sesi</p>
+
+            <div class="flex justify-between items-center">
+                <span class="text-sm text-gray-500 flex items-center gap-2">
+                    <i class="far fa-clock text-gray-400 w-3.5 text-center"></i> Durasi
+                </span>
+                <span class="text-sm font-semibold text-gray-700">{{ $session->started_at->diffInMinutes(now()) }} Menit</span>
+            </div>
+            <div class="flex justify-between items-center">
+                <span class="text-sm text-gray-500 flex items-center gap-2">
+                    <i class="far fa-comments text-gray-400 w-3.5 text-center"></i> Total Pesan
+                </span>
+                <span class="text-sm font-semibold text-gray-700">{{ $session->messages->count() }} Pesan</span>
+            </div>
+            <div class="flex justify-between items-center">
+                <span class="text-sm text-gray-500 flex items-center gap-2">
+                    <i class="far fa-calendar-alt text-gray-400 w-3.5 text-center"></i> Dimulai
+                </span>
+                <span class="text-sm font-semibold text-gray-700">{{ $session->started_at->format('H:i') }} WIB</span>
+            </div>
+        </div>
+
+        {{-- Informasi --}}
+        <div>
+            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Informasi</p>
+            <ul class="space-y-2 text-sm text-gray-600">
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-check text-teal-500 mt-1 text-[10px]"></i>
+                    <span>Riwayat tersimpan otomatis</span>
+                </li>
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-check text-teal-500 mt-1 text-[10px]"></i>
+                    <span>Dapat diakses di menu Riwayat</span>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</div>
 
             <div class="lg:col-span-2">
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">

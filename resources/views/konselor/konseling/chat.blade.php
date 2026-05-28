@@ -4,8 +4,6 @@
 
 @section('content')
 
-@vite(['resources/js/app.js'])
-
 <div class="flex flex-col -mx-4 -mt-4 md:mx-0 md:mt-0 h-[calc(100vh-4rem)] md:h-[calc(100vh-7rem)] bg-slate-50 md:rounded-3xl border-0 md:border md:border-gray-200 overflow-hidden font-sans shadow-sm relative">
 
     {{-- ====== HEADER ====== --}}
@@ -39,7 +37,6 @@
                         <h1 class="text-base sm:text-xl font-bold text-gray-800 leading-tight group-hover:text-teal-700 transition-colors">
                             {{ $session->konseli->nama }}
                         </h1>
-                        {{-- Status typing / online --}}
                         <p id="user-status" class="text-[11px] sm:text-sm text-teal-600 font-medium flex items-center gap-1">
                             {{ $session->konseli->npm_nip ?? 'Mahasiswa / Konseli' }}
                             <i class="fas fa-chevron-right text-[9px] opacity-60"></i>
@@ -89,8 +86,8 @@
 
             @foreach($messagesArray as $index => $msg)
                 @php
-                    $prevMsg = $index > 0 ? $messagesArray[$index - 1] : null;
-                    $nextMsg = $index < $totalMessages - 1 ? $messagesArray[$index + 1] : null;
+                    $prevMsg  = $index > 0 ? $messagesArray[$index - 1] : null;
+                    $nextMsg  = $index < $totalMessages - 1 ? $messagesArray[$index + 1] : null;
                     $showTime = !$nextMsg || $nextMsg->sender_id !== $msg->sender_id;
                     $isNewGroup = !$prevMsg || $prevMsg->sender_id !== $msg->sender_id;
                 @endphp
@@ -322,9 +319,10 @@ textarea::-webkit-scrollbar { display: none; }
 #modal-panel > div.overflow-y-auto::-webkit-scrollbar { width: 4px; }
 #modal-panel > div.overflow-y-auto::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
 </style>
+
 @endsection
 
-@section('scripts')
+@push('scripts')
 <script>
     const sessionId     = {{ $session->id }};
     const sendUrl       = "{{ route('konselor.konseling.send', $session->id) }}";
@@ -340,25 +338,21 @@ textarea::-webkit-scrollbar { display: none; }
     const typingIndicator   = document.getElementById('typing-indicator');
     const userStatus        = document.getElementById('user-status');
 
-    let lastMessageId  = {{ count($messagesArray ?? []) > 0 ? collect($messagesArray)->last()->id : 0 }};
-    let lastSenderId   = {{ count($messagesArray ?? []) > 0 ? collect($messagesArray)->last()->sender_id : 'null' }};
-    let typingTimer    = null;
-    let isTyping       = false;
-    let channel        = null;
+    let lastMessageId = {{ count($messagesArray ?? []) > 0 ? collect($messagesArray)->last()->id : 0 }};
+    let lastSenderId  = {{ count($messagesArray ?? []) > 0 ? collect($messagesArray)->last()->sender_id : 'null' }};
+    let typingTimer   = null;
+    let isTyping      = false;
+    let channel       = null;
 
     messageInput.addEventListener('input', function() {
         this.style.height = 'auto';
         this.style.height = Math.min(this.scrollHeight, 120) + 'px';
     });
 
-    // ==========================================
-    // KIRIM PESAN — Optimistic UI
-    // ==========================================
     async function sendMessage() {
         const message = messageInput.value.trim();
         if (!message) return;
 
-        // Hentikan typing indicator saat kirim
         sendTypingEvent(false);
 
         messageInput.value = '';
@@ -422,15 +416,11 @@ textarea::-webkit-scrollbar { display: none; }
         }
     });
 
-    // ==========================================
-    // TYPING EVENT — Pusher Client Event
-    // ==========================================
     function sendTypingEvent(typing) {
         if (!channel) return;
         try {
             channel.whisper('typing', { typing, user_id: currentUserId });
-        } catch (e) {
-        }
+        } catch (e) {}
     }
 
     messageInput.addEventListener('input', function() {
@@ -445,9 +435,6 @@ textarea::-webkit-scrollbar { display: none; }
         }, 2000);
     });
 
-    // ==========================================
-    // HELPER UI
-    // ==========================================
     function hideEmptyState() {
         if (emptyState) emptyState.classList.add('hidden');
     }
@@ -520,59 +507,45 @@ textarea::-webkit-scrollbar { display: none; }
         return messageDiv;
     }
 
-    // ==========================================
-    // PUSHER / LARAVEL ECHO — Real-time
-    // ==========================================
-    document.addEventListener('DOMContentLoaded', function () {
-        if (typeof window.Echo !== 'undefined') {
-            const channelName = `session.${sessionId}`;
-
-            channel = window.Echo.private(channelName);
-
-            channel
-                .listen('.message.sent', (e) => {
-                    const newMessage = e;
-
-                    if (newMessage.sender_id !== currentUserId) {
-                        const isNewGroup = lastSenderId !== newMessage.sender_id;
-                        addMessage(newMessage, false, isNewGroup);
-                        lastSenderId = newMessage.sender_id;
-                    }
-
-                    if (newMessage.id > lastMessageId) {
-                        lastMessageId = newMessage.id;
-                    }
-                })
-                .listenForWhisper('typing', (e) => {
-                    // Hanya tampilkan jika dari lawan bicara
-                    if (e.user_id !== currentUserId) {
-                        if (e.typing) {
-                            showTyping();
-                        } else {
-                            hideTyping();
-                        }
-                    }
-                })
-                .subscribed(() => {
-                    realtimeIndicator.classList.remove('hidden');
-                    realtimeIndicator.classList.add('flex');
-                    console.log(`[Pusher] Terhubung ke channel: ${channelName}`);
-                })
-                .error((err) => {
-                    realtimeIndicator.classList.add('hidden');
-                    realtimeIndicator.classList.remove('flex');
-                    console.error('[Pusher] Gagal terhubung:', err);
-                });
-        } else {
-            console.error('[Echo] Laravel Echo tidak tersedia.');
+    function initEchoChat() {
+        if (typeof window.Echo === 'undefined') {
+            setTimeout(initEchoChat, 200);
+            return;
         }
 
-        scrollToBottom();
-    });
+        const channelName = `session.${sessionId}`;
+        channel = window.Echo.private(channelName);
 
-    // ==========================================
-    // MODAL INFO KONSULI
-    // ==========================================
+        channel
+            .listen('.message.sent', (e) => {
+                if (e.sender_id !== currentUserId) {
+                    const isNewGroup = lastSenderId !== e.sender_id;
+                    addMessage(e, false, isNewGroup);
+                    lastSenderId = e.sender_id;
+                }
+                if (e.id > lastMessageId) lastMessageId = e.id;
+            })
+            .listenForWhisper('typing', (e) => {
+                if (e.user_id !== currentUserId) {
+                    e.typing ? showTyping() : hideTyping();
+                }
+            })
+            .subscribed(() => {
+                realtimeIndicator.classList.remove('hidden');
+                realtimeIndicator.classList.add('flex');
+                console.log(`[Pusher] Terhubung ke channel: ${channelName}`);
+            })
+            .error((err) => {
+                realtimeIndicator.classList.add('hidden');
+                realtimeIndicator.classList.remove('flex');
+                console.error('[Pusher] Gagal terhubung:', err);
+            });
+
+        scrollToBottom();
+    }
+
+    initEchoChat();
+
     function closeModalInfo() {
         const modal = document.getElementById('modal-info-konsuli');
         const panel = document.getElementById('modal-panel');
@@ -591,4 +564,4 @@ textarea::-webkit-scrollbar { display: none; }
         document.getElementById('btn-info-konsuli').click();
     });
 </script>
-@endsection
+@endpush
