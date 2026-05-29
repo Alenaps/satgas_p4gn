@@ -74,7 +74,7 @@
                         <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
                     @enderror
 
-                    <label>NIP/NPM</label>
+                    <label>NIP/NPM<span class="text-red-500">*</span></label>
                     <input type="text" name="npm_nip" value="{{ old('npm_nip') }}" class="w-full p-2 rounded mb-3">
 
                     <label>No Telp</label>

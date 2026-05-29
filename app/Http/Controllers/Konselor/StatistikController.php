@@ -231,8 +231,218 @@ class StatistikController extends Controller
         ));
     }
 
-    public function laporan()
+    // ══════════════════════════════════════════════
+    // STATISTIK LAPORAN
+    // ══════════════════════════════════════════════
+
+        private function getLaporanData(string $periode): array
     {
-        return view('konselor.statistik.laporan');
+        [$from, $to] = $this->resolveDateRange($periode);
+ 
+        // ── 1. METRIK UTAMA ──────────────────────────────────
+ 
+        $totalLaporan = DB::table('laporans')
+            ->whereBetween('tanggal', [$from->toDateString(), $to->toDateString()])
+            ->count();
+ 
+        // Distribusi status laporan
+        $distribusiStatus = DB::table('laporans')
+            ->whereBetween('tanggal', [$from->toDateString(), $to->toDateString()])
+            ->select('status', DB::raw('COUNT(*) as jumlah'))
+            ->groupBy('status')
+            ->pluck('jumlah', 'status');
+ 
+        // Distribusi jenis kasus (Pengguna / Pengedar / Kurir / Bandar)
+        $distribusiJenisKasus = DB::table('laporans')
+            ->whereBetween('tanggal', [$from->toDateString(), $to->toDateString()])
+            ->select('jenis_kasus', DB::raw('COUNT(*) as jumlah'))
+            ->groupBy('jenis_kasus')
+            ->orderByDesc('jumlah')
+            ->get();
+ 
+        // ── 2. JENIS NARKOBA ─────────────────────────────────
+ 
+        $distribusiNarkoba = DB::table('laporans')
+            ->whereBetween('laporans.tanggal', [$from->toDateString(), $to->toDateString()])
+            ->leftJoin('jenis_narkobas', 'laporans.jenis_narkoba_id', '=', 'jenis_narkobas.id')
+            ->select(
+                DB::raw('COALESCE(jenis_narkobas.nama, "Tidak Disebutkan") as nama_narkoba'),
+                DB::raw('COUNT(*) as jumlah')
+            )
+            ->groupBy(DB::raw('COALESCE(jenis_narkobas.nama, "Tidak Disebutkan")'))
+            ->orderByDesc('jumlah')
+            ->get();
+ 
+        $topNarkoba = $distribusiNarkoba->first();
+ 
+        // ── 3. PERAN PELAPOR & TERLAPOR ──────────────────────
+ 
+        $distribusiPeranPelapor = DB::table('laporans')
+            ->whereBetween('tanggal', [$from->toDateString(), $to->toDateString()])
+            ->select('peran_pelapor as peran', DB::raw('COUNT(*) as jumlah'))
+            ->groupBy('peran_pelapor')
+            ->orderByDesc('jumlah')
+            ->get();
+ 
+        $distribusiPeranTerlapor = DB::table('laporans')
+            ->whereBetween('tanggal', [$from->toDateString(), $to->toDateString()])
+            ->select('peran_terlapor as peran', DB::raw('COUNT(*) as jumlah'))
+            ->groupBy('peran_terlapor')
+            ->orderByDesc('jumlah')
+            ->get();
+ 
+        // ── 4. GENDER PELAPOR & TERLAPOR ─────────────────────
+ 
+        $genderPelapor = DB::table('laporans')
+            ->whereBetween('tanggal', [$from->toDateString(), $to->toDateString()])
+            ->select('jk_pelapor', DB::raw('COUNT(*) as jumlah'))
+            ->groupBy('jk_pelapor')
+            ->pluck('jumlah', 'jk_pelapor');
+ 
+        $genderTerlapor = DB::table('laporans')
+            ->whereBetween('tanggal', [$from->toDateString(), $to->toDateString()])
+            ->select('jk_terlapor', DB::raw('COUNT(*) as jumlah'))
+            ->groupBy('jk_terlapor')
+            ->pluck('jumlah', 'jk_terlapor');
+ 
+        // ── 5. DISTRIBUSI UNIT/FAKULTAS ──────────────────────
+        // Rute: laporans.user_id → users.unit_id → units
+ 
+        $distribusiUnit = DB::table('laporans')
+            ->whereBetween('laporans.tanggal', [$from->toDateString(), $to->toDateString()])
+            ->leftJoin('users', 'laporans.user_id', '=', 'users.id')
+            ->leftJoin('units', 'users.unit_id', '=', 'units.id')
+            ->select(
+                DB::raw('COALESCE(units.nama_unit, "Tidak Diketahui") as nama_unit'),
+                DB::raw('COALESCE(units.kategori_unit, "Tidak Diketahui") as kategori_unit'),
+                DB::raw('COUNT(*) as jumlah')
+            )
+            ->groupBy(
+                DB::raw('COALESCE(units.nama_unit, "Tidak Diketahui")'),
+                DB::raw('COALESCE(units.kategori_unit, "Tidak Diketahui")')
+            )
+            ->orderByDesc('jumlah')
+            ->limit(10)
+            ->get();
+ 
+        $distribusiKategoriUnit = DB::table('laporans')
+            ->whereBetween('laporans.tanggal', [$from->toDateString(), $to->toDateString()])
+            ->leftJoin('users', 'laporans.user_id', '=', 'users.id')
+            ->leftJoin('units', 'users.unit_id', '=', 'units.id')
+            ->select(
+                DB::raw('COALESCE(units.kategori_unit, "Tidak Diketahui") as kategori_unit'),
+                DB::raw('COUNT(*) as jumlah')
+            )
+            ->groupBy(DB::raw('COALESCE(units.kategori_unit, "Tidak Diketahui")'))
+            ->orderByDesc('jumlah')
+            ->get();
+ 
+        $topUnit = $distribusiUnit->first();
+ 
+        // ── 6. TREN BULANAN (12 bulan terakhir) ──────────────
+        // Selalu tampil 12 bulan terakhir terlepas dari filter periode
+        $trenBulanan = DB::table('laporans')
+            ->whereBetween('tanggal', [
+                now()->subMonths(11)->startOfMonth()->toDateString(),
+                now()->endOfMonth()->toDateString(),
+            ])
+            ->select(
+                DB::raw('DATE_FORMAT(tanggal, "%Y-%m") as bulan'),
+                DB::raw('COUNT(*) as jumlah')
+            )
+            ->groupBy('bulan')
+            ->orderBy('bulan')
+            ->get()
+            ->keyBy('bulan');
+ 
+        // Isi bulan yang kosong dengan 0
+        $trenLabels = [];
+        $trenValues = [];
+        for ($i = 11; $i >= 0; $i--) {
+            $key = now()->subMonths($i)->format('Y-m');
+            $trenLabels[] = now()->subMonths($i)->translatedFormat('M Y');
+            $trenValues[] = $trenBulanan->get($key)?->jumlah ?? 0;
+        }
+ 
+        // ── 7. TINDAK LANJUT — waktu rata-rata penyelesaian ──
+        $rataWaktuSelesai = DB::table('laporans')
+            ->whereBetween('laporans.tanggal', [$from->toDateString(), $to->toDateString()])
+            ->where('laporans.status', 'selesai')
+            ->join('tindak_lanjuts', function ($join) {
+                $join->on('tindak_lanjuts.laporan_id', '=', 'laporans.id')
+                     ->where('tindak_lanjuts.status', 'selesai');
+            })
+            ->select(DB::raw('AVG(DATEDIFF(tindak_lanjuts.created_at, laporans.created_at)) as rata_hari'))
+            ->value('rata_hari');
+ 
+        // ── 8. KONSELOR PALING AKTIF ─────────────────────────────
+        $aktivitasKonselor = DB::table('tindak_lanjuts')
+            ->join('laporans', 'tindak_lanjuts.laporan_id', '=', 'laporans.id')
+            ->whereBetween('laporans.tanggal', [$from->toDateString(), $to->toDateString()])
+            ->whereNotNull('tindak_lanjuts.konselor_id')
+            ->join('users as konselor', 'tindak_lanjuts.konselor_id', '=', 'konselor.id')
+            ->select(
+                'konselor.nama',
+                DB::raw('COUNT(DISTINCT tindak_lanjuts.laporan_id) as total_laporan'),
+                DB::raw('SUM(CASE WHEN tindak_lanjuts.status = "selesai" THEN 1 ELSE 0 END) as total_selesai')
+            )
+            ->groupBy('tindak_lanjuts.konselor_id', 'konselor.nama')
+            ->orderByDesc('total_laporan')
+            ->get()
+            ->map(function ($row) {
+                $row->completion_rate = $row->total_laporan > 0
+                    ? round(($row->total_selesai / $row->total_laporan) * 100, 1) : 0;
+                return $row;
+            });
+ 
+        return compact(
+            'totalLaporan', 'distribusiStatus', 'distribusiJenisKasus',
+            'distribusiNarkoba', 'topNarkoba',
+            'distribusiPeranPelapor', 'distribusiPeranTerlapor',
+            'genderPelapor', 'genderTerlapor',
+            'distribusiUnit', 'distribusiKategoriUnit', 'topUnit',
+            'trenLabels', 'trenValues',
+            'rataWaktuSelesai', 'aktivitasKonselor',
+            'periode', 'from', 'to'
+        );
+    }
+ 
+    /**
+     * Halaman statistik laporan narkoba (SSR + JS charts).
+     */
+    public function laporan(Request $request)
+    {
+        $periode = $request->get('periode', 'bulanan');
+        return view('konselor.statistik.laporan', $this->getLaporanData($periode));
+    }
+ 
+    /**
+     * JSON endpoint untuk refresh data via AJAX (opsional).
+     */
+    public function laporanData(Request $request)
+    {
+        $periode = $request->get('periode', 'bulanan');
+        $d = $this->getLaporanData($periode);
+ 
+        $selesaiRate = $d['totalLaporan'] > 0
+            ? round(($d['distribusiStatus']['selesai'] ?? 0) / $d['totalLaporan'] * 100, 1) : 0;
+ 
+        return response()->json([
+            'totalLaporan'         => $d['totalLaporan'],
+            'selesaiRate'          => $selesaiRate,
+            'rataWaktuSelesai'     => $d['rataWaktuSelesai'] ? round($d['rataWaktuSelesai'], 1) : null,
+            'topNarkoba'           => ['nama' => $d['topNarkoba']->nama_narkoba ?? '—', 'jumlah' => $d['topNarkoba']->jumlah ?? 0],
+            'topUnit'              => ['nama' => $d['topUnit']->nama_unit ?? '—', 'jumlah' => $d['topUnit']->jumlah ?? 0, 'kategori' => $d['topUnit']->kategori_unit ?? ''],
+            'aktivitasKonselor'       => $d['aktivitasKonselor']->count(),
+            'status'               => $d['distribusiStatus'],
+            'jenisKasus'           => ['labels' => $d['distribusiJenisKasus']->pluck('jenis_kasus'), 'values' => $d['distribusiJenisKasus']->pluck('jumlah')],
+            'narkoba'              => ['labels' => $d['distribusiNarkoba']->pluck('nama_narkoba'), 'values' => $d['distribusiNarkoba']->pluck('jumlah')],
+            'peranPelapor'         => ['labels' => $d['distribusiPeranPelapor']->pluck('peran'), 'values' => $d['distribusiPeranPelapor']->pluck('jumlah')],
+            'peranTerlapor'        => ['labels' => $d['distribusiPeranTerlapor']->pluck('peran'), 'values' => $d['distribusiPeranTerlapor']->pluck('jumlah')],
+            'genderPelapor'        => $d['genderPelapor'],
+            'genderTerlapor'       => $d['genderTerlapor'],
+            'kategoriUnit'         => ['labels' => $d['distribusiKategoriUnit']->pluck('kategori_unit'), 'values' => $d['distribusiKategoriUnit']->pluck('jumlah')],
+            'tren'                 => ['labels' => $d['trenLabels'], 'values' => $d['trenValues']],
+        ]);
     }
 }

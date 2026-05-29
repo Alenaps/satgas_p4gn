@@ -129,7 +129,7 @@
                     </a>
                     <a href="{{ route('admin.statistik.laporan') }}"
                        class="flex items-center gap-2 px-3 py-2 text-sm hover:bg-green-500 rounded-lg transition-colors {{ request()->routeIs('admin.statistik.laporan') ? 'bg-green-500' : '' }}">
-                        <i class="fas fa-file-chart-column w-4 text-xs"></i>
+                        <i class="fas fa-chart-column w-4 text-xs"></i>
                         <span>Laporan</span>
                     </a>
                 </div>

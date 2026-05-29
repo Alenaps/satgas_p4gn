@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard Konselor')</title>
+    @stack('styles')
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -105,7 +106,7 @@
                     </a>
                     <a href="{{ route('konselor.statistik.laporan') }}"
                     class="flex items-center gap-2 px-3 py-2 text-sm hover:bg-green-500 rounded-lg transition-colors {{ request()->routeIs('konselor.statistik.laporan') ? 'bg-green-500' : '' }}">
-                        <i class="fas fa-file-chart-column w-4 text-xs"></i>
+                        <i class="fas fa-chart-column w-4 text-xs"></i>
                         <span>Laporan</span>
                     </a>
                 </div>

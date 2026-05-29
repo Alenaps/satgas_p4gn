@@ -62,7 +62,7 @@
     <div class="overflow-x-auto bg-white rounded-xl shadow border border-blue-200">
 
         <table class="w-full text-left">
-            <thead class="bg-blue-600 border-b border-blue-200 text-white">
+            <thead class="bg-green-600 border-b border-blue-200 text-white">
                 <tr>
                     <th class="p-4 font-semibold">No</th>
                     <th class="p-4 font-semibold">Thumbnail</th>

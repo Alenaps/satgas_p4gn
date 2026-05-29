@@ -63,7 +63,7 @@
 
         <table class="w-full text-sm">
             <thead>
-                <tr class="bg-blue-600 text-white border-b border-blue-200">
+                <tr class="bg-green-600 text-white border-b border-blue-200">
                     <th class="p-4 text-left font-semibold">NO</th>
                     <th class="p-4 text-left font-semibold">TANGGAL</th>
                     <th class="p-4 text-left font-semibold">NAMA TERLAPOR</th>

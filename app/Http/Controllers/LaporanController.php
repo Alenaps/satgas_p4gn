@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\LaporanTerkirimMail;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class LaporanController extends Controller
 {   
@@ -102,7 +104,7 @@ class LaporanController extends Controller
             'peran_pelapor'     => 'required|in:Mahasiswa,Dosen,Tendik',
             'jk_pelapor'        => 'required|in:Laki-laki,Perempuan',
 
-            'npm_nip'           => 'nullable|string|max:18',
+            'npm_nip'           => 'required|string|max:18',
             'no_telp'           => 'nullable|string|digits_between:10,15',
             'email'             => 'required|email|max:30',
 
@@ -132,6 +134,7 @@ class LaporanController extends Controller
             'email.email'              => 'Format email tidak valid.',
             'email.max'                => 'Email maksimal 30 karakter.',
 
+            'npm_nip.required'         => 'NPM/NIP wajib diisi.',
             'npm_nip.max'              => 'NPM/NIP maksimal 18 karakter.',
             'no_telp.digits_between'   => 'Nomor telepon harus 10-15 digit.',
 
@@ -185,27 +188,54 @@ class LaporanController extends Controller
 
     public function konsuliKlaim(Request $request)
     {
+        // Validasi input
         $request->validate([
-            'kode_laporan' => 'required',
-            'token_laporan' => 'required'
+            'kode_laporan'  => 'required|string',
+            'token_laporan' => 'required|string',
         ]);
 
-        $laporan = LaporanModel::where('kode_laporan', $request->kode_laporan)
-            ->where('token_laporan', $request->token_laporan)
-            ->first();
+        // Harus sudah login
+        if (!Auth::check()) {
+            return back()->with('error', 'Silakan login terlebih dahulu sebelum mengklaim laporan.');
+        }
+
+        $user = Auth::user();
+
+        // Cari laporan berdasarkan kode + token
+        $laporan = LaporanModel::where('kode_laporan',  $request->kode_laporan)
+                            ->where('token_laporan', $request->token_laporan)
+                            ->first();
 
         if (!$laporan) {
-            return back()->with('error', 'Kode / token salah');
+            return back()->with('error', 'Kode laporan atau token tidak valid.');
         }
 
-        // CEGAH DOUBLE CLAIM
+        // Cegah double claim
+        // Jika sudah diklaim oleh orang LAIN - tolak
+        // Jika sudah diklaim oleh user yang SAMA - anggap sukses (idempotent)
         if ($laporan->user_id) {
-            return back()->with('error', 'Laporan sudah diklaim');
+            if ((int) $laporan->user_id === (int) $user->id) {
+                return back()->with('success', 'Laporan ini sudah terhubung ke akun Anda.');
+            }
+            return back()->with('error', 'Laporan ini sudah diklaim oleh pengguna lain.');
         }
 
-        $laporan->update(['user_id' => auth()->id()]);
+        // Verifikasi kepemilikan via npm_nip
+        // laporan menyimpan npm_nip pelapor dan user punya npm_nip,
+        // memastikan data identitas cocok agar tidak ada user lain yang klaim milik orang lain.
+             
+        if ($laporan->npm_nip && $user->npm_nip) {
+            if ($laporan->npm_nip !== $user->npm_nip) {
+                return back()->with('error', 'Data identitas Anda tidak cocok dengan laporan ini.');
+            }
+        }
 
-        return back()->with('success', 'Berhasil klaim laporan');
+        // Hubungkan laporan ke user yang login
+        // Setelah ini, query statistik unit akan langsung terbaca via:
+        // laporans.user_id - users.unit_id - units
+        $laporan->update(['user_id' => $user->id]);
+
+        return back()->with('success', 'Laporan berhasil diklaim dan terhubung ke akun Anda.');
     }
 
     public function konsuliLaporanSaya()
