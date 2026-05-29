@@ -279,6 +279,51 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // ══════════════════════════════════════════════════════════
+    // SESI BERAKHIR
+    // ══════════════════════════════════════════════════════════
+    function showSessionEnded() {
+        hideTyping();
+
+        // Disable input
+        messageInput.disabled = true;
+        messageInput.placeholder = 'Sesi telah berakhir.';
+        document.getElementById('sendButton').disabled = true;
+
+        // Update status header
+        statusDot.classList.remove('bg-emerald-500', 'bg-red-500');
+        statusDot.classList.add('bg-slate-400');
+        statusNormal.textContent = 'Sesi Telah Berakhir';
+        statusNormal.classList.remove('text-emerald-600', 'text-red-600');
+        statusNormal.classList.add('text-slate-500');
+        statusNormal.classList.remove('hidden');
+        statusTyping.classList.add('hidden');
+
+        // Banner di dalam chat
+        if (!document.getElementById('session-ended-banner')) {
+            messagesList.insertAdjacentHTML('beforeend', `
+                <div id="session-ended-banner" class="flex flex-col items-center py-8 mt-6 animate-pop-in">
+                    <div class="w-px h-10 bg-slate-200 mb-6"></div>
+                    <div class="bg-slate-100 border border-slate-200 rounded-[2rem] px-8 py-5 text-center max-w-sm">
+                        <div class="w-12 h-12 bg-slate-200 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                            <i class="fas fa-lock text-slate-500 text-lg"></i>
+                        </div>
+                        <p class="text-sm font-black text-slate-700 mb-1">Sesi Telah Berakhir</p>
+                        <p class="text-xs text-slate-500 font-medium leading-relaxed">
+                            Konselor telah mengakhiri sesi ini. Terima kasih sudah mau bercerita. 💚
+                        </p>
+                    </div>
+                    <div class="w-px h-6 bg-slate-200 mt-6"></div>
+                    <a href="{{ route('konsuli.konseling.index') }}"
+                       class="mt-4 inline-flex items-center gap-2 px-6 py-3 bg-slate-900 hover:bg-emerald-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all duration-300">
+                        <i class="fas fa-arrow-left"></i> Kembali ke Beranda
+                    </a>
+                </div>
+            `);
+            chatMessages.scrollTo({ top: chatMessages.scrollHeight, behavior: 'smooth' });
+        }
+    }
+
+    // ══════════════════════════════════════════════════════════
     // RENDER PESAN
     // ══════════════════════════════════════════════════════════
     function renderMessage(msg, isNewGroup = true, isOptimistic = false) {
@@ -428,6 +473,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 }
             })
+            .listen('.session.updated', (e) => {
+                if (e.status === 'completed') {
+                    showSessionEnded();
+                }
+            })
             .subscribed(() => {
                 setStatusConnected();
                 console.info(`[Pusher] Terhubung ke channel: session.${konselingId}`);
@@ -438,6 +488,11 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
         setStatusDisconnected();
     }
+
+    // Cek status awal dari server (jika halaman dibuka saat sesi sudah selesai)
+    @if($konseling->status === 'completed')
+        showSessionEnded();
+    @endif
 
     scrollToBottom();
 });

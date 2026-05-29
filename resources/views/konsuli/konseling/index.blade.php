@@ -10,18 +10,28 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative">
 
         @if(session('success'))
-        <div class="max-w-4xl mx-auto bg-emerald-500/10 border border-emerald-500/20 backdrop-blur-xl text-emerald-400 px-6 py-4 rounded-3xl mb-12 flex items-center shadow-2xl animate-fade-in-down">
-            <div class="bg-emerald-500 text-white p-2 rounded-full mr-4 text-xs"><i class="fas fa-check"></i></div>
-            <span class="font-bold text-sm">{{ session('success') }}</span>
-        </div>
-        @endif
+<div id="alert-success" class="max-w-4xl mx-auto bg-emerald-500/10 border border-emerald-500/20 backdrop-blur-xl text-emerald-400 px-6 py-4 rounded-3xl mb-12 flex items-center justify-between shadow-2xl animate-fade-in-down">
+    <div class="flex items-center">
+        <div class="bg-emerald-500 text-white p-2 rounded-full mr-4 text-xs"><i class="fas fa-check"></i></div>
+        <span class="font-bold text-sm">{{ session('success') }}</span>
+    </div>
+    <button onclick="document.getElementById('alert-success').remove()" class="ml-4 text-emerald-400 hover:text-emerald-200 transition-colors flex-shrink-0">
+        <i class="fas fa-times text-base"></i>
+    </button>
+</div>
+@endif
 
-        @if(session('error'))
-        <div class="max-w-4xl mx-auto bg-rose-500/10 border border-rose-500/20 backdrop-blur-xl text-rose-400 px-6 py-4 rounded-3xl mb-12 flex items-center shadow-2xl animate-fade-in-down">
-            <div class="bg-rose-500 text-white p-2 rounded-full mr-4 text-xs"><i class="fas fa-times"></i></div>
-            <span class="font-bold text-sm">{{ session('error') }}</span>
-        </div>
-        @endif
+@if(session('error'))
+<div id="alert-error" class="max-w-4xl mx-auto bg-rose-500/10 border border-rose-500/20 backdrop-blur-xl text-rose-400 px-6 py-4 rounded-3xl mb-12 flex items-center justify-between shadow-2xl animate-fade-in-down">
+    <div class="flex items-center">
+        <div class="bg-rose-500 text-white p-2 rounded-full mr-4 text-xs"><i class="fas fa-exclamation"></i></div>
+        <span class="font-bold text-sm">{{ session('error') }}</span>
+    </div>
+    <button onclick="document.getElementById('alert-error').remove()" class="ml-4 text-rose-400 hover:text-rose-200 transition-colors flex-shrink-0">
+        <i class="fas fa-times text-base"></i>
+    </button>
+</div>
+@endif
 
         <div class="mb-20 text-center max-w-3xl mx-auto animate-fade-in">
             <div class="inline-block px-5 py-2 mb-6 rounded-full bg-emerald-500/10 backdrop-blur-md border border-emerald-500/20 text-emerald-400 text-[10px] font-black uppercase tracking-[0.2em]">
@@ -120,7 +130,7 @@
                             </div>
                             <div class="flex items-center justify-between text-sm bg-slate-50 p-4 rounded-2xl border border-slate-100 mb-10">
                                 <span class="text-slate-400 font-black px-1 uppercase text-[10px] tracking-widest">Waktu Mulai</span>
-                                <span class="text-slate-900 font-black">{{ $session->started_at?->format('H:i WIB') ?? '--:--' }}</span>
+                                <span class="text-slate-900 font-black">{{ $session->started_at?->format('H:i') ?? '--:--' }} WIB</span>
                             </div>
                             <a href="{{ route('konsuli.konseling.chat', $session->id) }}"
                                class="flex items-center justify-center w-full bg-slate-900 hover:bg-emerald-600 text-white py-5 rounded-[2rem] transition-all duration-300 font-black text-xs uppercase tracking-widest group-hover:shadow-xl group-hover:shadow-emerald-500/20">
