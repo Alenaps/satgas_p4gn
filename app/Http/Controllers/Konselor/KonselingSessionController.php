@@ -62,7 +62,7 @@ class KonselingSessionController extends Controller
     // ─────────────────────────────────────────────────────────────
     public function approve(KonselingSession $session)
     {
-        if ($session->konselor_id !== Auth::id()) {
+        if ((int) $session->konselor_id !== (int) Auth::id()) {
             return redirect()->route('konselor.konseling.index')
                 ->with('error', 'Anda tidak memiliki akses ke sesi ini.');
         }
@@ -88,7 +88,7 @@ class KonselingSessionController extends Controller
     // ─────────────────────────────────────────────────────────────
     public function reject(KonselingSession $session)
     {
-        if ($session->konselor_id !== Auth::id()) {
+        if ((int) $session->konselor_id !== (int) Auth::id()) {
             return redirect()->route('konselor.konseling.index')
                 ->with('error', 'Anda tidak memiliki akses ke sesi ini.');
         }
@@ -111,7 +111,7 @@ class KonselingSessionController extends Controller
     // ─────────────────────────────────────────────────────────────
     public function showEndSessionForm(KonselingSession $session)
     {
-        if ($session->konselor_id !== Auth::id()) {
+        if ((int) $session->konselor_id !== (int) Auth::id()) {
             return redirect()->route('konselor.konseling.index')
                 ->with('error', 'Anda tidak memiliki akses ke sesi ini.');
         }
@@ -135,7 +135,7 @@ class KonselingSessionController extends Controller
             'catatan_konselor' => 'nullable|string|max:5000',
         ]);
 
-        if ($session->konselor_id !== Auth::id()) {
+        if ((int) $session->konselor_id !== (int) Auth::id()) {
             return redirect()->route('konselor.konseling.index')
                 ->with('error', 'Anda tidak memiliki akses ke sesi ini.');
         }
@@ -162,7 +162,7 @@ class KonselingSessionController extends Controller
     // ─────────────────────────────────────────────────────────────
     public function chat(KonselingSession $session)
     {
-        if ($session->konselor_id !== Auth::id()) {
+        if ((int) $session->konselor_id !== (int) Auth::id()) {
             return redirect()->route('konselor.konseling.index')
                 ->with('error', 'Anda tidak memiliki akses ke sesi ini.');
         }
@@ -190,7 +190,7 @@ class KonselingSessionController extends Controller
     // ─────────────────────────────────────────────────────────────
     public function getMessages(Request $request, KonselingSession $session)
     {
-        if ($session->konselor_id !== Auth::id()) {
+        if ((int) $session->konselor_id !== (int) Auth::id()) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
@@ -219,7 +219,7 @@ class KonselingSessionController extends Controller
             'message' => 'required|string|max:5000',
         ]);
 
-        if ($session->konselor_id !== Auth::id()) {
+        if ((int) $session->konselor_id !== (int) Auth::id()) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
@@ -248,7 +248,7 @@ class KonselingSessionController extends Controller
     // ─────────────────────────────────────────────────────────────
     public function detail(KonselingSession $session)
     {
-        if ($session->konselor_id !== Auth::id()) {
+        if ((int) $session->konselor_id !== (int) Auth::id()) {
             return redirect()->route('konselor.konseling.index')
                 ->with('error', 'Anda tidak memiliki akses ke sesi ini.');
         }
@@ -266,7 +266,7 @@ class KonselingSessionController extends Controller
     // ─────────────────────────────────────────────────────────────
     public function showDetail(KonselingSession $session)
     {
-        if ($session->konselor_id !== Auth::id()) {
+        if ((int) $session->konselor_id !== (int) Auth::id()) {
             return redirect()->route('konselor.konseling.index')
                 ->with('error', 'Anda tidak memiliki akses ke sesi ini.');
         }
