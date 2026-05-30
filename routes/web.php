@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PublikasiController;
 use App\Http\Controllers\JenisNarkobaController;
+use App\Http\Controllers\StorageController;
 
 // Konsuli Controllers
 use App\Http\Controllers\Konsuli\KonselingController;
@@ -37,6 +38,10 @@ use App\Http\Controllers\Admin\JabatanController;
 | PUBLIC (Guest)
 |--------------------------------------------------------------------------
 */
+Route::get('/storage/{path}', [StorageController::class, 'serve'])
+    ->where('path', '.*') // penting! agar bisa nested path seperti images/foto.jpg
+    ->name('storage.serve');
+
 Route::get('/', fn () => view('welcome'))->name('home');
 Route::view('/tentang', 'tentang')->name('tentang');
 
