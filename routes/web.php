@@ -163,16 +163,6 @@ Route::middleware(['auth', 'role:konselor'])
     ->prefix('konselor')->name('konselor.')
     ->group(function () {
 
-        Broadcast::channel('konselor.{konselorId}', function ($user, $konselorId) {
-            return (int) $user->id === (int) $konselorId;
-        });
-        Broadcast::channel('konseling.{sessionId}', function ($user, $sessionId) {
-            $session = \App\Models\KonselingSession::find($sessionId);
-            if (!$session) return false;
-
-            return $user->id === $session->konselor_id
-                || $user->id === $session->konseli_id;
-        });
 
         Route::get('konseling/{session}/messages', [KonselingSessionController::class, 'getMessages'])
         ->name('konselor.konseling.messages');
