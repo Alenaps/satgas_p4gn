@@ -39,7 +39,7 @@
         @endif
 
         {{-- Grid Konselor --}}
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
             @forelse($konselors as $konselor)
             @php
                 $profile          = $konselor->konselorProfile;
@@ -51,13 +51,13 @@
 
             {{-- Card --}}
             <div id="konselor-card-{{ $konselor->id }}"
-                 class="bg-white rounded-3xl shadow-2xl shadow-black/20 hover:shadow-emerald-500/10 transition-all duration-500 border border-white/5 flex flex-row overflow-hidden group">
+                 class="bg-white rounded-3xl shadow-2xl shadow-black/20 hover:shadow-emerald-500/10 transition-all duration-500 border border-white/5 flex flex-col sm:flex-row overflow-hidden group">
 
                 {{-- Kolom Kiri: Avatar --}}
-                <div class="flex-shrink-0 w-52 bg-slate-50 flex flex-col items-center justify-center p-6 relative">
+                <div class="flex-shrink-0 w-full sm:w-40 bg-slate-50 flex flex-col items-center justify-center p-6 relative">
                     <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-emerald-50 to-slate-50 opacity-60"></div>
 
-                    <div class="relative z-10 w-36 h-36 p-1 rounded-2xl bg-gradient-to-tr from-emerald-400 to-blue-500 shadow-lg group-hover:scale-105 group-hover:rotate-3 transition-all duration-500">
+                    <div class="relative z-10 w-24 h-24 sm:w-32 sm:h-32 p-1 rounded-2xl bg-gradient-to-tr from-emerald-400 to-blue-500 shadow-lg group-hover:scale-105 group-hover:rotate-3 transition-all duration-500">
                         <div class="w-full h-full rounded-xl bg-white p-0.5 overflow-hidden">
                             @if($konselor->foto)
                                 <img src="{{ asset('storage/' . $konselor->foto) }}" class="w-full h-full object-cover rounded-[10px]" alt="{{ $konselor->nama }}">
@@ -88,7 +88,7 @@
 
                     {{-- Nama & Status Badge --}}
                     <div class="mb-2">
-                        <div class="flex items-center gap-3 flex-wrap mb-1">
+                        <div class="flex items-center gap-2 flex-wrap mb-1 min-w-0">
                             <h3 class="font-black text-xl text-slate-900 leading-tight group-hover:text-emerald-600 transition-colors truncate">{{ $konselor->nama }}</h3>
                             <span id="konselor-status-{{ $konselor->id }}"
                                   class="flex-shrink-0 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border

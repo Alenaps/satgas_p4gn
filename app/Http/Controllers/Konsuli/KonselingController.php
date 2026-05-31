@@ -155,13 +155,13 @@ class KonselingController extends Controller
     }
 
     public function showRiwayat($id)
-    {
-        $session = KonselingSession::with(['konselor', 'messages'])->findOrFail($id);
+{
+    $session = KonselingSession::with(['konselor', 'messages'])->findOrFail($id);
 
-        if ($session->konseli_id !== auth()->id()) {
-            abort(403);
-        }
-
-        return view('konsuli.konseling.detail', compact('session'));
+    if ($session->konseli_id != auth()->id()) {
+        abort(403);
     }
+
+    return view('konsuli.konseling.detail', compact('session'));
+}
 }

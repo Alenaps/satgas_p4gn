@@ -113,7 +113,7 @@
                     {{-- Message Area --}}
                     <div class="flex-1 overflow-y-auto p-10 space-y-10 bg-[#f8fafc] chat-container">
                         @forelse($session->messages as $msg)
-                            @if($msg->user_id == auth()->id())
+                            @if($msg->sender_id == auth()->id())
                                 {{-- Kanan (User/Konsuli) --}}
                                 <div class="flex justify-end items-end gap-4">
                                     <div class="flex flex-col items-end gap-2 max-w-[85%]">
