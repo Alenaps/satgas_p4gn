@@ -7,17 +7,20 @@ import Pusher from 'pusher-js';
 
 window.Pusher = Pusher;
 
-const csrfToken = (document.head.querySelector('meta[name="csrf-token"]')
-    ?.getAttribute('content') ?? '').split('\n')[0].trim();
+const csrfToken = document.head
+    .querySelector('meta[name="csrf-token"]')
+    ?.getAttribute('content') ?? '';
 
 window.Echo = new Echo({
     broadcaster: 'pusher',
     key: import.meta.env.VITE_PUSHER_APP_KEY,
     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
     forceTLS: true,
+    authEndpoint: '/broadcasting/auth',      // ← tambahkan ini
     auth: {
         headers: {
-            'X-CSRF-TOKEN': csrfToken, // ← pakai variable yang sudah di-trim
+            'X-CSRF-TOKEN': csrfToken,
+            'X-Requested-With': 'XMLHttpRequest',  // ← tambahkan ini
         },
     },
 });

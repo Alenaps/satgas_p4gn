@@ -243,7 +243,7 @@
                                     </span>
                                 </td>
                                 <td class="px-8 py-8 whitespace-nowrap text-right">
-                                    <a href="{{ route('konsuli.konseling.konsuli.riwayat.show', $session->id) }}"
+                                    <a href="{{ route('konsuli.konseling.riwayat.show', $session->id) }}"
                                        class="inline-flex items-center justify-center px-6 py-3 bg-white border-2 border-slate-100 text-slate-900 hover:border-emerald-500 hover:text-emerald-600 rounded-2xl transition-all text-[11px] font-black uppercase tracking-widest shadow-sm hover:shadow-md">
                                         Detail Sesi <i class="fas fa-chevron-right ml-2 text-[9px]"></i>
                                     </a>

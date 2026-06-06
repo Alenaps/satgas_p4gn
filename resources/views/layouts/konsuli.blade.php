@@ -65,7 +65,7 @@
         <a href="{{ route('konsuli.tentang') }}"
            class="flex items-center h-10 px-3 rounded-lg transition duration-200
            hover:bg-white/10
-           {{ Request::routeIs('tentang') ? 'bg-white/20 font-semibold' : '' }}">
+           {{ Request::routeIs('konsuli.tentang') ? 'bg-white/20 font-semibold' : '' }}
             TENTANG
         </a>
     </li>
@@ -139,7 +139,7 @@
             <ul class="flex flex-col items-center py-4 space-y-2 text-white">
 
                 <li><a href="{{ route('konsuli.dashboard') }}" class="px-4 py-2 hover:bg-white/15 rounded block">BERANDA</a></li>
-                <li><a href="{{ route('tentang') }}" class="px-4 py-2 hover:bg-white/15 rounded block">TENTANG</a></li>
+                <li><a href="{{ route('konsuli.tentang') }}" class="px-4 py-2 hover:bg-white/15 rounded block">TENTANG</a></li>
                 <li><a href="{{ route('konsuli.publikasi.index') }}" class="px-4 py-2 hover:bg-white/15 rounded block">PUBLIKASI</a></li>
                 <li><a href="{{ route('konsuli.laporan.saya') }}" class="px-4 py-2 hover:bg-white/15 rounded block">LAPORAN SAYA</a></li>
                 <li><a href="{{ route('konsuli.konselor.index') }}" class="px-4 py-2 hover:bg-white/15 rounded block">KONSELOR</a></li>
@@ -191,7 +191,7 @@
                 <h3 class="text-white font-semibold mb-3">Navigasi</h3>
                 <ul class="space-y-2 text-sm">
                     <li><a href="{{ route('konsuli.dashboard') }}" class="hover:text-white">Beranda</a></li>
-                    <li><a href="{{ route('tentang') }}" class="hover:text-white">Tentang</a></li>
+                    <li><a href="{{ route('konsuli.tentang') }}" class="hover:text-white">Tentang</a></li>
                     <li><a href="{{ route('konsuli.publikasi.index') }}" class="hover:text-white">Publikasi</a></li>
                     <li><a href="{{ route('konsuli.konselor.index') }}" class="hover:text-white">Konselor</a></li>
                     <li><a href="{{ route('konsuli.konseling.index') }}" class="hover:text-white">Konseling</a></li>
