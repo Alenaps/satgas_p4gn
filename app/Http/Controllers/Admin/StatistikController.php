@@ -352,28 +352,44 @@ class StatistikController extends Controller
             ->value('rata_hari');
  
         // ── 8. ADMIN PALING AKTIF ─────────────────────────────
-        $aktivitas = DB::table('tindak_lanjuts')
+        $admin = DB::table('tindak_lanjuts')
             ->join('laporans', 'tindak_lanjuts.laporan_id', '=', 'laporans.id')
-            ->leftJoin('users as admin', 'tindak_lanjuts.admin_id', '=', 'admin.id')
-            ->leftJoin('users as konselor', 'tindak_lanjuts.konselor_id', '=', 'konselor.id')
+            ->join('users as admin', 'tindak_lanjuts.admin_id', '=', 'admin.id')
             ->whereBetween('laporans.tanggal', [$from->toDateString(), $to->toDateString()])
+            ->where('admin.role', 'admin') 
+            ->whereNotNull('tindak_lanjuts.admin_id')
             ->select(
-                DB::raw('COALESCE(admin.nama, konselor.nama) as nama'),
-                DB::raw('CASE 
-                    WHEN tindak_lanjuts.admin_id IS NOT NULL THEN "Admin"
-                    ELSE "Konselor"
-                END as role'),
+                'admin.nama as nama',
+                DB::raw('"Admin" as role'),
                 DB::raw('COUNT(DISTINCT tindak_lanjuts.laporan_id) as total_laporan'),
                 DB::raw('SUM(CASE WHEN tindak_lanjuts.status = "selesai" THEN 1 ELSE 0 END) as total_selesai')
             )
-            ->groupBy('nama', 'role')
-            ->orderByDesc('total_laporan')
+            ->groupBy('admin.nama');
+
+        $konselor = DB::table('tindak_lanjuts')
+            ->join('laporans', 'tindak_lanjuts.laporan_id', '=', 'laporans.id')
+            ->join('users as konselor', 'tindak_lanjuts.konselor_id', '=', 'konselor.id')
+            ->whereBetween('laporans.tanggal', [$from->toDateString(), $to->toDateString()])
+            ->where('konselor.role', 'konselor') 
+            ->whereNotNull('tindak_lanjuts.konselor_id')
+            ->select(
+                'konselor.nama as nama',
+                DB::raw('"Konselor" as role'),
+                DB::raw('COUNT(DISTINCT tindak_lanjuts.laporan_id) as total_laporan'),
+                DB::raw('SUM(CASE WHEN tindak_lanjuts.status = "selesai" THEN 1 ELSE 0 END) as total_selesai')
+            )
+            ->groupBy('konselor.nama');
+
+        $aktivitas = $admin->unionAll($konselor)
             ->get()
             ->map(function ($row) {
                 $row->completion_rate = $row->total_laporan > 0
-                    ? round(($row->total_selesai / $row->total_laporan) * 100, 1) : 0;
+                    ? round(($row->total_selesai / $row->total_laporan) * 100, 1)
+                    : 0;
                 return $row;
-            });
+            })
+            ->sortByDesc('total_laporan')
+            ->values();
  
         return compact(
             'totalLaporan', 'distribusiStatus', 'distribusiJenisKasus',
