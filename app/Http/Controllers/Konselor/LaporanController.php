@@ -75,7 +75,7 @@ class LaporanController extends Controller
         $laporan->tindakLanjuts()->create([
             'status' => $request->status,
             'catatan' => $request->catatan,
-            'admin_id' => auth()->id()
+            'konselor_id' => auth()->id()
         ]);
 
         // UPDATE STATUS UTAMA

@@ -65,7 +65,7 @@
         <a href="{{ route('konsuli.tentang') }}"
            class="flex items-center h-10 px-3 rounded-lg transition duration-200
            hover:bg-white/10
-           {{ Request::routeIs('konsuli.tentang') ? 'bg-white/20 font-semibold' : '' }}
+           {{ Request::routeIs('konsuli.tentang') ? 'bg-white/20 font-semibold' : '' }}">
             TENTANG
         </a>
     </li>

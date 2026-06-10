@@ -640,54 +640,87 @@
         @endif
     </div>
 
-    {{-- Aktivitas Admin / Penanganan --}}
+    {{-- Aktivitas Penanganan (Admin + Konselor) --}}
     <div class="card anim-card" style="padding:1.375rem;">
         <div class="sec-header">
-            <i class="fas fa-user-shield"></i> Aktivitas Penanganan Admin
-            <span class="sec-badge">{{ $aktivitasAdmin->count() }} admin</span>
+            <i class="fas fa-users"></i> Aktivitas Penanganan
+            <span class="sec-badge">{{ $aktivitas->count() }} petugas</span>
         </div>
+
         <div style="overflow-x:auto;">
             <table class="admin-table">
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Nama Admin</th>
+                        <th>Nama</th>
+                        <th>Role</th>
                         <th style="text-align:center;">Total Laporan</th>
                         <th style="text-align:center;">Selesai</th>
                         <th>Completion Rate</th>
                     </tr>
                 </thead>
+
                 <tbody>
-                    @forelse($aktivitasAdmin as $i => $a)
+                    @forelse($aktivitas as $i => $a)
                     <tr>
+                        {{-- Ranking --}}
                         <td>
                             <span class="rank-badge" style="{{ $i===0?'background:#fef9c3;color:#a16207;':($i===1?'background:#f1f5f9;color:#475569;':($i===2?'background:#ffedd5;color:#c2410c;':'background:#f8fafc;color:#94a3b8;')) }}">
                                 {{ $i + 1 }}
                             </span>
                         </td>
-                        <td style="font-weight:600;color:var(--clr-ink-2);">{{ $a->nama }}</td>
-                        <td style="text-align:center;font-family:var(--ff-mono);font-weight:500;color:var(--clr-ink);">{{ number_format($a->total_laporan) }}</td>
-                        <td style="text-align:center;font-family:var(--ff-mono);font-weight:500;color:var(--clr-green);">{{ number_format($a->total_selesai) }}</td>
+
+                        {{-- Nama --}}
+                        <td style="font-weight:600;color:var(--clr-ink-2);">
+                            {{ $a->nama }}
+                        </td>
+
+                        {{-- Role Badge --}}
+                        <td>
+                            <span style="
+                                padding:4px 10px;
+                                border-radius:999px;
+                                font-size:12px;
+                                font-weight:500;
+                                background:{{ $a->role == 'Admin' ? '#dbeafe' : '#dcfce7' }};
+                                color:{{ $a->role == 'Admin' ? '#1d4ed8' : '#166534' }};
+                            ">
+                                {{ $a->role }}
+                            </span>
+                        </td>
+
+                        {{-- Total --}}
+                        <td style="text-align:center;font-family:var(--ff-mono);">
+                            {{ number_format($a->total_laporan) }}
+                        </td>
+
+                        {{-- Selesai --}}
+                        <td style="text-align:center;color:var(--clr-green);font-family:var(--ff-mono);">
+                            {{ number_format($a->total_selesai) }}
+                        </td>
+
+                        {{-- Completion Rate --}}
                         <td>
                             <div style="display:flex;align-items:center;gap:.625rem;">
                                 <div class="rate-bar">
                                     <div class="rate-fill"
-                                         style="width:{{ $a->completion_rate }}%;
-                                                background:{{ $a->completion_rate >= 70 ? '#059669' : ($a->completion_rate >= 40 ? '#d97706' : '#e11d48') }};
-                                                -webkit-print-color-adjust:exact;print-color-adjust:exact;">
+                                        style="width:{{ $a->completion_rate }}%;
+                                                background:{{ $a->completion_rate >= 70 ? '#059669' : ($a->completion_rate >= 40 ? '#d97706' : '#e11d48') }};">
                                     </div>
                                 </div>
-                                <span style="font-family:var(--ff-mono);font-size:.75rem;font-weight:500;color:var(--clr-ink-2);width:2.75rem;text-align:right;">
+
+                                <span style="width:2.75rem;text-align:right;">
                                     {{ $a->completion_rate }}%
                                 </span>
                             </div>
                         </td>
                     </tr>
+
                     @empty
                     <tr>
-                        <td colspan="5" style="text-align:center;padding:2.5rem;color:var(--clr-ink-3);">
+                        <td colspan="6" style="text-align:center;padding:2.5rem;">
                             <i class="fas fa-inbox" style="font-size:2rem;display:block;margin-bottom:.5rem;opacity:.4;"></i>
-                            Belum ada data admin
+                            Belum ada data aktivitas
                         </td>
                     </tr>
                     @endforelse

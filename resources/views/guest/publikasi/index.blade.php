@@ -19,9 +19,9 @@
                 <input type="text" name="q"
                     value="{{ request('q') }}"
                     placeholder="Cari..."
-                    class="w-full md:w-auto px-3 py-2 border rounded-lg text-black">
+                    class="w-full md:w-48 px-3 py-2 border rounded-lg text-black">
 
-                <select name="kategori" class="w-full md:w-auto px-3 py-2 border rounded-lg text-gray-600">
+                <select name="kategori" class="w-full md:w-48 px-3 py-2 border rounded-lg text-gray-600">
                     <option value="">Semua Kategori</option>
                     @foreach($kategori as $k)
                         <option value="{{ $k->kategori }}" {{ request('kategori')==$k->kategori? 'selected':'' }}>
@@ -30,7 +30,7 @@
                     @endforeach
                 </select>
 
-                <button class="w-full md:w-auto py-2 bg-blue-600 px-4 text-white rounded-lg">
+                <button class="flex-none w-full md:w-24 py-2 bg-blue-600 px-4 text-white rounded-lg">
                     Cari
                 </button>
 

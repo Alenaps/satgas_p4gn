@@ -7,7 +7,7 @@
 <div class="bg-gray-100 text-gray-800 ">
 
     {{-- Hero Background --}}
-    <div class="relative w-full h-96 bg-cover bg-center flex items-center justify-center bg-[url('{{ asset('assets/struktur-organisasi.jpeg') }}')]">
+    <div class="relative w-full h-96 bg-cover bg-center flex items-center justify-center" style="background-image: url('{{ asset('assets/struktur-organisasi.jpeg') }}');">
 
         
         <!-- Overlay -->
