@@ -5,30 +5,30 @@
 
 <style>
     body {
-        font-family: DejaVu Sans, sans-serif;
-        margin: 10px 35px; /* margin atas diperkecil */
+        font-family: 'Times New Roman', Times, serif, sans-serif;
+        margin: 10px 35px; 
         line-height: 1.45;
-        font-size: 13px;
+        font-size: 15px;
     }
 
     .kop-table {
         width: 100%;
         border-collapse: collapse;
-        margin-bottom: 5px; /* lebih rapat */
+        margin-bottom: 5px; 
     }
 
     .kop-table td {
-        padding: 0; /* hilangkan padding bawaan tabel */
+        padding: 0; 
     }
 
     .kop-logo {
-        width: 60px; /* perkecil supaya kop tidak tinggi */
+        width: 60px; 
         margin: 0;
         padding: 0;
     }
 
     .kop-text-title {
-        font-size: 17px;
+        font-size: 20px;
         font-weight: bold;
         margin: 0;
         padding: 0;
@@ -36,7 +36,7 @@
     }
 
     .kop-text-sub {
-        font-size: 14px;
+        font-size: 15px;
         font-weight: bold;
         margin: 0;
         padding: 0;
@@ -80,13 +80,33 @@
     .page-break { page-break-after: always; }
 </style>
 
+@php
+    // Logo — pakai DOCUMENT_ROOT karena file ada di public_html/assets/
+    $logoPath = $_SERVER['DOCUMENT_ROOT'] . '/assets/logo_unila.jpg';
+    $logo = file_exists($logoPath)
+        ? 'data:image/jpeg;base64,' . base64_encode(file_get_contents($logoPath))
+        : null;
+
+    // Foto lokasi — pakai storage_path langsung tanpa symlink
+    $fotoSrc = null;
+    if (!empty($laporan->foto_lokasi)) {
+        $fotoPath = storage_path('app/public/' . $laporan->foto_lokasi);
+        if (file_exists($fotoPath)) {
+            $mime    = mime_content_type($fotoPath);
+            $fotoSrc = 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($fotoPath));
+        }
+    }
+@endphp
+
 <body>
 
 <!-- ==================== KOP SURAT ==================== -->
 <table class="kop-table">
     <tr>
         <td style="width: 65px; text-align: left; vertical-align: top;">
-            <img src="{{ public_path('assets/logo_unila.jpg') }}" class="kop-logo">
+            @if($logo)
+                <img src="{{ $logo }}" class="kop-logo">
+            @endif
         </td>
 
         <td style="text-align: center;">
@@ -106,7 +126,7 @@
 <div class="title-main">SURAT LAPORAN RESMI</div>
 
 @php
-    $nomorSurat = 'P4GN-UNILA/' . $laporan->id . '/' . date('Y');
+    $nomorSurat = 'P4GN-UNILA/' . $laporan->kode_laporan . '/' . date('Y');
 @endphp
 
 <table>
@@ -130,7 +150,7 @@
     Demikian surat laporan ini dibuat untuk diproses dan ditindaklanjuti sesuai prosedur yang berlaku.<br>
 </p>
 <br>
-<p>Hormat kami,<br><br><br>
+<p style="text-align: left; margin-left: 60%;">Hormat kami,<br><br><br><br>
     Petugas Satgas P4GN<br>
     Universitas Lampung
 </p>
@@ -141,7 +161,11 @@
 <!-- ==================== HALAMAN 2 ==================== -->
 <table class="kop-table">
     <tr>
-        <td style="width: 65px;"><img src="{{ public_path('assets/logo_unila.jpg') }}" class="kop-logo"></td>
+        <td style="width: 65px;">
+            @if($logo)
+                <img src="{{ $logo }}" class="kop-logo">
+            @endif
+        </td>
         <td style="text-align: center;"><p class="kop-text-sub">RINGKASAN LAPORAN</p></td>
         <td style="width: 40px;"></td>
     </tr>
@@ -162,12 +186,8 @@
 
 <div class="section-title">Foto Lokasi</div>
 
-@php
-    $foto = public_path('storage/' . $laporan->foto_lokasi);
-@endphp
-
-@if ($laporan->foto_lokasi && file_exists($foto))
-    <img src="file://{{ realpath($foto) }}" width="350">
+@if($fotoSrc)
+    <img src="{{ $fotoSrc }}" width="350">
 @else
     <p><i>Tidak ada foto lokasi / file tidak ditemukan.</i></p>
 @endif
