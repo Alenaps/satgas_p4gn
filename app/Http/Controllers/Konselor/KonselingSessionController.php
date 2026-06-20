@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Events\MessageSent;
 use App\Events\SessionStatusUpdated;
+use App\Events\KonselorStatusUpdated;
 
 class KonselingSessionController extends Controller
 {
@@ -77,7 +78,11 @@ class KonselingSessionController extends Controller
             'started_at' => now(),
         ]);
 
+        $session->load('konseli', 'konselor');
+
         broadcast(new SessionStatusUpdated($session->fresh()));
+        // Konselor baru ditandai "busy" di sini, saat sesi benar-benar diterima.
+        event(new KonselorStatusUpdated($session->konselor, 'busy'));
 
         return redirect()->route('konselor.konseling.index')
             ->with('success', 'Permintaan konseling berhasil diterima.');
@@ -151,7 +156,10 @@ class KonselingSessionController extends Controller
             'catatan_konselor' => $request->catatan_konselor,
         ]);
 
+        $session->load('konseli', 'konselor');
+
         broadcast(new SessionStatusUpdated($session->fresh()));
+        event(new KonselorStatusUpdated($session->konselor, 'available'));
 
         return redirect()->route('konselor.konseling.index')
             ->with('success', 'Sesi konseling berhasil diselesaikan.');

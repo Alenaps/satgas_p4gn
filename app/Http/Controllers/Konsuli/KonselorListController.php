@@ -25,8 +25,9 @@ class KonselorListController extends Controller
             ->whereIn('status', ['pending', 'active'])
             ->get();
 
-        // Semua konselor yang sedang sibuk (dari siapapun)
-        $busyKonselorIds = KonselingSession::whereIn('status', ['pending', 'active'])
+        // Konselor dianggap "sibuk" hanya kalau sesinya sudah ACTIVE (diterima).
+        // Sesi yang masih PENDING tidak menghalangi konsuli lain untuk mengajukan.
+        $busyKonselorIds = KonselingSession::where('status', 'active')
             ->pluck('konselor_id')
             ->unique()
             ->toArray();

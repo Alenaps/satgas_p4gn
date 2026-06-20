@@ -24,7 +24,8 @@ class KonselingController extends Controller
         ->whereIn('status', ['pending', 'active'])
         ->get();
 
-    $busyKonselorIds = KonselingSession::whereIn('status', ['pending', 'active'])
+    // Konselor dianggap "sibuk" hanya kalau sesinya sudah ACTIVE (diterima).
+    $busyKonselorIds = KonselingSession::where('status', 'active')
         ->pluck('konselor_id')
         ->unique()
         ->toArray();
@@ -67,7 +68,9 @@ class KonselingController extends Controller
         $session->load('konseli', 'konselor');
 
         broadcast(new SessionStatusUpdated($session));
-        event(new KonselorStatusUpdated($session->konselor, 'busy'));
+        // Tidak lagi broadcast KonselorStatusUpdated('busy') di sini.
+        // Konselor baru ditandai "busy" saat sesi benar-benar diterima (status -> active),
+        // lihat KonselingSessionController@approve.
 
         return redirect()->route('konsuli.konseling.index')
             ->with('success', 'Permintaan konseling berhasil dikirim! Silakan tunggu persetujuan konselor.');
