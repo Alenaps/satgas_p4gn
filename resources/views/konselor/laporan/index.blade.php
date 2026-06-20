@@ -30,7 +30,7 @@
                 class="border rounded-lg px-4 py-2 w-full">
 
             <!-- FILTER PERAN TERLAPOR-->
-            <select name="peran_terlapor" class="border rounded-lg px-4 py-2 w-full">
+            <select name="peran_terlapor" class="text-sm border rounded-lg px-4 py-2 w-full">
                 <option value="">-- Semua Peran Terlapor --</option>
                 <option value="Mahasiswa" {{ request('peran_terlapor')=='Mahasiswa'?'selected':'' }}>
                     Mahasiswa

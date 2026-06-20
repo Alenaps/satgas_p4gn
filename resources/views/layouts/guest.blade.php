@@ -122,7 +122,7 @@
                 <h3 class="text-white font-semibold mb-3">Kontak</h3>
                 <p class="text-sm opacity-80">UPA Bimbingan Konseling Universitas Lampung</p>
                 <p class="text-sm mt-2 opacity-70">Email: satgasp4gn@gmail.com</p>
-                <p class="text-sm opacity-70">Alamat: Gedung Rektorat Lt. 2, Universitas Lampung</p>
+                <p class="text-sm opacity-70">Alamat: Ruang UPA Bimbingan Konseling, Lantai 3 Gedung Rektorat Universitas Lampung</p>
 
                 <div class="flex gap-4 mt-4">
                     <!-- Social Icons -->
