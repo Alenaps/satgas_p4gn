@@ -112,7 +112,7 @@ class KelolaPenggunaController extends Controller
             'status_sivitas_id' => $request->status_sivitas_id,
             'unit_id'           => $request->unit_id,
             'role'              => $request->role,
-            'password'          => Hash::make($request->password),
+            'password'          => $request->password,
             'foto'              => null,
         ]);
 
@@ -215,7 +215,7 @@ class KelolaPenggunaController extends Controller
         ];
 
         if ($request->filled('password')) {
-            $data['password'] = Hash::make($request->password);
+            $data['password'] = $request->password;
         }
 
         $user->update($data);
