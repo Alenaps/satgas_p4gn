@@ -40,7 +40,7 @@
                         <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" fill="#1E90FF"/>
                     </svg>
                     <p class="text-sm leading-relaxed m-0" style="color: #000;">
-                        Pastikan data yang Anda isi sudah benar dan sesuai fakta. Seluruh informasi yang masuk dijamin kerahasiaannya.
+                        Pastikan seluruh data yang diisi benar dan sesuai fakta. Informasi identitas pelapor digunakan hanya sebagai bahan verifikasi, validasi, serta komunikasi dalam proses penanganan laporan oleh petugas yang berwenang. Sistem menjaga kerahasiaan identitas pelapor dan hanya memberikan akses kepada petugas yang memiliki kewenangan sesuai prosedur penanganan laporan.
                     </p>
                 </div>
             </div>
@@ -123,6 +123,7 @@
 
                     <label>No Telp</label>
                     <input type="text" name="no_telp_terlapor" value="{{ old('no_telp_terlapor') }}" class="w-full p-2 rounded mb-3">
+                    <p class="text-xs text-gray-600 mb-3">*Opsional. Isi jika diketahui.</p>
 
                     <label>Jenis Kelamin<span class="text-red-500">*</span></label>
                     <select name="jk_terlapor" class="w-full p-2 rounded mb-3">
@@ -137,6 +138,7 @@
 
                     <label>Alamat Terlapor</label>
                     <input type="text" name="alamat_terlapor" value="{{ old('alamat_terlapor') }}" class="w-full p-2 rounded mb-3">
+                    <p class="text-xs text-gray-600 mb-3">*Opsional. Isi jika diketahui.</p>
 
                     <label>Jenis Kasus/Indikasi<span class="text-red-500">*</span></label>
                     <select name="jenis_kasus" class="w-full p-2 rounded mb-3">
@@ -193,6 +195,20 @@
                 @error('kronologi')
                         <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
                     @enderror
+
+                <div class="mt-5">
+                    <label class="flex items-start gap-2">
+                        <input type="checkbox" name="setuju_privasi" value="1" {{ old('setuju_privasi') ? 'checked' : '' }} class="mt-1">
+                        <span class="text-sm text-gray-600">
+                            Saya telah membaca dan menyetujui
+                            <a href="{{ route('privacy') }}" target="_blank" class="text-blue-600 underline">Kebijakan Privasi</a>
+                            serta menyatakan bahwa informasi yang saya berikan adalah benar.
+                        </span>
+                    </label>
+                    @error('setuju_privasi')
+                        <p class="text-red-600 text-sm mt-2">{{ $message }}</p>
+                    @enderror
+                </div>
             </div>
 
             <div class="flex justify-end mt-5">

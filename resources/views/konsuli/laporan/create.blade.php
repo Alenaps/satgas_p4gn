@@ -40,7 +40,7 @@
                         <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" fill="#1E90FF"/>
                     </svg>
                     <p class="text-sm leading-relaxed m-0" style="color: #000;">
-                        Pastikan data yang Anda isi sudah benar dan sesuai fakta. Seluruh informasi yang masuk dijamin kerahasiaannya.
+                        Pastikan seluruh data yang diisi benar dan sesuai fakta. Informasi identitas pelapor digunakan hanya sebagai bahan verifikasi, validasi, serta komunikasi dalam proses penanganan laporan oleh petugas yang berwenang. Sistem menjaga kerahasiaan identitas pelapor dan hanya memberikan akses kepada petugas yang memiliki kewenangan sesuai prosedur penanganan laporan.
                     </p>
                 </div>
             </div>
@@ -58,40 +58,44 @@
 
                     
                     <label>Nama Pelapor<span class="text-red-500">*</span></label>
-                    <input type="text" name="nama_pelapor" value="{{ old('nama_pelapor') }}" class="w-full p-2 rounded mb-3">
+                    <input type="text" name="nama_pelapor" value="{{ auth()->user()->nama }}" class="w-full p-2 rounded mb-3">
                     @error('nama_pelapor')
                         <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
                     @enderror
 
                     <label>Peran Pelapor<span class="text-red-500">*</span></label>
+                    @php
+                        $status = old('peran_pelapor', auth()->user()->statusSivitas?->nama);
+                    @endphp
+
                     <select name="peran_pelapor" class="w-full p-2 rounded mb-3">
                         <option value="">--Pilih--</option>
-                        <option value="Mahasiswa" {{ old('peran_pelapor') == 'Mahasiswa' ? 'selected' : '' }}>Mahasiswa</option>
-                        <option value="Dosen" {{ old('peran_pelapor') == 'Dosen' ? 'selected' : '' }}>Dosen</option>
-                        <option value="Tendik" {{ old('peran_pelapor') == 'Tendik' ? 'selected' : '' }}>Tendik</option>
+                        <option value="Mahasiswa" {{ $status == 'Mahasiswa' ? 'selected' : '' }}>Mahasiswa</option>
+                        <option value="Dosen" {{ $status == 'Dosen' ? 'selected' : '' }}>Dosen</option>
+                        <option value="Tendik" {{ $status == 'Tendik' ? 'selected' : '' }}>Tendik</option>
                     </select>
                     @error('peran_pelapor')
                         <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
                     @enderror
 
                     <label>NIP/NPM<span class="text-red-500">*</span></label>
-                    <input type="text" name="npm_nip" value="{{ old('npm_nip') }}" class="w-full p-2 rounded mb-3">
+                    <input type="text" name="npm_nip" value="{{ auth()->user()->npm_nip }}" class="w-full p-2 rounded mb-3">
 
                     <label>No Telp</label>
-                    <input type="text" name="no_telp" value="{{ old('no_telp') }}" class="w-full p-2 rounded mb-3">
+                    <input type="text" name="no_telp" value="{{ auth()->user()->no_telp }}" class="w-full p-2 rounded mb-3">
 
                     <label>Email<span class="text-red-500">*</span></label>
-                    <input type="email" name="email" value="{{ old('email') }}" class="w-full p-2 rounded mb-3">
+                    <input type="email" name="email" value="{{ auth()->user()->email }}" class="w-full p-2 rounded mb-3">
                     @error('email')
                         <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
                     @enderror
                     <p class="text-xs text-gray-600 mb-3">Pastikan email yang Anda masukkan aktif</p>
 
                     <label>Jenis Kelamin<span class="text-red-500">*</span></label>
-                    <select name="jk_pelapor" value="{{ old('jk_pelapor') }}" class="w-full p-2 rounded mb-3">
+                    <select name="jk_pelapor" value="{{ auth()->user()->jenis_kelamin }}" class="w-full p-2 rounded mb-3">
                         <option value="">--Pilih--</option>
-                        <option value="Laki-laki" {{ old('jk_pelapor') == 'Laki-laki' ? 'selected' : '' }}>Laki-Laki</option>
-                        <option value="Perempuan" {{ old('jk_pelapor') == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
+                        <option value="Laki-laki" {{ old('jk_pelapor', auth()->user()->jenis_kelamin) == 'Laki-laki' ? 'selected' : '' }}>Laki-Laki</option>
+                        <option value="Perempuan" {{ old('jk_pelapor', auth()->user()->jenis_kelamin) == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
                     </select>
                     @error('jk_pelapor')
                         <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
@@ -121,7 +125,8 @@
 
                     <label>No Telp</label>
                     <input type="text" name="no_telp_terlapor" value="{{ old('no_telp_terlapor') }}" class="w-full p-2 rounded mb-3">
-
+                    <p class="text-xs text-gray-600 mb-3">*Opsional. Isi jika diketahui.</p>
+                    
                     <label>Jenis Kelamin<span class="text-red-500">*</span></label>
                     <select name="jk_terlapor" class="w-full p-2 rounded mb-3">
                         <option value="">--Pilih--</option>
@@ -135,6 +140,7 @@
 
                     <label>Alamat Terlapor</label>
                     <input type="text" name="alamat_terlapor" value="{{ old('alamat_terlapor') }}" class="w-full p-2 rounded mb-3">
+                    <p class="text-xs text-gray-600 mb-3">*Opsional. Isi jika diketahui.</p>
 
                     <label>Jenis Kasus/Indikasi<span class="text-red-500">*</span></label>
                     <select name="jenis_kasus" class="w-full p-2 rounded mb-3">
@@ -191,6 +197,20 @@
                 @error('kronologi')
                         <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
                     @enderror
+
+                <div class="mt-5">
+                    <label class="flex items-start gap-2">
+                        <input type="checkbox" name="setuju_privasi" value="1" {{ old('setuju_privasi') ? 'checked' : '' }} class="mt-1">
+                        <span class="text-sm text-gray-600">
+                            Saya telah membaca dan menyetujui
+                            <a href="{{ route('privacy') }}" target="_blank" class="text-blue-600 underline">Kebijakan Privasi</a>
+                            serta menyatakan bahwa informasi yang saya berikan adalah benar.
+                        </span>
+                    </label>
+                    @error('setuju_privasi')
+                        <p class="text-red-600 text-sm mt-2">{{ $message }}</p>
+                    @enderror
+                </div>
             </div>
 
             <div class="flex justify-end mt-5">

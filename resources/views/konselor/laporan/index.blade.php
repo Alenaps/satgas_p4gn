@@ -59,10 +59,10 @@
         </div>
     </form>
 
+    <!-- TABLE WRAPPER -->
+    <div class="overflow-x-auto bg-white rounded-xl shadow border border-blue-200">
 
-    <div class="bg-white shadow-md rounded-xl border border-blue-200 overflow-hidden">
-
-        <table class="w-full text-sm">
+        <table class="w-full text-sm min-w-[800px]">
             <thead>
                 <tr class="bg-green-600 text-white border-b border-blue-200">
                     <th class="p-4 text-left font-semibold">NO</th>
@@ -75,11 +75,12 @@
             </thead>
 
             <tbody class="text-gray-800 divide-y divide-blue-100">
-                @forelse ($laporans as $index => $laporan)
+                @forelse ($laporans as $laporan)
                 <tr class="hover:bg-blue-50/70 transition">
 
+                    <!-- NOMOR (FIX PAGINATION) -->
                     <td class="p-4 font-medium">
-                        {{ $index + 1 }}
+                        {{ ($laporans->currentPage() - 1) * $laporans->perPage() + $loop->iteration }}
                     </td>
 
                     <td class="p-4">
@@ -132,6 +133,12 @@
         </table>
 
     </div>
+    
+    <!-- PAGINATION -->
+    <div class="mt-6">
+        {{ $laporans->links() }}
+    </div>
+
 </div>
 
 @endsection

@@ -6,6 +6,7 @@ use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PublikasiController;
 use App\Http\Controllers\JenisNarkobaController;
 use App\Http\Controllers\StorageController;
+use App\Http\Controllers\HalamanController;
 
 // Konsuli Controllers
 use App\Http\Controllers\Konsuli\KonselingController;
@@ -57,6 +58,8 @@ Route::get('/laporan', [LaporanController::class, 'guestIndex'])->name('guest.la
 Route::get('/laporan/create', [LaporanController::class, 'guestCreate'])->name('guest.laporan.create');
 Route::post('/laporan', [LaporanController::class, 'guestStore'])->name('guest.laporan.store');
 Route::get('/jenis-narkoba/search', [JenisNarkobaController::class, 'search']);
+
+Route::get('/kebijakan-privasi', [HalamanController::class, 'privacy'])->name('privacy');
 /*
 |--------------------------------------------------------------------------
 | REDIRECT SETELAH LOGIN

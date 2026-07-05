@@ -106,7 +106,7 @@ class LaporanController extends Controller
 
             'npm_nip'           => 'required|string|max:18',
             'no_telp'           => 'nullable|string|digits_between:10,15',
-            'email'             => 'required|email|max:30',
+            'email'             => 'required|email|max:40',
 
             'nama_terlapor'     => 'required|string|max:60',
             'peran_terlapor'    => 'required|in:Mahasiswa,Dosen,Tendik',
@@ -124,6 +124,8 @@ class LaporanController extends Controller
             'kronologi'         => 'required|string|min:20|max:5000',
 
             'foto_lokasi'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            
+            'setuju_privasi'    => 'accepted',
         ], [
 
             // Pesan custom validasi
@@ -132,7 +134,7 @@ class LaporanController extends Controller
             'jk_pelapor.required'      => 'Jenis kelamin wajib dipilih.',
             'email.required'           => 'Email wajib diisi.',
             'email.email'              => 'Format email tidak valid.',
-            'email.max'                => 'Email maksimal 30 karakter.',
+            'email.max'                => 'Email maksimal 40 karakter.',
 
             'npm_nip.required'         => 'NPM/NIP wajib diisi.',
             'npm_nip.max'              => 'NPM/NIP maksimal 18 karakter.',
@@ -153,6 +155,7 @@ class LaporanController extends Controller
             'tanggal.before_or_equal'  => 'Tanggal kejadian tidak boleh melebihi hari ini.',
             'kronologi.required'       => 'Kolom kronologi wajib diisi.',            
             'kronologi.min'            => 'Kronologi minimal harus berisi 20 karakter.',
+            'setuju_privasi.accepted'  => 'Anda harus menyetujui Kebijakan Privasi sebelum mengirim laporan.',
            ]); 
     }
 

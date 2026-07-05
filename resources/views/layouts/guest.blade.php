@@ -142,6 +142,11 @@
 
         <div class="text-center text-green-400 text-xs py-4 border-t border-gray-700">
             © {{ date('Y') }} SATGAS P4GN UNILA — Sistem Informasi Konseling & Pelaporan.
+            <div class="flex justify-center gap-6 text-sm">
+            <a href="{{ route('privacy') }}" class="hover:text-white">
+                Kebijakan Privasi
+            </a>
+            </div>
         </div>
     </footer>
 

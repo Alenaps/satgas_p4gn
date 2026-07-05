@@ -125,7 +125,7 @@ class PublikasiController extends Controller
     private function validatePublikasi(Request $request, $id = null)
     {
         return $request->validate([
-            'judul'     => 'required|string|min:5|max:191',
+            'judul'     => 'required|string|min:5|max:200',
 
             'slug'      => [
                 'nullable',
@@ -148,7 +148,7 @@ class PublikasiController extends Controller
 
             'judul.required' => 'Judul wajib diisi.',
             'judul.min'      => 'Judul minimal 5 karakter.',
-            'judul.max'      => 'Judul maksimal 191 karakter.',
+            'judul.max'      => 'Judul maksimal 200 karakter.',
 
             'slug.unique'    => 'Slug sudah digunakan.',
 

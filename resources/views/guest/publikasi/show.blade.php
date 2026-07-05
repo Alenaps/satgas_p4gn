@@ -8,7 +8,7 @@
         <h1 class="text-3xl font-bold">{{ $publikasi->judul }}</h1>
 
         <p class="text-gray-600 mt-2">
-            {{ $publikasi->created_at->format('d M Y') }} • {{ $publikasi->kategori }} • {{ $publikasi->label }} 
+            {{ $publikasi->created_at->format('d M Y') }} • {{ $publikasi->kategori }} • {{ $publikasi->label }} • Author: {{ $publikasi->user->nama }}
         </p>
 
         <img src="{{ asset('storage/'.$publikasi->thumbnail) }}"

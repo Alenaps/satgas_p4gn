@@ -195,8 +195,8 @@
                     </div>
                     <div class="ml-3 text-sm">
                         <label for="terms" class="text-gray-600 cursor-pointer text-justify">
-                            Saya menyetujui ketersediaan data untuk dipergunakan oleh konsulen sebagai kepentingan
-                            statistik, dan data yang tersimpan dijamin kerahasiaannya oleh konsulen.
+                            Saya menyetujui ketersediaan data untuk dipergunakan oleh Satgas P4GN UNILA sebagai kepentingan
+                            statistik, dan data yang tersimpan dijamin kerahasiaannya oleh Satgas P4GN UNILA. Lihat <span><a href="{{ route('privacy') }}" class="text-blue-600 hover:underline font-semibold">Kebijakan Privasi</a></span>
                         </label>
                         @error('terms')
                             <p class="text-red-600 text-sm mt-1">{{ $message }}</p>

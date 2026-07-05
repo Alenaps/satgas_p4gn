@@ -33,14 +33,23 @@
             Selamat Datang, Konsuli!
         </h2>
 
+        <p class="text-white/80 text-sm md:text-base leading-7 max-w-3xl mx-auto mb-10">
+            Pilih layanan yang sesuai dengan kebutuhan Anda.
+            Jika Anda memerlukan ruang yang aman untuk berbagi cerita, memperoleh informasi, atau mendapatkan pendampingan terkait permasalahan narkoba, gunakan layanan
+            <span class="font-semibold text-green-300">Mulai Konseling</span>.
+            Apabila Anda ingin menyampaikan informasi mengenai dugaan penyalahgunaan atau peredaran narkoba, gunakan layanan
+            <span class="font-semibold text-blue-500">Lapor Sekarang!</span>.
+            Seluruh informasi yang diberikan akan diproses secara profesional dengan menjaga kerahasiaan data pengguna.
+        </p>
+
         <div class="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fadeInUp-delay">
             <a href="{{ route('konsuli.konseling.index') }}" 
-               class="bg-blue-500 text-white px-8 py-3 rounded-full font-semibold shadow-xl hover:shadow-blue-500/50 hover:-translate-y-1 transition-all duration-300">
+               class="bg-green-500 text-white px-8 py-3 rounded-full font-semibold shadow-xl hover:shadow-blue-500/50 hover:-translate-y-1 transition-all duration-300">
                 Mulai Konseling
             </a>
 
             <a href="{{ route('konsuli.laporan.create') }}" 
-               class="bg-green-600 text-white px-8 py-3 rounded-full font-semibold shadow-xl hover:shadow-green-500/50 hover:-translate-y-1 transition-all duration-300">
+               class="bg-blue-600 text-white px-8 py-3 rounded-full font-semibold shadow-xl hover:shadow-green-500/50 hover:-translate-y-1 transition-all duration-300">
                 Lapor Sekarang
             </a>
         </div>
