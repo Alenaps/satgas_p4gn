@@ -10,27 +10,26 @@
 
         <div class="absolute inset-0 bg-black bg-opacity-40"></div>
 
-        <div class="relative z-10 flex flex-col items-center justify-center h-full">
-            <h1 class="text-white text-3xl font-bold mb-4">News & Articles</h1>
+        <div class="relative z-10 flex flex-col items-center justify-center h-full px-4">
+            <h1 class="text-white text-3xl font-bold mb-5">News & Articles</h1>
 
-            {{-- Search --}}
+            {{-- Search & Filter --}}
             <form method="GET"
                   action="{{ route('konsuli.publikasi.index') }}"
-                  class="flex flex-col md:flex-row gap-3 justify-center items-center w-full max-w-xl mx-auto">
+                  class="flex flex-col sm:flex-row gap-3 justify-center items-center w-11/12 max-w-xs sm:max-w-2xl mx-auto">
 
                 <input
                     type="text"
                     name="q"
                     value="{{ request('q') }}"
-                    placeholder="Cari..."
-                    class="text-black w-full md:w-48 px-3 py-2 border rounded-lg">
+                    placeholder="Cari publikasi..."
+                    class="text-black w-full sm:w-56 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
 
                 <select
                     name="kategori"
-                    class="w-full md:w-48 px-3 py-2 border rounded-lg text-gray-600">
+                    class="w-full sm:w-48 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
 
                     <option value="">Semua Kategori</option>
-
                     @foreach($kategori as $k)
                         <option value="{{ $k->kategori }}"
                             {{ request('kategori') == $k->kategori ? 'selected' : '' }}>
@@ -41,7 +40,7 @@
                 </select>
 
                 <button
-                    class="flex-none w-full md:w-24 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition">
+                    class="w-full sm:w-auto px-8 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-sm transition-colors">
                     Cari
                 </button>
 
@@ -58,7 +57,7 @@
 
             @forelse($publikasi as $p)
 
-                <article class="bg-white rounded-xl overflow-hidden shadow hover:shadow-lg transition">
+                <article class="bg-white rounded-xl overflow-hidden shadow hover:shadow-lg transition-shadow">
 
                     {{-- Thumbnail --}}
                     <img src="{{ $p->thumbnail ? asset('storage/'.$p->thumbnail) : asset('assets/publikasi-default.jpg') }}"
@@ -82,7 +81,7 @@
 
                         <a href="{{ route('konsuli.publikasi.show', $p->slug) }}"
                            class="text-blue-600 mt-4 inline-block font-medium hover:underline">
-                            Read More →
+                            Read More &rarr;
                         </a>
 
                     </div>
@@ -103,12 +102,10 @@
                                  fill="none"
                                  viewBox="0 0 24 24"
                                  stroke="currentColor">
-
                                 <path stroke-linecap="round"
                                       stroke-linejoin="round"
                                       stroke-width="1.5"
                                       d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 100-15 7.5 7.5 0 000 15z"/>
-
                             </svg>
 
                             <h2 class="text-2xl font-bold text-gray-700">
@@ -123,7 +120,7 @@
                             </p>
 
                             <a href="{{ route('konsuli.publikasi.index') }}"
-                               class="inline-block mt-6 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow transition">
+                               class="inline-block mt-6 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow transition-colors">
                                 Lihat Semua Publikasi
                             </a>
 
