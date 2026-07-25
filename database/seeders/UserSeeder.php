@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
             'status_sivitas_id' => 1,
             'unit_id' => 1,
             'email' => 'testingappsatgaspgn@gmail.com',
-            'password' => Hash::make('password123'),
+            'password' => 'password123',
             'role' => 'admin',
         ]);
 
@@ -32,7 +32,7 @@ class UserSeeder extends Seeder
             'status_sivitas_id' => 2,
             'unit_id' => 1,
             'email' => 'konselor@gmail.com',
-            'password' => Hash::make('password123'),
+            'password' => 'password123',
             'role' => 'konselor',
         ]);
 
@@ -45,7 +45,7 @@ class UserSeeder extends Seeder
             'status_sivitas_id' => 3,
             'unit_id' => 1,
             'email' => 'konsuli@gmail.com',
-            'password' => Hash::make('password123'),
+            'password' => 'password123',
             'role' => 'konsuli',
         ]);
     }
