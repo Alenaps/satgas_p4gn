@@ -82,44 +82,81 @@
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+            {{-- Pimpinan --}}
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8 lg:gap-10 mb-8 sm:mb-12 max-w-4xl mx-auto">
+                @php
+                    $pimpinan = [
+                        ['Ketua', 'profile.jpg', 'Prof. Novita Tresiana, S.Sos., M.Si.'],
+                        ['Wakil Ketua', 'profile.jpg', 'Indrayati Putri Idrus, S.H., M.H.'],
+                        ['Sekretaris', 'profile.jpg', 'Eko Budi Sulistio, S.Sos. M.Ap.'],
+                    ];
+                @endphp
+
+                @foreach($pimpinan as $a)
+                <div class="group relative bg-white/5 backdrop-blur-sm rounded-[1.5rem] sm:rounded-[2.5rem] p-4 sm:p-8 border border-white/10 hover:bg-white hover:shadow-2xl hover:-translate-y-1 sm:hover:-translate-y-2 transition-all duration-500">
+                    <div class="relative w-20 h-20 sm:w-28 sm:h-28 mx-auto mb-4 sm:mb-6">
+                        <div class="absolute inset-0 bg-emerald-500 rounded-[1.5rem] sm:rounded-[2.5rem] rotate-6 group-hover:rotate-0 transition-transform duration-500"></div>
+                        <div class="relative w-full h-full bg-slate-800 rounded-[1.5rem] sm:rounded-[2.5rem] overflow-hidden border-2 border-white/20">
+                             <img src="{{ asset('assets/' . $a[1]) }}" class="w-full h-full object-cover" alt="{{ $a[0] }}">
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <span class="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.1em] sm:tracking-[0.2em] text-emerald-400 group-hover:text-emerald-600 mb-1.5 sm:mb-2 block line-clamp-1">
+                            {{ $a[0] }}
+                        </span>
+                        <h3 class="font-black text-white group-hover:text-slate-900 text-sm sm:text-base leading-snug transition-colors line-clamp-2">
+                            {{ $a[2] }}
+                        </h3>
+                        <div class="hidden sm:flex mt-4 justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                            <a href="#" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-emerald-500 hover:text-white transition-all"><i class="fab fa-linkedin-in text-xs"></i></a>
+                            <a href="#" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-emerald-500 hover:text-white transition-all"><i class="fab fa-instagram text-xs"></i></a>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+
+            {{-- Anggota & Konselor --}}
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-8 lg:gap-10">
                 @php
                     $anggota = [
-                        ['Ketua SATGAS', 'profile.jpg', 'Dr. Nama Ketua, M.Si.'],
-                        ['Sekretaris', 'profile.jpg', 'Nama Sekretaris, S.Kom.'],
-                        ['Koord. Pencegahan', 'profile.jpg', 'Nama Koordinator, M.Pd.'],
-                        ['Koord. Pelaporan', 'profile.jpg', 'Nama Koordinator, S.H.'],
-                        ['Koord. Konseling', 'profile.jpg', 'Nama Koordinator, M.Psi.'],
-                        ['Koord. Dokumentasi', 'profile.jpg', 'Nama Koordinator, S.I.Kom.'],
+                        ['Anggota', 'profile.jpg', 'Rengga Fransseda, A.Md.'],
+                        ['Anggota', 'profile.jpg', 'Muhammad Ubaidillah'],
+                        ['Anggota', 'profile.jpg', 'Ahmad Suntara, S.Kom.'],
+                        ['Anggota', 'profile.jpg', 'Yusrizal, S.P., MM.'],
+                        ['Anggota', 'profile.jpg', 'M. Yhogha Ismail Ibn Ibrahim, M.T.I.'],
+                        ['Anggota', 'profile.jpg', 'dr. Tri Umiana Soleha'],
+                        ['Anggota', 'profile.jpg', 'Nidia Putri, S.Pd.'],
+                        ['Anggota', 'profile.jpg', 'Hanny Nurluthfiah Rianti. A.'],
+                        ['Anggota', 'profile.jpg', 'M. Semario Ibrahim Habib Al Huda'],
+                        ['Anggota', 'profile.jpg', 'Niabi Rahma Wati'],
+                        ['Anggota', 'profile.jpg', 'Mayang Atika Sekar Kirani'],
+                        ['Anggota', 'profile.jpg', 'Olivia Elizabeth Sekar Lumbantobing'],
+                        ['Anggota', 'profile.jpg', 'Martha Vinencia Putri Sinaga'],
+                        ['Anggota', 'profile.jpg', 'Kurnia Tri Rahayu'],
+                        ['Konselor/Fasilitator', 'profile.jpg', 'Prof. Dr. Noverman Duadji, M.Si.'],
+                        ['Konselor/Fasilitator', 'profile.jpg', 'Dr. Budiyono, MH.'],
                     ];
                 @endphp
 
                 @foreach($anggota as $a)
-                <div class="group relative bg-white/5 backdrop-blur-sm rounded-[2.5rem] p-8 border border-white/10 hover:bg-white hover:shadow-2xl hover:-translate-y-2 transition-all duration-500">
-                    {{-- Avatar Container --}}
-                    <div class="relative w-32 h-32 mx-auto mb-6">
-                        <div class="absolute inset-0 bg-emerald-500 rounded-[2.5rem] rotate-6 group-hover:rotate-0 transition-transform duration-500"></div>
-                        <div class="relative w-full h-full bg-slate-800 rounded-[2.5rem] overflow-hidden border-2 border-white/20">
-                             <img src="{{ asset('assets/' . $a[1]) }}"
-                                  class="w-full h-full object-cover"
-                                  alt="{{ $a[0] }}">
+                <div class="group relative bg-white/5 backdrop-blur-sm rounded-[1.5rem] sm:rounded-[2.5rem] p-4 sm:p-8 border border-white/10 hover:bg-white hover:shadow-2xl hover:-translate-y-1 sm:hover:-translate-y-2 transition-all duration-500">
+                    <div class="relative w-20 h-20 sm:w-28 sm:h-28 mx-auto mb-4 sm:mb-6">
+                        <div class="absolute inset-0 bg-emerald-500 rounded-[1.5rem] sm:rounded-[2.5rem] rotate-6 group-hover:rotate-0 transition-transform duration-500"></div>
+                        <div class="relative w-full h-full bg-slate-800 rounded-[1.5rem] sm:rounded-[2.5rem] overflow-hidden border-2 border-white/20">
+                             <img src="{{ asset('assets/' . $a[1]) }}" class="w-full h-full object-cover" alt="{{ $a[0] }}">
                         </div>
                     </div>
-
                     <div class="text-center">
-                        <span class="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-400 group-hover:text-emerald-600 mb-2 block">
+                        <span class="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.1em] sm:tracking-[0.2em] text-emerald-400 group-hover:text-emerald-600 mb-1.5 sm:mb-2 block line-clamp-1">
                             {{ $a[0] }}
                         </span>
-                        <h3 class="font-black text-white group-hover:text-slate-900 text-lg leading-snug transition-colors">
+                        <h3 class="font-black text-white group-hover:text-slate-900 text-sm sm:text-base leading-snug transition-colors line-clamp-2">
                             {{ $a[2] }}
                         </h3>
-                        <div class="mt-4 flex justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                            <a href="#" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-emerald-500 hover:text-white transition-all">
-                                <i class="fab fa-linkedin-in text-xs"></i>
-                            </a>
-                            <a href="#" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-emerald-500 hover:text-white transition-all">
-                                <i class="fab fa-instagram text-xs"></i>
-                            </a>
+                        <div class="hidden sm:flex mt-4 justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                            <a href="#" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-emerald-500 hover:text-white transition-all"><i class="fab fa-linkedin-in text-xs"></i></a>
+                            <a href="#" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-emerald-500 hover:text-white transition-all"><i class="fab fa-instagram text-xs"></i></a>
                         </div>
                     </div>
                 </div>

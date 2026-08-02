@@ -8,9 +8,13 @@ use App\Http\Controllers\JenisNarkobaController;
 use App\Http\Controllers\StorageController;
 use App\Http\Controllers\HalamanController;
 
+// Welcome Controller
+use App\Http\Controllers\WelcomeController;
+
 // Konsuli Controllers
 use App\Http\Controllers\Konsuli\KonselingController;
 use App\Http\Controllers\Konsuli\PublikasiController as KonsuliPublikasiController;
+use App\Http\Controllers\Konsuli\DashboardController as KonsuliDashboardController;
 
 // Konselor Controllers
 use App\Http\Controllers\Konselor\KonselingSessionController;
@@ -43,7 +47,7 @@ Route::get('/storage/{path}', [StorageController::class, 'serve'])
     ->where('path', '.*') // penting! agar bisa nested path seperti images/foto.jpg
     ->name('storage.serve');
 
-Route::get('/', fn () => view('welcome'))->name('home');
+Route::get('/', [WelcomeController::class, 'index'])->name('home');
 Route::view('/tentang', 'tentang')->name('tentang');
 
 Route::get('/publikasi', [PublikasiController::class, 'index'])->name('guest.publikasi.index');
@@ -210,7 +214,7 @@ Route::middleware(['auth', 'verified', 'role:konsuli']) // ← tambah 'verified'
     ->prefix('konsuli')->name('konsuli.')
     ->group(function () {
 
-        Route::view('/dashboard', 'konsuli.dashboard')->name('dashboard');
+        Route::get('/dashboard', [KonsuliDashboardController::class, 'index'])->name('dashboard');
         Route::view('/tentang', 'konsuli.tentang')->name('tentang');
 
         // Laporan

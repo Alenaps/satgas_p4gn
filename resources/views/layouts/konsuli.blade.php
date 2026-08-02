@@ -14,7 +14,7 @@
     @stack('styles')
 </head>
 
-<body class="bg-white">
+<body class="@yield('body_class', 'bg-white')">
 
     <!-- NAVBAR -->
     <nav class="bg-gradient-to-r from-green-500 to-green-600 shadow-lg" x-data="{ open: false }">

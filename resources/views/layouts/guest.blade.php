@@ -12,7 +12,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
 </head>
-<body class="bg-white">
+<body class="@yield('body_class', 'bg-white')">
     <!-- Navbar -->
     <nav class="bg-gradient-to-r from-green-500 to-green-600 shadow-lg" x-data="{ open: false }">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">

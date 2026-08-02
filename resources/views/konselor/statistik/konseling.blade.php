@@ -105,13 +105,22 @@ a.period-tab-dark.period-tab-dark--active:visited {
     /* Reset */
     *, *::before, *::after { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
 
-    /* Hide everything except print area */
-    body > *:not(#print-wrapper),
+    /* Sembunyikan seluruh halaman, lalu tampilkan hanya #print-wrapper.
+       Pakai visibility (bukan display) agar aman walau #print-wrapper
+       tidak berada langsung di bawah <body> (masih dibungkus layout: #app, <main>, dsb). */
+    body * { visibility: hidden !important; }
+    #print-wrapper, #print-wrapper * { visibility: visible !important; }
+    #print-wrapper {
+        display: block !important;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+
     header, nav, aside, footer,
     [data-no-print],
     .no-print { display: none !important; }
-
-    #print-wrapper { display: block !important; }
 
     @page {
         size: A4 portrait;
