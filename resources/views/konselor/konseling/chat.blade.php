@@ -310,6 +310,10 @@
 .animate-pop-in {
     animation: popIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
+#messages-container p {
+    word-break: break-all;
+    overflow-wrap: anywhere;
+}
 #messages-container::-webkit-scrollbar { width: 6px; }
 #messages-container::-webkit-scrollbar-track { background: transparent; }
 #messages-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
