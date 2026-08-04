@@ -91,7 +91,7 @@
                                         <p class="text-sm leading-relaxed font-medium break-words">{{ $msg->message }}</p>
                                     </div>
                                     @if($showTime)
-                                        <p class="text-[10px] font-black text-slate-400 mt-1.5 ml-2 uppercase tracking-tighter">{{ $msg->created_at->format('H:i') }}</p>
+                                        <p class="text-[10px] font-black text-slate-400 mt-1.5 ml-2 uppercase tracking-tighter chat-timestamp" data-timestamp="{{ $msg->created_at->toISOString() }}"></p>
                                     @endif
                                 </div>
                             </div>
@@ -103,7 +103,7 @@
                                     </div>
                                     @if($showTime)
                                         <div class="flex items-center gap-1.5 mt-1.5 mr-2">
-                                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-tighter">{{ $msg->created_at->format('H:i') }}</p>
+                                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-tighter chat-timestamp" data-timestamp="{{ $msg->created_at->toISOString() }}"></p>
                                             <i class="fas fa-check-double text-[9px] text-emerald-500"></i>
                                         </div>
                                     @endif
@@ -498,6 +498,13 @@ document.addEventListener('DOMContentLoaded', function () {
     @if($konseling->status === 'completed')
         showSessionEnded();
     @endif
+
+    // Format timestamps from Blade
+    document.querySelectorAll('.chat-timestamp').forEach(el => {
+        if (el.dataset.timestamp) {
+            el.textContent = formatTime(el.dataset.timestamp);
+        }
+    });
 
     scrollToBottom();
 });

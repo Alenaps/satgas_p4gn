@@ -10,7 +10,7 @@
     <div class="bg-white border-b border-gray-100 p-4 shrink-0 z-20 shadow-sm relative">
         <div class="flex items-center justify-between">
             <div class="flex items-center gap-3 sm:gap-4">
-                <a href="{{ route('konselor.konseling.index') }}" class="md:hidden text-gray-500 hover:text-teal-600 transition-colors py-2 px-1">
+                <a href="{{ route('konselor.konseling.index') }}" class="text-gray-500 hover:text-teal-600 transition-colors py-2 px-1">
                     <i class="fas fa-arrow-left text-xl"></i>
                 </a>
 
@@ -99,7 +99,7 @@
                                 <p class="text-[13px] sm:text-sm leading-relaxed break-words">{{ $msg->message }}</p>
                             </div>
                             @if($showTime)
-                                <p class="text-[10px] sm:text-[11px] text-gray-400 mt-1 ml-1">{{ $msg->created_at->format('H:i') }}</p>
+                                <p class="text-[10px] sm:text-[11px] text-gray-400 mt-1 ml-1 chat-timestamp" data-timestamp="{{ $msg->created_at->toISOString() }}"></p>
                             @endif
                         </div>
                     </div>
@@ -111,7 +111,7 @@
                             </div>
                             @if($showTime)
                                 <div class="flex items-center gap-1 mt-1 mr-1">
-                                    <p class="text-[10px] sm:text-[11px] text-gray-400">{{ $msg->created_at->format('H:i') }}</p>
+                                    <p class="text-[10px] sm:text-[11px] text-gray-400 chat-timestamp" data-timestamp="{{ $msg->created_at->toISOString() }}"></p>
                                     <i class="fas fa-check-double text-[10px] text-teal-500"></i>
                                 </div>
                             @endif
@@ -549,6 +549,13 @@ textarea::-webkit-scrollbar { display: none; }
     }
 
     initEchoChat();
+
+    // Format timestamps from Blade
+    document.querySelectorAll('.chat-timestamp').forEach(el => {
+        if (el.dataset.timestamp) {
+            el.textContent = formatTime(el.dataset.timestamp);
+        }
+    });
 
     function closeModalInfo() {
         const modal = document.getElementById('modal-info-konsuli');
