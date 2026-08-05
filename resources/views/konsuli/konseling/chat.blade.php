@@ -10,7 +10,7 @@
     <div class="absolute top-0 right-0 w-[400px] h-[400px] bg-emerald-500/10 rounded-full blur-[100px] -z-0 -mr-48 -mt-48"></div>
     <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-500/10 rounded-full blur-[100px] -z-0 -ml-48 -mb-48"></div>
 
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 relative z-10">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
 
         {{-- Header --}}
         <div class="bg-white rounded-t-[2.5rem] shadow-2xl border-b border-slate-100 p-5 sm:p-7 sticky top-0 z-20">
@@ -88,10 +88,10 @@
                             <div class="flex items-end gap-3 {{ $isNewGroup ? 'mt-8' : 'mt-1' }} animate-pop-in">
                                 <div class="flex flex-col max-w-[85%] sm:max-w-md">
                                     <div class="bg-white text-slate-700 rounded-[1.5rem] px-5 py-3.5 shadow-sm border border-slate-100 {{ $isNewGroup ? 'rounded-tl-none' : '' }}">
-                                        <p class="text-sm leading-relaxed font-medium">{{ $msg->message }}</p>
+                                        <p class="text-sm leading-relaxed font-medium break-words">{{ $msg->message }}</p>
                                     </div>
                                     @if($showTime)
-                                        <p class="text-[10px] font-black text-slate-400 mt-1.5 ml-2 uppercase tracking-tighter">{{ $msg->created_at->format('H:i') }}</p>
+                                        <p class="text-[10px] font-black text-slate-400 mt-1.5 ml-2 uppercase tracking-tighter chat-timestamp" data-timestamp="{{ $msg->created_at->toISOString() }}"></p>
                                     @endif
                                 </div>
                             </div>
@@ -99,11 +99,11 @@
                             <div class="flex items-end justify-end gap-3 {{ $isNewGroup ? 'mt-8' : 'mt-1' }} animate-pop-in">
                                 <div class="flex flex-col items-end max-w-[85%] sm:max-w-md">
                                     <div class="bg-slate-900 text-white rounded-[1.5rem] px-5 py-3.5 shadow-lg shadow-slate-200/50 {{ $isNewGroup ? 'rounded-tr-none' : '' }}">
-                                        <p class="text-sm leading-relaxed font-medium">{{ $msg->message }}</p>
+                                        <p class="text-sm leading-relaxed font-medium break-words">{{ $msg->message }}</p>
                                     </div>
                                     @if($showTime)
                                         <div class="flex items-center gap-1.5 mt-1.5 mr-2">
-                                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-tighter">{{ $msg->created_at->format('H:i') }}</p>
+                                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-tighter chat-timestamp" data-timestamp="{{ $msg->created_at->toISOString() }}"></p>
                                             <i class="fas fa-check-double text-[9px] text-emerald-500"></i>
                                         </div>
                                     @endif
@@ -162,6 +162,11 @@
 }
 .animate-pop-in { animation: popIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 .msg-optimistic { opacity: 0.6; }
+
+#chatMessages p {
+    word-break: break-all;
+    overflow-wrap: anywhere;
+}
 
 #chatMessages::-webkit-scrollbar { width: 4px; }
 #chatMessages::-webkit-scrollbar-track { background: transparent; }
@@ -343,7 +348,7 @@ document.addEventListener('DOMContentLoaded', function () {
             el.innerHTML = `
                 <div class="flex flex-col items-end max-w-[85%] sm:max-w-md">
                     <div class="bg-slate-900 text-white rounded-[1.5rem] px-5 py-3.5 shadow-lg shadow-slate-200/50 ${radiusClass}">
-                        <p class="text-sm leading-relaxed font-medium">${escapeHtml(msg.message)}</p>
+                        <p class="text-sm leading-relaxed font-medium break-words">${escapeHtml(msg.message)}</p>
                     </div>
                     <div class="flex items-center gap-1.5 mt-1.5 mr-2">
                         <p class="text-[10px] font-black text-slate-400 uppercase tracking-tighter">${time}</p>
@@ -356,7 +361,7 @@ document.addEventListener('DOMContentLoaded', function () {
             el.innerHTML = `
                 <div class="flex flex-col max-w-[85%] sm:max-w-md">
                     <div class="bg-white text-slate-700 rounded-[1.5rem] px-5 py-3.5 shadow-sm border border-slate-100 ${radiusClass}">
-                        <p class="text-sm leading-relaxed font-medium">${escapeHtml(msg.message)}</p>
+                        <p class="text-sm leading-relaxed font-medium break-words">${escapeHtml(msg.message)}</p>
                     </div>
                     <p class="text-[10px] font-black text-slate-400 mt-1.5 ml-2 uppercase tracking-tighter">${time}</p>
                 </div>`;
@@ -493,6 +498,13 @@ document.addEventListener('DOMContentLoaded', function () {
     @if($konseling->status === 'completed')
         showSessionEnded();
     @endif
+
+    // Format timestamps from Blade
+    document.querySelectorAll('.chat-timestamp').forEach(el => {
+        if (el.dataset.timestamp) {
+            el.textContent = formatTime(el.dataset.timestamp);
+        }
+    });
 
     scrollToBottom();
 });

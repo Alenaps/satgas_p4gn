@@ -3,46 +3,6 @@
 @section('title', 'Dashboard Konsuli')
 @section('body_class', 'bg-gray-950 antialiased')
 
-@push('styles')
-<style>
-    /* ===== Hero Image Slider (CSS-only, 3 slides) ===== */
-    @keyframes heroFade {
-        0%, 25%        { opacity: 1; }
-        33.33%, 91.67% { opacity: 0; }
-        100%           { opacity: 1; }
-    }
-    .hero-slide {
-        animation: heroFade 15s ease-in-out infinite;
-    }
-    .hero-slide:nth-child(1) { animation-delay: 0s; }
-    .hero-slide:nth-child(2) { animation-delay: -10s; }
-    .hero-slide:nth-child(3) { animation-delay: -5s; }
-
-    /* ===== Subtle Fade In ===== */
-    @keyframes fadeInUp {
-        from { opacity: 0; transform: translateY(20px); }
-        to   { opacity: 1; transform: translateY(0); }
-    }
-    .fade-in-up {
-        animation: fadeInUp 0.6s ease-out both;
-    }
-    .fade-in-up-d1 { animation-delay: 0.1s; }
-    .fade-in-up-d2 { animation-delay: 0.2s; }
-    .fade-in-up-d3 { animation-delay: 0.3s; }
-
-    /* ===== Reduced Motion ===== */
-    @media (prefers-reduced-motion: reduce) {
-        .hero-slide,
-        .fade-in-up {
-            animation: none !important;
-            opacity: 1 !important;
-        }
-        .hero-slide { opacity: 0 !important; }
-        .hero-slide:first-child { opacity: 1 !important; }
-    }
-</style>
-@endpush
-
 @section('content')
 
 {{-- ============================================================ --}}
@@ -53,13 +13,13 @@
     {{-- Background Slider Images (3 stacked, CSS fade) --}}
     <div class="absolute inset-0">
         <div class="hero-slide absolute inset-0">
-            <img src="{{ asset('assets/bg_team.jpeg') }}" alt="Tim Satgas P4GN UNILA" class="w-full h-full object-cover">
+            <img src="{{ asset('assets/bg_team.webp') }}" alt="Tim Satgas P4GN UNILA" class="w-full h-full object-cover">
         </div>
         <div class="hero-slide absolute inset-0">
-            <img src="{{ asset('assets/bg_team1.jpg') }}" alt="Kegiatan Satgas P4GN" class="w-full h-full object-cover">
+            <img src="{{ asset('assets/bg_team1.webp') }}" alt="Kegiatan Satgas P4GN" class="w-full h-full object-cover">
         </div>
         <div class="hero-slide absolute inset-0">
-            <img src="{{ asset('assets/bg_team2.jpg') }}" alt="Sosialisasi Anti Narkoba" class="w-full h-full object-cover">
+            <img src="{{ asset('assets/bg_team2.webp') }}" alt="Sosialisasi Anti Narkoba" class="w-full h-full object-cover">
         </div>
     </div>
 
@@ -85,13 +45,13 @@
                 <a href="{{ route('konsuli.konseling.index') }}"
                    id="cta-konseling"
                    class="inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3.5 rounded-full font-semibold transition-all duration-300 hover:scale-[0.98] active:scale-95 shadow-lg shadow-emerald-600/20">
-                    <i class="fas fa-comments text-sm"></i>
+                    <i class="fas fa-comments text-sm" aria-hidden="true"></i>
                     Mulai Konseling
                 </a>
                 <a href="{{ route('konsuli.laporan.create') }}"
                    id="cta-laporan"
                    class="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-3.5 rounded-full font-semibold transition-all duration-300 hover:scale-[0.98] active:scale-95 shadow-lg shadow-blue-600/20">
-                    <i class="fas fa-bullhorn text-sm"></i>
+                    <i class="fas fa-bullhorn text-sm" aria-hidden="true"></i>
                     Lapor Sekarang!
                 </a>
             </div>
@@ -107,10 +67,12 @@
     <div class="max-w-3xl mx-auto px-6">
         <div class="relative bg-white/5 border border-white/10 rounded-2xl p-10 md:p-14 text-center">
 
+            <h2 class="sr-only">Dasar Hukum</h2>
+
             {{-- Decorative Icon --}}
             <div class="flex justify-center mb-6">
                 <div class="w-16 h-16 rounded-full bg-emerald-500/10 flex items-center justify-center">
-                    <i class="fas fa-balance-scale text-emerald-400 text-2xl"></i>
+                    <i class="fas fa-balance-scale text-emerald-400 text-2xl" aria-hidden="true"></i>
                 </div>
             </div>
 
@@ -152,19 +114,19 @@
                 <ul class="space-y-4 mb-8">
                     <li class="flex items-start gap-3">
                         <div class="w-6 h-6 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0 mt-0.5">
-                            <i class="fas fa-shield-alt text-emerald-400 text-[10px]"></i>
+                            <i class="fas fa-shield-alt text-emerald-400 text-[10px]" aria-hidden="true"></i>
                         </div>
                         <span class="text-gray-300 text-sm leading-relaxed">Kerahasiaan 100% terjamin oleh sistem dan kode etik profesional</span>
                     </li>
                     <li class="flex items-start gap-3">
                         <div class="w-6 h-6 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0 mt-0.5">
-                            <i class="fas fa-user-md text-emerald-400 text-[10px]"></i>
+                            <i class="fas fa-user-md text-emerald-400 text-[10px]" aria-hidden="true"></i>
                         </div>
                         <span class="text-gray-300 text-sm leading-relaxed">Pendampingan langsung oleh Psikolog dan Konselor bersertifikat</span>
                     </li>
                     <li class="flex items-start gap-3">
                         <div class="w-6 h-6 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0 mt-0.5">
-                            <i class="fas fa-laptop text-emerald-400 text-[10px]"></i>
+                            <i class="fas fa-laptop text-emerald-400 text-[10px]" aria-hidden="true"></i>
                         </div>
                         <span class="text-gray-300 text-sm leading-relaxed">Konseling online yang mudah diakses kapan saja</span>
                     </li>
@@ -172,7 +134,7 @@
 
                 <a href="{{ route('konsuli.konseling.index') }}"
                    class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-full font-semibold text-sm transition-all duration-300 hover:scale-[0.98] active:scale-95">
-                    <i class="fas fa-comments text-xs"></i>
+                    <i class="fas fa-comments text-xs" aria-hidden="true"></i>
                     Mulai Konseling
                 </a>
             </div>
@@ -180,9 +142,10 @@
             {{-- Image --}}
             <div class="order-1 md:order-2">
                 <div class="rounded-2xl overflow-hidden border border-white/10 shadow-2xl shadow-emerald-500/5">
-                    <img src="{{ asset('assets/konseling.jpg') }}"
+                    <img src="{{ asset('assets/konseling.webp') }}"
                          alt="Layanan Konseling Satgas P4GN"
-                         class="w-full h-72 md:h-[420px] object-cover transition-transform duration-500 hover:scale-105">
+                         class="w-full h-72 md:h-[420px] object-cover"
+                         loading="lazy">
                 </div>
             </div>
         </div>
@@ -195,9 +158,10 @@
             {{-- Image --}}
             <div class="order-1">
                 <div class="rounded-2xl overflow-hidden border border-white/10 shadow-2xl shadow-blue-500/5">
-                    <img src="{{ asset('assets/pelaporan.jpg') }}"
+                    <img src="{{ asset('assets/pelaporan.webp') }}"
                          alt="Layanan Pelaporan Satgas P4GN"
-                         class="w-full h-72 md:h-[420px] object-cover transition-transform duration-500 hover:scale-105">
+                         class="w-full h-72 md:h-[420px] object-cover"
+                         loading="lazy">
                 </div>
             </div>
 
@@ -218,19 +182,19 @@
                 <ul class="space-y-4 mb-8">
                     <li class="flex items-start gap-3 md:flex-row-reverse md:text-right">
                         <div class="w-6 h-6 rounded-full bg-blue-500/10 flex items-center justify-center shrink-0 mt-0.5">
-                            <i class="fas fa-user-secret text-blue-400 text-[10px]"></i>
+                            <i class="fas fa-user-secret text-blue-400 text-[10px]" aria-hidden="true"></i>
                         </div>
                         <span class="text-gray-300 text-sm leading-relaxed">Sampaikan informasi berdasarkan apa yang diketahui tanpa perlu khawatir</span>
                     </li>
                     <li class="flex items-start gap-3 md:flex-row-reverse md:text-right">
                         <div class="w-6 h-6 rounded-full bg-blue-500/10 flex items-center justify-center shrink-0 mt-0.5">
-                            <i class="fas fa-bolt text-blue-400 text-[10px]"></i>
+                            <i class="fas fa-bolt text-blue-400 text-[10px]" aria-hidden="true"></i>
                         </div>
                         <span class="text-gray-300 text-sm leading-relaxed">Data dan informasi laporan dijaga kerahasiaannya sesuai kebijakan privasi</span>
                     </li>
                     <li class="flex items-start gap-3 md:flex-row-reverse md:text-right">
                         <div class="w-6 h-6 rounded-full bg-blue-500/10 flex items-center justify-center shrink-0 mt-0.5">
-                            <i class="fas fa-lock text-blue-400 text-[10px]"></i>
+                            <i class="fas fa-lock text-blue-400 text-[10px]" aria-hidden="true"></i>
                         </div>
                         <span class="text-gray-300 text-sm leading-relaxed">Laporan dapat dipantau dan ditindaklanjuti oleh tim Satgas P4GN UNILA</span>
                     </li>
@@ -238,7 +202,7 @@
 
                 <a href="{{ route('konsuli.laporan.create') }}"
                    class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full font-semibold text-sm transition-all duration-300 hover:scale-[0.98] active:scale-95">
-                    <i class="fas fa-bullhorn text-xs"></i>
+                    <i class="fas fa-bullhorn text-xs" aria-hidden="true"></i>
                     Lapor Sekarang!
                 </a>
             </div>
@@ -264,112 +228,73 @@
         {{-- Vertical Card Stack --}}
         <div class="space-y-8">
 
-            {{-- Card 1: Program Screening --}}
-            <div class="bg-white/5 border border-white/10 rounded-2xl p-8 md:p-10 hover:border-blue-500/20 transition-colors duration-300">
-                <div class="grid grid-cols-1 md:grid-cols-[80px_1fr] gap-6 items-start">
-                    {{-- Icon --}}
-                    <div class="flex items-start">
-                        <div class="w-16 h-16 rounded-2xl bg-blue-500/10 flex items-center justify-center">
-                            <i class="fas fa-vial text-blue-400 text-2xl"></i>
-                        </div>
-                    </div>
-                    {{-- Content --}}
-                    <div>
-                        <h3 class="text-xl font-bold text-white mb-3">Program Screening</h3>
-                        <p class="text-gray-400 text-sm mb-5 leading-relaxed max-w-2xl">
-                            Deteksi dini melalui pemeriksaan urine secara berkala dan terstruktur untuk menjaga lingkungan kampus tetap bersih dari narkoba.
-                        </p>
-                        <ul class="space-y-3">
-                            <li class="flex items-start gap-3">
-                                <i class="fas fa-check text-blue-400 mt-1 text-xs"></i>
-                                <span class="text-gray-300 text-sm leading-relaxed">Tes urine berkala untuk mahasiswa, dosen, dan karyawan melalui stratified random sampling</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <i class="fas fa-check text-blue-400 mt-1 text-xs"></i>
-                                <span class="text-gray-300 text-sm leading-relaxed">Tes urine wajib bagi calon mahasiswa baru (S1 - S3)</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <i class="fas fa-check text-blue-400 mt-1 text-xs"></i>
-                                <span class="text-gray-300 text-sm leading-relaxed">Survei literasi dan potensi penggunaan narkoba di lingkungan kampus</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+            @php
+            $programs = [
+                [
+                    'title' => 'Program Screening',
+                    'icon'  => 'fa-vial',
+                    'color' => 'blue',
+                    'desc'  => 'Deteksi dini melalui pemeriksaan urine secara berkala dan terstruktur untuk menjaga lingkungan kampus tetap bersih dari narkoba.',
+                    'items' => [
+                        'Tes urine berkala untuk mahasiswa, dosen, dan karyawan melalui stratified random sampling',
+                        'Tes urine wajib bagi calon mahasiswa baru (S1 - S3)',
+                        'Survei literasi dan potensi penggunaan narkoba di lingkungan kampus',
+                    ],
+                ],
+                [
+                    'title' => 'Program Edukasi',
+                    'icon'  => 'fa-graduation-cap',
+                    'color' => 'emerald',
+                    'desc'  => 'Sosialisasi dan pelatihan komprehensif untuk meningkatkan kesadaran civitas akademika tentang bahaya narkoba.',
+                    'items' => [
+                        'Roadshow pelatihan dan sosialisasi ke seluruh fakultas',
+                        'Sosialisasi pada kegiatan PKKMB (Pengenalan Kehidupan Kampus)',
+                        'Pembentukan relawan anti narkoba dan edukasi lembaga kemahasiswaan',
+                        'Edukasi melalui media sosial dan platform digital',
+                    ],
+                ],
+                [
+                    'title' => 'Kerja Sama dengan BNN',
+                    'icon'  => 'fa-handshake',
+                    'color' => 'blue',
+                    'desc'  => 'Kolaborasi strategis dengan Badan Narkotika Nasional untuk memperkuat upaya pencegahan dan penanganan di lingkungan kampus.',
+                    'items' => [
+                        'Penyediaan narasumber untuk sosialisasi dan pelatihan fakultas',
+                        'Tenaga ahli untuk layanan e-konseling',
+                        'Penelitian potensi penyalahgunaan narkoba di lingkungan kampus',
+                        'Pendampingan civitas akademika yang terdeteksi terlibat narkoba',
+                    ],
+                ],
+            ];
+            @endphp
 
-            {{-- Card 2: Program Edukasi --}}
-            <div class="bg-white/5 border border-white/10 rounded-2xl p-8 md:p-10 hover:border-emerald-500/20 transition-colors duration-300">
-                <div class="grid grid-cols-1 md:grid-cols-[80px_1fr] gap-6 items-start">
-                    {{-- Icon --}}
-                    <div class="flex items-start">
-                        <div class="w-16 h-16 rounded-2xl bg-emerald-500/10 flex items-center justify-center">
-                            <i class="fas fa-graduation-cap text-emerald-400 text-2xl"></i>
+            @foreach($programs as $program)
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-8 md:p-10 hover:border-{{ $program['color'] }}-500/20 transition-colors duration-300">
+                    <div class="grid grid-cols-1 md:grid-cols-[80px_1fr] gap-6 items-start">
+                        {{-- Icon --}}
+                        <div class="flex items-start">
+                            <div class="w-16 h-16 rounded-2xl bg-{{ $program['color'] }}-500/10 flex items-center justify-center">
+                                <i class="fas {{ $program['icon'] }} text-{{ $program['color'] }}-400 text-2xl" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                        {{-- Content --}}
+                        <div>
+                            <h3 class="text-xl font-bold text-white mb-3">{{ $program['title'] }}</h3>
+                            <p class="text-gray-400 text-sm mb-5 leading-relaxed max-w-2xl">
+                                {{ $program['desc'] }}
+                            </p>
+                            <ul class="space-y-3">
+                                @foreach($program['items'] as $item)
+                                    <li class="flex items-start gap-3">
+                                        <i class="fas fa-check text-{{ $program['color'] }}-400 mt-1 text-xs" aria-hidden="true"></i>
+                                        <span class="text-gray-300 text-sm leading-relaxed">{{ $item }}</span>
+                                    </li>
+                                @endforeach
+                            </ul>
                         </div>
                     </div>
-                    {{-- Content --}}
-                    <div>
-                        <h3 class="text-xl font-bold text-white mb-3">Program Edukasi</h3>
-                        <p class="text-gray-400 text-sm mb-5 leading-relaxed max-w-2xl">
-                            Sosialisasi dan pelatihan komprehensif untuk meningkatkan kesadaran civitas akademika tentang bahaya narkoba.
-                        </p>
-                        <ul class="space-y-3">
-                            <li class="flex items-start gap-3">
-                                <i class="fas fa-check text-emerald-400 mt-1 text-xs"></i>
-                                <span class="text-gray-300 text-sm leading-relaxed">Roadshow pelatihan dan sosialisasi ke seluruh fakultas</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <i class="fas fa-check text-emerald-400 mt-1 text-xs"></i>
-                                <span class="text-gray-300 text-sm leading-relaxed">Sosialisasi pada kegiatan PKKMB (Pengenalan Kehidupan Kampus)</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <i class="fas fa-check text-emerald-400 mt-1 text-xs"></i>
-                                <span class="text-gray-300 text-sm leading-relaxed">Pembentukan relawan anti narkoba dan edukasi lembaga kemahasiswaan</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <i class="fas fa-check text-emerald-400 mt-1 text-xs"></i>
-                                <span class="text-gray-300 text-sm leading-relaxed">Edukasi melalui media sosial dan platform digital</span>
-                            </li>
-                        </ul>
-                    </div>
                 </div>
-            </div>
-
-            {{-- Card 3: Kerja Sama BNN --}}
-            <div class="bg-white/5 border border-white/10 rounded-2xl p-8 md:p-10 hover:border-blue-500/20 transition-colors duration-300">
-                <div class="grid grid-cols-1 md:grid-cols-[80px_1fr] gap-6 items-start">
-                    {{-- Icon --}}
-                    <div class="flex items-start">
-                        <div class="w-16 h-16 rounded-2xl bg-blue-500/10 flex items-center justify-center">
-                            <i class="fas fa-handshake text-blue-400 text-2xl"></i>
-                        </div>
-                    </div>
-                    {{-- Content --}}
-                    <div>
-                        <h3 class="text-xl font-bold text-white mb-3">Kerja Sama dengan BNN</h3>
-                        <p class="text-gray-400 text-sm mb-5 leading-relaxed max-w-2xl">
-                            Kolaborasi strategis dengan Badan Narkotika Nasional untuk memperkuat upaya pencegahan dan penanganan di lingkungan kampus.
-                        </p>
-                        <ul class="space-y-3">
-                            <li class="flex items-start gap-3">
-                                <i class="fas fa-check text-blue-400 mt-1 text-xs"></i>
-                                <span class="text-gray-300 text-sm leading-relaxed">Penyediaan narasumber untuk sosialisasi dan pelatihan fakultas</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <i class="fas fa-check text-blue-400 mt-1 text-xs"></i>
-                                <span class="text-gray-300 text-sm leading-relaxed">Tenaga ahli untuk layanan e-konseling</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <i class="fas fa-check text-blue-400 mt-1 text-xs"></i>
-                                <span class="text-gray-300 text-sm leading-relaxed">Penelitian potensi penyalahgunaan narkoba di lingkungan kampus</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <i class="fas fa-check text-blue-400 mt-1 text-xs"></i>
-                                <span class="text-gray-300 text-sm leading-relaxed">Pendampingan civitas akademika yang terdeteksi terlibat narkoba</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+            @endforeach
 
         </div>
     </div>
@@ -395,17 +320,19 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             @foreach($publikasis as $publikasi)
             <a href="{{ route('konsuli.publikasi.show', $publikasi->slug) }}"
-               class="group bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:border-emerald-500/20 transition-all duration-300 hover:-translate-y-1">
+               class="group bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:border-emerald-500/20 transition-all duration-300 hover:-translate-y-1"
+               aria-label="Baca artikel: {{ $publikasi->judul }}">
 
                 {{-- Thumbnail --}}
                 <div class="aspect-video overflow-hidden bg-gray-800">
                     @if($publikasi->thumbnail)
                         <img src="{{ asset('storage/' . $publikasi->thumbnail) }}"
                              alt="{{ $publikasi->judul }}"
-                             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                             loading="lazy">
                     @else
                         <div class="w-full h-full bg-gradient-to-br from-emerald-900/40 to-blue-900/40 flex items-center justify-center">
-                            <i class="fas fa-newspaper text-white/20 text-3xl"></i>
+                            <i class="fas fa-newspaper text-white/20 text-3xl" aria-hidden="true"></i>
                         </div>
                     @endif
                 </div>
@@ -413,7 +340,7 @@
                 {{-- Card Content --}}
                 <div class="p-5">
                     <p class="text-gray-500 text-xs mb-2">
-                        <i class="far fa-calendar-alt mr-1"></i>
+                        <i class="far fa-calendar-alt mr-1" aria-hidden="true"></i>
                         {{ $publikasi->created_at->format('d M Y') }}
                     </p>
 
@@ -426,7 +353,7 @@
                     </p>
 
                     <span class="inline-flex items-center gap-1.5 text-emerald-400 text-xs font-medium group-hover:gap-2.5 transition-all duration-300">
-                        Baca <i class="fas fa-arrow-right text-[10px]"></i>
+                        Baca <i class="fas fa-arrow-right text-[10px]" aria-hidden="true"></i>
                     </span>
                 </div>
             </a>
@@ -436,7 +363,7 @@
         {{-- Empty State --}}
         <div class="text-center py-16">
             <div class="w-20 h-20 rounded-2xl bg-white/5 flex items-center justify-center mx-auto mb-6">
-                <i class="fas fa-newspaper text-gray-600 text-3xl"></i>
+                <i class="fas fa-newspaper text-gray-600 text-3xl" aria-hidden="true"></i>
             </div>
             <p class="text-gray-400 text-lg font-medium">Belum ada data publikasi saat ini</p>
             <p class="text-gray-500 text-sm mt-2">Artikel dan berita terbaru akan ditampilkan di sini.</p>
