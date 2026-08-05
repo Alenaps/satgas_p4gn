@@ -89,9 +89,9 @@
 
         {{-- THUMBNAIL --}}
         <div class="bg-yellow-300 p-4 rounded">
-          <label class="block">Thumbnail / Cover</label>
+          <label class="block mb-2">Thumbnail / Cover</label>
 
-          <div id="thumbPreview" class="w-full h-36 bg-gray-100 mt-2 rounded flex items-center justify-center text-gray-500 overflow-hidden">
+          <div id="thumbPreview" class="w-full h-36 bg-gray-100 rounded flex items-center justify-center text-gray-500 overflow-hidden">
             @if($publikasi->thumbnail)
               <img src="/storage/{{ $publikasi->thumbnail }}" class="w-full h-full object-cover rounded">
             @else
@@ -99,10 +99,28 @@
             @endif
           </div>
 
-          {{-- thumbnail input --}}
-          <input id="thumbnail" name="thumbnail" type="file" accept="image/*" class="mt-3" />
+          <div class="mt-3 flex items-center gap-2">
+            <label for="thumbnail"
+                  class="flex-shrink-0 cursor-pointer bg-white border border-gray-400 text-sm px-3 py-2 rounded hover:bg-gray-50 transition">
+              Ganti File
+            </label>
+            <input type="file" name="thumbnail" id="thumbnail" accept="image/*" class="hidden" />
 
-          <small class="text-gray-600">Ukuran file maksimal 2MB format .jpg, .jpeg, .png</small>
+            <span id="thumbFileName"
+                  class="min-w-0 flex-1 text-xs text-gray-700 bg-white border rounded px-2 py-2 truncate"
+                  @if($publikasi->thumbnail) title="{{ basename($publikasi->thumbnail) }}" @endif>
+              @if($publikasi->thumbnail)
+                {{ basename($publikasi->thumbnail) }}
+              @else
+                Belum ada file dipilih
+              @endif
+            </span>
+          </div>
+
+          <small class="text-gray-600 block mt-2">Ukuran file maksimal 2MB format .jpg, .jpeg, .png</small>
+          @error('thumbnail')
+            <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
+          @enderror
         </div>
 
         <div class="bg-yellow-300 p-4 rounded">
@@ -154,9 +172,19 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 
   // THUMBNAIL PREVIEW 
-  document.getElementById('thumbnail').addEventListener('change', function(e){
+   document.getElementById('thumbnail').addEventListener('change', function(){
     const file = this.files[0];
-    if (!file) return;
+    const nameEl = document.getElementById('thumbFileName');
+
+    if(!file){
+      nameEl.textContent = 'Belum ada file dipilih';
+      nameEl.title = '';
+      return;
+    }
+
+    nameEl.textContent = file.name;
+    nameEl.title = file.name;
+
     const url = URL.createObjectURL(file);
     document.getElementById('thumbPreview').innerHTML =
       `<img src="${url}" class="w-full h-full object-cover rounded">`;

@@ -208,11 +208,11 @@
                 </span>
 
                 <h2 class="text-3xl md:text-4xl font-bold text-white mb-6 leading-tight">
-                    Sistem Pelaporan Anonim
+                    Sampaikan Informasi Tanpa Ragu
                 </h2>
 
                 <p class="text-gray-300 leading-relaxed mb-8">
-                    Laporkan informasi terkait penyalahgunaan atau peredaran gelap narkoba di lingkungan kampus dengan aman. Identitas pelapor tidak dicatat oleh sistem.
+                    Laporkan informasi terkait penyalahgunaan atau peredaran gelap narkoba di lingkungan kampus dengan aman. Setiap laporan akan diterima dan ditangani secara serius oleh Satgas P4GN UNILA.
                 </p>
 
                 <ul class="space-y-4 mb-8">
@@ -220,19 +220,19 @@
                         <div class="w-6 h-6 rounded-full bg-blue-500/10 flex items-center justify-center shrink-0 mt-0.5">
                             <i class="fas fa-user-secret text-blue-400 text-[10px]"></i>
                         </div>
-                        <span class="text-gray-300 text-sm leading-relaxed">Identitas pelapor sepenuhnya anonim dan tidak tersimpan</span>
+                        <span class="text-gray-300 text-sm leading-relaxed">Sampaikan informasi berdasarkan apa yang diketahui tanpa perlu khawatir</span>
                     </li>
                     <li class="flex items-start gap-3 md:flex-row-reverse md:text-right">
                         <div class="w-6 h-6 rounded-full bg-blue-500/10 flex items-center justify-center shrink-0 mt-0.5">
                             <i class="fas fa-bolt text-blue-400 text-[10px]"></i>
                         </div>
-                        <span class="text-gray-300 text-sm leading-relaxed">Tindak lanjut cepat oleh tim Satgas P4GN UNILA</span>
+                        <span class="text-gray-300 text-sm leading-relaxed">Data dan informasi laporan dijaga kerahasiaannya sesuai kebijakan privasi</span>
                     </li>
                     <li class="flex items-start gap-3 md:flex-row-reverse md:text-right">
                         <div class="w-6 h-6 rounded-full bg-blue-500/10 flex items-center justify-center shrink-0 mt-0.5">
                             <i class="fas fa-lock text-blue-400 text-[10px]"></i>
                         </div>
-                        <span class="text-gray-300 text-sm leading-relaxed">Proses pelaporan dilindungi kebijakan privasi ketat</span>
+                        <span class="text-gray-300 text-sm leading-relaxed">Laporan dapat dipantau dan ditindaklanjuti oleh tim Satgas P4GN UNILA</span>
                     </li>
                 </ul>
 
