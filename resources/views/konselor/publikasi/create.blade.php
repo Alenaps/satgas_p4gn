@@ -45,8 +45,11 @@
         </label>
 
         <label class="block mb-3">
-          <span class="text-sm">Kutipan</span>
-          <input name="kutipan" value="{{ old('kutipan') }}" class="w-full border px-3 py-2 rounded" />
+            <span class="text-sm">Kutipan</span>
+            <textarea name="kutipan" rows="4" class="w-full border px-3 py-2 rounded" placeholder="Kutipan pertama...&#10;Kutipan kedua...">{{ old('kutipan') }}</textarea>   
+            @error('kutipan')
+                <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
+            @enderror
         </label>
 
         <label class="block mb-3">
@@ -144,6 +147,7 @@ document.addEventListener('DOMContentLoaded', function(){
   tinymce.init({
     selector:'#isi',
     height: 550,
+    menubar: true,
     plugins: 'lists link image table code paste',
     toolbar: 'undo redo | bold italic underline | bullist numlist | link image | code',
     paste_as_text: true

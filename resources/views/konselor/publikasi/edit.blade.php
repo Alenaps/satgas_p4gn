@@ -45,10 +45,9 @@
         </label>
 
         <label class="block mb-3">
-          <span class="text-sm">Kutipan</span>
-          <input name="kutipan" value="{{ old('kutipan', $publikasi->kutipan) }}"
-                 class="w-full border px-3 py-2 rounded" />
-          <small id="kutipanErr" class="text-red-600 hidden">Maksimal 300 karakter</small>
+            <span class="text-sm">Kutipan</span>
+            <textarea name="kutipan" rows="4" maxlength="300" class="w-full border px-3 py-2 rounded">{{ old('kutipan', $publikasi->kutipan) }}</textarea>
+            <small id="kutipanErr" class="text-red-600 hidden">Maksimal 300 karakter</small>
         </label>
 
         <label class="block mb-3">
@@ -154,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function(){
   tinymce.init({
     selector:'#isi',
     height: 550,
-    menubar: false,
+    menubar: true,
     plugins: 'lists link image table code paste help',
     toolbar: 'undo redo | bold italic underline | alignleft aligncenter alignright | bullist numlist | link image | removeformat | code',
     paste_as_text: true
